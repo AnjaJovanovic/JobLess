@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace MATFInfostud.Oglasi.Infrastructure.Migrations
+namespace JobLess.Oglasi.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class IzbrisanoNepotrebnoPolje : Migration

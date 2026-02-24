@@ -8,7 +8,7 @@ using JobLess.Oglasi.Application.Queries.VratiSveOglase;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MATFInfostud.Oglasi.API.Controllers
+namespace JobLess.Oglasi.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -66,6 +66,7 @@ namespace MATFInfostud.Oglasi.API.Controllers
 
             return Ok(result);
         }
+        //TODO: ne radi ocekivano
         [HttpGet("PretraziOglase")]
         public async Task<ActionResult<PretraziOglaseResult>> PretraziOglase([FromQuery] PretraziOglaseQuery query)
         {

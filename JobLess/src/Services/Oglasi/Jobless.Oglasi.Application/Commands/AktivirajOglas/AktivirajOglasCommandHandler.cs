@@ -1,6 +1,6 @@
 ﻿using JobLess.Oglasi.Application.Commands.IzbrisiOglas;
 using JobLess.Oglasi.Application.Interfaces;
-using MATFInfostud.Shared.Domain.Common.Interfaces;
+using JobLess.Shared.Domain.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;

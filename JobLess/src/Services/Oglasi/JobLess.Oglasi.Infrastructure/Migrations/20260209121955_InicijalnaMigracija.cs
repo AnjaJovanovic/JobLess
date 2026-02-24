@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MATFInfostud.Oglasi.Infrastructure.Migrations
+namespace JobLess.Oglasi.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InicijalnaMigracija : Migration

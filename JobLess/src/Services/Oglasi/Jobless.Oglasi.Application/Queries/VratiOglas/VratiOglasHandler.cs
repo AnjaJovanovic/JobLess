@@ -1,4 +1,4 @@
-﻿using Jobless.Oglasi.Application.Interfaces;
+﻿using JobLess.Oglasi.Application.Interfaces;
 using JobLess.Oglasi.Application.Models;
 using JobLess.Oglasi.Application.Queries.VratiSveOglase;
 using JobLess.Shared.Domain.Common.Interfaces;

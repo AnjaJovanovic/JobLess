@@ -1,6 +1,6 @@
 ﻿using JobLess.Oglasi.Domain.Enums;
 using JobLess.Shared.Domain.Common;
-namespace JobLess.Shared.Domain;
+namespace JobLess.Oglasi.Domain.Entities;
 public class Oglas : BaseEntity
 {
     
