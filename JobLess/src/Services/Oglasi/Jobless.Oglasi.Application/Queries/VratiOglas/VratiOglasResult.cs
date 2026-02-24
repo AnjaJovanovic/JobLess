@@ -1,4 +1,4 @@
-﻿using MATFInfostud.Oglasi.Application.Models;
+﻿using JobLess.Oglasi.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

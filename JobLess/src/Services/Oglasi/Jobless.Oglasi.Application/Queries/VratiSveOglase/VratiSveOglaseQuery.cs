@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MATFInfostud.Oglasi.Application.Queries.VratiSveOglase
+namespace JobLess.Oglasi.Application.Queries.VratiSveOglase
 {
     public class VratiSveOglaseQuery : IRequest<VratiSveOglaseResult>
     {

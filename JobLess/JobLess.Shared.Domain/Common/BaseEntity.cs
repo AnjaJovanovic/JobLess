@@ -1,5 +1,7 @@
-﻿using System;
+﻿using JobLess.Shared.Domain.Common;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace JobLess.Shared.Domain.Common;

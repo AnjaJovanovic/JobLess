@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FluentValidation.Results;
+using JobLess.Shared.Domain.Common.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace JobLess.Shared.Domain.Common

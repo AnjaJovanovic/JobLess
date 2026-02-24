@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using MediatR;
-using MATFInfostud.Oglasi.Domain.Enums;
+using JobLess.Oglasi.Domain.Enums;
 
-namespace MATFInfostud.Oglasi.Application.Queries.PretraziOglase
+namespace JobLess.Oglasi.Application.Queries.PretraziOglase
 {
     public class PretraziOglaseQuery : IRequest<PretraziOglaseResult>
     {

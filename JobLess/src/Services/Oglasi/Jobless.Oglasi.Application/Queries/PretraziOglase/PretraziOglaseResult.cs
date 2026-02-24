@@ -1,11 +1,11 @@
-﻿using MATFInfostud.Oglasi.Application.Models;
+﻿using JobLess.Oglasi.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MATFInfostud.Oglasi.Application.Queries.PretraziOglase
+namespace JobLess.Oglasi.Application.Queries.PretraziOglase
 {
     public class PretraziOglaseResult
     {

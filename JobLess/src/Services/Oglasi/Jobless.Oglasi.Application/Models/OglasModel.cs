@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq.Expressions;
-using MATFInfostud.Oglasi.Domain.Entities;
-using MATFInfostud.Oglasi.Domain.Enums;
+using JobLess.Oglasi.Domain.Entities;
+using JobLess.Oglasi.Domain.Enums;
 
 
-namespace MATFInfostud.Oglasi.Application.Models
+namespace JobLess.Oglasi.Application.Models
 {
     public class OglasModel
     {

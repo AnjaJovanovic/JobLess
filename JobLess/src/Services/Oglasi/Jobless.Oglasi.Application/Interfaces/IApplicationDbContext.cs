@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore; // DbSet dolazi odavde
-using MATFInfostud.Oglasi.Domain;
+using JobLess.Oglasi.Domain;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MATFInfostud.Oglasi.Domain.Entities;
+using JobLess.Oglasi.Domain.Entities;
 
-namespace MATFInfostud.Oglasi.Application.Interfaces
+namespace JobLess.Oglasi.Application.Interfaces
 {
     public interface IApplicationDbContext
     {
