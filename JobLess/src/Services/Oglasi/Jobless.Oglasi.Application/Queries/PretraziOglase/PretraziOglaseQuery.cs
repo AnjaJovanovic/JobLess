@@ -32,8 +32,8 @@ namespace JobLess.Oglasi.Application.Queries.PretraziOglase
 
         public string? Valuta { get; init; }
         public bool? PlataVidljiva { get; init; }
-        public int BrojStranice { get; set; }
-        public int VelicinaStranice { get; set; }
+        public int BrojStranice { get; set; } = 1;
+        public int VelicinaStranice { get; set; } = 10;
 
     }
 }
