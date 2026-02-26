@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace JobLess.Oglasi.Application.Common
+namespace JobLess.Advertisement.Application.Common
 {
     public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {

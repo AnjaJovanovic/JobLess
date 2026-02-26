@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace JobLess.Oglasi.Infrastructure.Migrations
+namespace JobLess.Advertisement.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class IzbrisanoNepotrebnoPolje : Migration

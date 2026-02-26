@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace JobLess.Oglasi.Infrastructure.Migrations
+namespace JobLess.Advertisement.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InicijalnaMigracija : Migration

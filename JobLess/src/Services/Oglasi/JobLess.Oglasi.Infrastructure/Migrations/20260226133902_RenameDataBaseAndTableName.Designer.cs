@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobLess.Advertisement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260209122354_IzbrisanoNepotrebnoPolje")]
-    partial class IzbrisanoNepotrebnoPolje
+    [Migration("20260226133902_RenameDataBaseAndTableName")]
+    partial class RenameDataBaseAndTableName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace JobLess.Advertisement.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Oglas", b =>
+            modelBuilder.Entity("JobLess.Advertisement.Domain.Entities.JobAdvertisement", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,72 +33,72 @@ namespace JobLess.Advertisement.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Aktivan")
-                        .HasColumnType("bit");
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DatumIsteka")
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmploymentType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ExpiresAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DatumPostavljanja")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Drzava")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Grad")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("IskustvoMax")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IskustvoMin")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KompanijaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Naslov")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Opis")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("PlataDo")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("PlataOd")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool?>("PlataVidljiva")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Pozicija")
+                    b.Property<bool>("IsSalaryVisible")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MaxExperience")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MinExperience")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Position")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RadnoVreme")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("PostedAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Senioritet")
+                    b.Property<decimal?>("SalaryFrom")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("SalaryTo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("SeniorityLevel")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("TipRada")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TipZaposlenja")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Valuta")
+                    b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WorkSchedule")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Oglasi");
+                    b.ToTable("JobAdvertisements");
                 });
 #pragma warning restore 612, 618
         }

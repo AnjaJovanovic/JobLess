@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using JobLess.Oglasi.Application.Interfaces;
+using JobLess.Advertisement.Application.Interfaces;
 //using MATFInfostud.Oglasi.Domain.En;
 using System.Threading.Tasks;
-using JobLess.Oglasi.Domain.Entities;
+using JobLess.Advertisement.Domain.Entities;
 
-namespace JobLess.Oglasi.Infrastructure.Persistence
+namespace JobLess.Advertisement.Infrastructure.Persistence
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
@@ -17,7 +17,7 @@ namespace JobLess.Oglasi.Infrastructure.Persistence
         {
         }
 
-        public DbSet<Oglas> Oglasi { get; set; }
+        public DbSet<JobAdvertisement> JobAdvertisements { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
