@@ -1,11 +1,11 @@
-﻿using JobLess.Oglasi.Application.Commands.KreirajOglas;
-using JobLess.Oglasi.Application.Interfaces;
+﻿using JobLess.Advertisement.Application.Commands.Create;
+using JobLess.Advertisement.Application.Interfaces;
 using JobLess.Shared.Domain.Common;
-using JobLess.Oglasi.Application.Interfaces;
+using JobLess.Advertisement.Application.Interfaces;
 using JobLess.Shared.Domain.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using JobLess.Oglasi.Infrastructure.Persistence;
+using JobLess.Advertisement.Infrastructure.Persistence;
 using JobLess.Shared.Domain.Common.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +34,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssembly(typeof(KreirajOglasCommand).Assembly));
+    cfg.RegisterServicesFromAssembly(typeof(CreateAdvertisementCommand).Assembly));
 builder.Services.AddScoped<IValidationExceptionThrower, ValidationExceptionThrower>();
 
 // 2️⃣ Build aplikacije

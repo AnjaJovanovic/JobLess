@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -22,8 +22,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\JobLess.Shared.Domain\JobLess.Shared.Domain.csproj" />
-		<ProjectReference Include="..\Jobless.Oglasi.Application\Jobless.Oglasi.Application.csproj" />
-		<ProjectReference Include="..\JobLess.Oglasi.Infrastructure\JobLess.Oglasi.Infrastructure.csproj" />
+		<ProjectReference Include="..\Jobless.Oglasi.Application\Jobless.Advertisement.Application.csproj" />
+		<ProjectReference Include="..\JobLess.Oglasi.Infrastructure\JobLess.Advertisement.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>
