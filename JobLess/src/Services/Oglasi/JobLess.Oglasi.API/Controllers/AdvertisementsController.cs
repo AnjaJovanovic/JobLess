@@ -42,12 +42,12 @@ namespace JobLess.Advertisement.API.Controllers
             return success;
         }
         [HttpGet("All")]
-        public async Task<ActionResult<GetAllAdvertisementResult>> GetAll([FromQuery] int brojStranice = 1, [FromQuery] int velicinaStranice = 10)
+        public async Task<ActionResult<GetAllAdvertisementResult>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var query = new GetAllAdvertisementQuery
             {
-                PageNumber = brojStranice,
-                PageSize = velicinaStranice
+                PageNumber = pageNumber,
+                PageSize = pageSize
             };
 
             var result = await _mediator.Send(query);
@@ -68,7 +68,7 @@ namespace JobLess.Advertisement.API.Controllers
         }
         //TODO: ne radi ocekivano
         [HttpGet("Search")]
-        public async Task<ActionResult<SearchAdvertisementResult>> Search([FromQuery] SearchAdvertisementResult query)
+        public async Task<ActionResult<SearchAdvertisementResult>> Search([FromQuery] SearchAdvertisementQuery query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);
