@@ -2,10 +2,10 @@
   <Folder Name="/src/" />
   <Folder Name="/src/Services/" />
   <Folder Name="/src/Services/Advertisement/">
-    <Project Path="src/Services/Oglasi/JobLess.Oglasi.API/JobLess.Advertisement.API.csproj" />
-    <Project Path="src/Services/Oglasi/Jobless.Oglasi.Application/Jobless.Advertisement.Application.csproj" />
-    <Project Path="src/Services/Oglasi/JobLess.Oglasi.Domain/JobLess.Advertisement.Domain.csproj" Id="88b96743-c5be-441c-8461-15e9d473accb" />
-    <Project Path="src/Services/Oglasi/JobLess.Oglasi.Infrastructure/JobLess.Advertisement.Infrastructure.csproj" Id="596a73aa-d8a9-41e0-a3bb-913b930d26c2" />
+    <Project Path="src/Services/Advertisement/JobLess.Advertisement.API/JobLess.Advertisement.API.csproj" />
+    <Project Path="src/Services/Advertisement/Jobless.Advertisement.Application/Jobless.Advertisement.Application.csproj" />
+    <Project Path="src/Services/Advertisement/JobLess.Advertisement.Domain/JobLess.Advertisement.Domain.csproj" Id="88b96743-c5be-441c-8461-15e9d473accb" />
+    <Project Path="src/Services/Advertisement/JobLess.Advertisement.Infrastructure/JobLess.Advertisement.Infrastructure.csproj" Id="596a73aa-d8a9-41e0-a3bb-913b930d26c2" />
   </Folder>
   <Folder Name="/src/Tests/" />
   <Folder Name="/src/Tests/Advertisement/">
