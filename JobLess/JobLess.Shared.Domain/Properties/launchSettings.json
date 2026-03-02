@@ -4,7 +4,8 @@
       "commandName": "Project"
     },
     "Profile 1": {
-      "commandName": "Executable"
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\jelena.mitrovic\\Desktop\\RS2\\JobLess\\JobLess\\src\\Services\\Oglasi\\JobLess.Oglasi.API\\JobLess.Advertisement.API.http"
     },
     "Profile 2": {
       "commandName": "Executable",

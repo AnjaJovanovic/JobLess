@@ -7,5 +7,7 @@
     <Project Path="src/Services/Oglasi/JobLess.Oglasi.Domain/JobLess.Advertisement.Domain.csproj" Id="88b96743-c5be-441c-8461-15e9d473accb" />
     <Project Path="src/Services/Oglasi/JobLess.Oglasi.Infrastructure/JobLess.Advertisement.Infrastructure.csproj" Id="596a73aa-d8a9-41e0-a3bb-913b930d26c2" />
   </Folder>
+  <Folder Name="/src/Tests/" />
+  <Folder Name="/src/Tests/Advertisement/" />
   <Project Path="JobLess.Shared.Domain/JobLess.Shared.Domain.csproj" />
 </Solution>
