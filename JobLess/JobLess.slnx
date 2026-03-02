@@ -9,7 +9,7 @@
   </Folder>
   <Folder Name="/src/Tests/" />
   <Folder Name="/src/Tests/Advertisement/">
-    <File Path="proba.cs" />
+    <Project Path="src/Tests/JobLess.Tests.Advertisement/JobLess.Tests.Advertisement.csproj" Id="d2a103d7-7cb1-4495-9447-4bc46ac5e77a" />
   </Folder>
   <Project Path="JobLess.Shared.Domain/JobLess.Shared.Domain.csproj" />
 </Solution>

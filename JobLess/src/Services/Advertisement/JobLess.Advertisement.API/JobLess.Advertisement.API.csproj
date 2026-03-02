@@ -22,8 +22,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\JobLess.Shared.Domain\JobLess.Shared.Domain.csproj" />
-		<ProjectReference Include="..\Jobless.Oglasi.Application\Jobless.Advertisement.Application.csproj" />
-		<ProjectReference Include="..\JobLess.Oglasi.Infrastructure\JobLess.Advertisement.Infrastructure.csproj" />
+		<ProjectReference Include="..\Jobless.Advertisement.Application\Jobless.Advertisement.Application.csproj" />
+		<ProjectReference Include="..\JobLess.Advertisement.Infrastructure\JobLess.Advertisement.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

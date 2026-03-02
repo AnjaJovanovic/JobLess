@@ -7,6 +7,7 @@ using JobLess.Advertisement.Application.Queries.GetOne;
 using JobLess.Advertisement.Application.Queries.GetAll;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Jobless.Advertisement.Application.Queries.GetAllForCompany;
 
 namespace JobLess.Advertisement.API.Controllers
 {
@@ -66,9 +67,15 @@ namespace JobLess.Advertisement.API.Controllers
 
             return Ok(result);
         }
-        //TODO: ne radi ocekivano
         [HttpGet("Search")]
         public async Task<ActionResult<SearchAdvertisementResult>> Search([FromQuery] SearchAdvertisementQuery query)
+        {
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("GetAdvertisementsForCompany")]
+        public async Task<ActionResult<GetAllForCompanyResult>> GetAdvertisementsForComapny([FromQuery] GetAllForCompanyQuery query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);
