@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using JobLess.Advertisement.Application.Commands.Activate;
+using JobLess.Advertisement.Application.Commands.Delete;
 using JobLess.Advertisement.Application.Interfaces;
 using JobLess.Advertisement.Domain.Entities;
 using JobLess.Advertisement.Domain.Enums;
@@ -108,5 +109,25 @@ public class ActivateAdvertisementCommandHandlerTests
         result.Should().BeTrue();
         ad.IsActive.Should().BeTrue();
         _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+    }
+    [Fact]
+    public async Task Handle_Should_Throw_When_Advertisement_Does_Not_Exist()
+    {
+        // Arrange
+        SetupDbSet(new List<JobAdvertisement>());
+        _validationThrowerMock
+            .Setup(v => v.ThrowValidationException("Id", "Advertisement don't exists."))
+            .Throws(new Exception("Advertisement don't exists."));
+
+        var command = new ActivateAdvertisementCommand { Id = 999 };
+
+        // Act
+        var act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await act.Should().ThrowAsync<Exception>()
+            .WithMessage("Advertisement don't exists.");
+
+        _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }
