@@ -1,0 +1,6 @@
+@JobLess.Oglasi.API_HostAddress = http://localhost:5104
+
+GET {{JobLess.Oglasi.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
