@@ -40,14 +40,14 @@ namespace JobLess.Advertisement.Application.Commands.Activate
                     .ThrowValidationException("Id",
                         "Advertisement don't exists.");
             }
-
+            /*
             if (advertisement!.IsActive == true)
             {
                 _validationExceptionThrower
                     .ThrowValidationException("Active",
                         "Advertisement is already active.");
             }
-
+            */
             advertisement!.IsActive = true;
 
             await _context.SaveChangesAsync(cancellationToken);
