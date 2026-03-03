@@ -57,7 +57,7 @@ public class SearchAdvertisementQueryHandler : IRequestHandler<SearchAdvertiseme
             advertisementsQuery = advertisementsQuery.Where(x => x.City.Contains(query.City));
 
         if (!string.IsNullOrWhiteSpace(query.Country))
-            advertisementsQuery = advertisementsQuery.Where(x => x.Country.Contains(query.Country));
+            advertisementsQuery = advertisementsQuery.Where(x => x.Country!.Contains(query.Country));
 
         if (query.WorkType.HasValue)
             advertisementsQuery = advertisementsQuery.Where(x => x.WorkType == query.WorkType.Value);

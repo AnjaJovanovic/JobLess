@@ -4,6 +4,7 @@ using JobLess.Advertisement.Application.Interfaces;
 using JobLess.Advertisement.Domain.Entities;
 using JobLess.Advertisement.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using MockQueryable.Moq;
 using Moq;
 using System.Collections.Generic;
 using System.Threading;

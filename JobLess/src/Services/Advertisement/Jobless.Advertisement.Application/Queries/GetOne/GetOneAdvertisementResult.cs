@@ -9,7 +9,7 @@ namespace JobLess.Advertisement.Application.Queries.GetOne
 {
     public class GetOneAdvertisementResult
     {
-        public AdvertisementModel Advertisement { get; set; }
+        public AdvertisementModel Advertisement { get; set; } = new();
        
     }
 }

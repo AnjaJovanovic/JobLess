@@ -1,7 +1,6 @@
 ﻿using JobLess.Advertisement.Application.Commands.Activate;
 using JobLess.Advertisement.Application.Interfaces;
 using JobLess.Advertisement.Application.Commands.Delete;
-using JobLess.Advertisement.Application.Interfaces;
 using JobLess.Shared.Domain.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -42,14 +41,14 @@ namespace JobLess.Advertisement.Application.Commands.Activate
                         "Advertisement don't exists.");
             }
 
-            if (advertisement.IsActive)
+            if (advertisement!.IsActive == true)
             {
                 _validationExceptionThrower
                     .ThrowValidationException("Active",
                         "Advertisement is already active.");
             }
 
-            advertisement.IsActive = true;
+            advertisement!.IsActive = true;
 
             await _context.SaveChangesAsync(cancellationToken);
 

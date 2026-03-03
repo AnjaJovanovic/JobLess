@@ -1,5 +1,4 @@
 ﻿using JobLess.Advertisement.Application.Interfaces;
-using JobLess.Advertisement.Application.Interfaces;
 using JobLess.Advertisement.Application.Models;
 using JobLess.Advertisement.Application.Queries.GetAll;
 using JobLess.Shared.Domain.Common.Interfaces;
@@ -43,7 +42,7 @@ namespace JobLess.Advertisement.Application.Queries.GetOne
 
             return new GetOneAdvertisementResult
             {
-                Advertisement = advertisement
+                Advertisement = advertisement!
             };
         }
     }

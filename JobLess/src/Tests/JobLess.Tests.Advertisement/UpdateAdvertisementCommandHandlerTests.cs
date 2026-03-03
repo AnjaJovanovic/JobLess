@@ -4,36 +4,26 @@ using JobLess.Advertisement.Application.Interfaces;
 using JobLess.Advertisement.Domain.Entities;
 using JobLess.Advertisement.Domain.Enums;
 using JobLess.Shared.Domain.Common.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using MockQueryable.Moq;  
 using Moq;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
-/*
+
+
 public class UpdateAdvertisementCommandHandlerTests
 {
     private readonly Mock<IApplicationDbContext> _contextMock;
-    private readonly Mock<DbSet<JobAdvertisement>> _dbSetMock;
     private readonly Mock<IValidationExceptionThrower> _validationMock;
     private readonly UpdateAdvertisementCommandHandler _handler;
 
     public UpdateAdvertisementCommandHandlerTests()
     {
         _contextMock = new Mock<IApplicationDbContext>();
-        _dbSetMock = new Mock<DbSet<JobAdvertisement>>();
         _validationMock = new Mock<IValidationExceptionThrower>();
-
-        _contextMock.Setup(c => c.JobAdvertisements).Returns(_dbSetMock.Object);
-
         _handler = new UpdateAdvertisementCommandHandler(_contextMock.Object, _validationMock.Object);
     }
 
     [Fact]
     public async Task Handle_Should_Update_Only_Specified_Fields_And_Keep_Others_Unchanged()
     {
-        // Arrange - postojeći oglas
         var existingAd = new JobAdvertisement
         {
             Id = 123,
@@ -55,14 +45,11 @@ public class UpdateAdvertisementCommandHandlerTests
             PostedAt = System.DateTime.UtcNow
         };
 
-        // Napravi IQueryable listu za LINQ
-        var ads = new List<JobAdvertisement> { existingAd }.AsQueryable();
+        var mockDbSet = new List<JobAdvertisement> { existingAd }
+            .AsQueryable()
+            .BuildMockDbSet();
 
-        _dbSetMock.As<IQueryable<JobAdvertisement>>().Setup(m => m.Provider).Returns(ads.Provider);
-        _dbSetMock.As<IQueryable<JobAdvertisement>>().Setup(m => m.Expression).Returns(ads.Expression);
-        _dbSetMock.As<IQueryable<JobAdvertisement>>().Setup(m => m.ElementType).Returns(ads.ElementType);
-        _dbSetMock.As<IQueryable<JobAdvertisement>>().Setup(m => m.GetEnumerator()).Returns(ads.GetEnumerator());
-
+        _contextMock.Setup(c => c.JobAdvertisements).Returns(mockDbSet.Object);
         _contextMock.Setup(c => c.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
 
         var command = new UpdateAdvertisementCommand
@@ -70,19 +57,14 @@ public class UpdateAdvertisementCommandHandlerTests
             Id = 123,
             Title = "Updated Title",
             Description = "Updated Description"
-            // ostala polja nisu navedena i neće se menjati
         };
 
-        // Act
+     
         var result = await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        //result.Should().Be(123);
 
         existingAd.Title.Should().Be("Updated Title");
         existingAd.Description.Should().Be("Updated Description");
-
-        // ostala polja nepromenjena
+        existingAd.Id.Should().Be(123);
         existingAd.Position.Should().Be("Developer");
         existingAd.EmploymentType.Should().Be(EmploymentType.Permanent);
         existingAd.WorkSchedule.Should().Be(WorkSchedule.PartTime);
@@ -95,8 +77,6 @@ public class UpdateAdvertisementCommandHandlerTests
         existingAd.IsSalaryVisible.Should().BeTrue();
         existingAd.IsActive.Should().BeTrue();
         existingAd.Status.Should().Be(JobPostingStatus.Draft);
-
         _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 }
-*/
