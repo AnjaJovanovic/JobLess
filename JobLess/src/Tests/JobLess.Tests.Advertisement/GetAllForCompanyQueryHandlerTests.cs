@@ -52,43 +52,53 @@ namespace JobLess.Tests.Advertisement
         };
 
         [Fact]
-        public async Task Handle_Should_Return_Only_Active_Ads_For_Given_Company()
+        public async Task Handle_Should_Return_All_Ads_For_Given_Company()
         {
             // Arrange
             SetupDbSet(new List<JobAdvertisement>
             {
                 CreateAd(1, companyId: 1, isActive: true),
                 CreateAd(2, companyId: 1, isActive: true),
-                CreateAd(3, companyId: 1, isActive: false), // neaktivan, ne sme da se vrati
-                CreateAd(4, companyId: 2, isActive: true),  // druga kompanija, ne sme da se vrati
+                CreateAd(3, companyId: 1, isActive: false),
+                CreateAd(4, companyId: 2, isActive: true)
             });
 
-            var query = new GetAllForCompanyQuery { CompanyId = 1, PageNumber = 1, PageSize = 10 };
+            var query = new GetAllForCompanyQuery
+            {
+                CompanyId = 1,
+                PageNumber = 1,
+                PageSize = 10
+            };
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
             result.Should().NotBeNull();
-            result.Advertisements.Should().HaveCount(2);
+            result.Advertisements.Should().HaveCount(3);
+
             result.Advertisements.Should().AllSatisfy(a =>
             {
                 a.CompanyId.Should().Be(1);
-                a.IsActive.Should().BeTrue();
             });
         }
 
         [Fact]
-        public async Task Handle_Should_Return_Empty_When_Company_Has_No_Active_Ads()
+        public async Task Handle_Should_Return_Empty_When_Company_Has_No_Ads()
         {
             // Arrange
             SetupDbSet(new List<JobAdvertisement>
             {
-                CreateAd(1, companyId: 1, isActive: false),
-                CreateAd(2, companyId: 1, isActive: false)
+                CreateAd(1, companyId: 2, isActive: true),
+                CreateAd(2, companyId: 2, isActive: false)
             });
 
-            var query = new GetAllForCompanyQuery { CompanyId = 1, PageNumber = 1, PageSize = 10 };
+            var query = new GetAllForCompanyQuery
+            {
+                CompanyId = 1,
+                PageNumber = 1,
+                PageSize = 10
+            };
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
@@ -105,12 +115,17 @@ namespace JobLess.Tests.Advertisement
             SetupDbSet(new List<JobAdvertisement>
             {
                 CreateAd(1, companyId: 1, isActive: true),
-                CreateAd(2, companyId: 1, isActive: true),
+                CreateAd(2, companyId: 1, isActive: false),
                 CreateAd(3, companyId: 1, isActive: true),
-                CreateAd(4, companyId: 1, isActive: true),
+                CreateAd(4, companyId: 1, isActive: false),
             });
 
-            var query = new GetAllForCompanyQuery { CompanyId = 1, PageNumber = 1, PageSize = 2 };
+            var query = new GetAllForCompanyQuery
+            {
+                CompanyId = 1,
+                PageNumber = 1,
+                PageSize = 2
+            };
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
@@ -120,5 +135,33 @@ namespace JobLess.Tests.Advertisement
             result.TotalCount.Should().Be(4);
             result.TotalPages.Should().Be(2);
         }
+        [Fact]
+        public async Task Handle_Should_Not_Return_Ads_From_Other_Companies()
+        {
+            // Arrange
+            SetupDbSet(new List<JobAdvertisement>
+            {
+               CreateAd(1, companyId: 1, isActive: true),
+               CreateAd(2, companyId: 1, isActive: false),
+               CreateAd(3, companyId: 2, isActive: true),
+               CreateAd(4, companyId: 3, isActive: true)
+            });
+
+            var query = new GetAllForCompanyQuery
+            {
+                CompanyId = 1,
+                PageNumber = 1,
+                PageSize = 10
+            };
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.Advertisements.Should().HaveCount(2);
+
+            result.Advertisements.Should().OnlyContain(a => a.CompanyId == 1);
+        }
     }
+
 }
