@@ -34,7 +34,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\JobLess.Shared.Domain\JobLess.Shared.Domain.csproj" />
 		<ProjectReference Include="..\..\Services\Advertisement\JobLess.Advertisement.Application\JobLess.Advertisement.Application.csproj" />
 		<ProjectReference Include="..\..\Services\Advertisement\JobLess.Advertisement.Domain\JobLess.Advertisement.Domain.csproj" />
 	</ItemGroup>

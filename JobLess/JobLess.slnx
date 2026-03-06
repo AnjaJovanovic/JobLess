@@ -7,9 +7,11 @@
     <Project Path="src/Services/Advertisement/JobLess.Advertisement.Domain/JobLess.Advertisement.Domain.csproj" Id="88b96743-c5be-441c-8461-15e9d473accb" />
     <Project Path="src/Services/Advertisement/JobLess.Advertisement.Infrastructure/JobLess.Advertisement.Infrastructure.csproj" Id="596a73aa-d8a9-41e0-a3bb-913b930d26c2" />
   </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/JobLess.Shared.Domain/JobLess.Shared.Domain.csproj" />
+  </Folder>
   <Folder Name="/src/Tests/" />
   <Folder Name="/src/Tests/Advertisement/">
     <Project Path="src/Tests/JobLess.Tests.Advertisement/JobLess.Tests.Advertisement.csproj" Id="d2a103d7-7cb1-4495-9447-4bc46ac5e77a" />
   </Folder>
-  <Project Path="JobLess.Shared.Domain/JobLess.Shared.Domain.csproj" />
 </Solution>
