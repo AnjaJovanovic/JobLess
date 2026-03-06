@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using JobLess.Advertisement.Application.Queries.GetAll;
+using System.Data;
 
 namespace JobLess.Advertisement.Application.Queries.GetAll;
 
@@ -29,7 +30,7 @@ public class GetAllAdvertisementQueryHandler : IRequestHandler<GetAllAdvertiseme
         var totalCount = await advertisementsQuery.CountAsync(cancellationToken);
 
         var advertisements = await advertisementsQuery
-            .Where(x => x.IsActive == true)
+            .Where(x => x.IsActive == true && x.ExpiresAt >= DateTime.UtcNow)
             .Select(AdvertisementModel.Projection)
             .Skip((query.PageNumber - 1) * query.PageSize)
             .Take(query.PageSize)

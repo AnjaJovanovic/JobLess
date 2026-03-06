@@ -30,7 +30,7 @@ namespace JobLess.Advertisement.Application.Queries.GetOne
             CancellationToken cancellationToken)
         {
             var advertisement = await _context.JobAdvertisements
-                .Where(x => x.Id == query.Id && x.IsActive == true)
+                .Where(x => x.Id == query.Id && x.IsActive == true && x.ExpiresAt >= DateTime.UtcNow)
                 .Select(AdvertisementModel.Projection)
                 .FirstOrDefaultAsync(cancellationToken);
 
