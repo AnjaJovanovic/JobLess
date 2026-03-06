@@ -57,8 +57,7 @@ public class ActivateAdvertisementCommandHandlerTests
             SalaryFrom = 1500,
             SalaryTo = 2500,
             IsSalaryVisible = true,
-            IsActive = false, 
-            Status = JobPostingStatus.Draft,
+            IsActive = false,
             PostedAt = System.DateTime.UtcNow
         };
         SetupDbSet(new List<JobAdvertisement> { ad });
@@ -95,7 +94,6 @@ public class ActivateAdvertisementCommandHandlerTests
             SalaryTo = 2500,
             IsSalaryVisible = true,
             IsActive = true,
-            Status = JobPostingStatus.Draft,
             PostedAt = System.DateTime.UtcNow
         };
         SetupDbSet(new List<JobAdvertisement> { ad });

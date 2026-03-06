@@ -41,7 +41,6 @@ public class UpdateAdvertisementCommandHandlerTests
             SalaryTo = 2500,
             IsSalaryVisible = true,
             IsActive = true,
-            Status = JobPostingStatus.Draft,
             PostedAt = System.DateTime.UtcNow
         };
 
@@ -76,7 +75,6 @@ public class UpdateAdvertisementCommandHandlerTests
         existingAd.SalaryTo.Should().Be(2500);
         existingAd.IsSalaryVisible.Should().BeTrue();
         existingAd.IsActive.Should().BeTrue();
-        existingAd.Status.Should().Be(JobPostingStatus.Draft);
         _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 }

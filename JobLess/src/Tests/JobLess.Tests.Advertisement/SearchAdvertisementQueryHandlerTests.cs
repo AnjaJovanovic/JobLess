@@ -5,6 +5,7 @@ using JobLess.Advertisement.Domain.Entities;
 using JobLess.Advertisement.Domain.Enums;
 using MockQueryable.Moq;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,7 +32,8 @@ namespace JobLess.Tests.Advertisement
 
         private JobAdvertisement CreateAd(int id, string title = "Backend Developer",
             string city = "Belgrade", EmploymentType employmentType = EmploymentType.Internship,
-            WorkType workType = WorkType.Hybrid, decimal salaryFrom = 1000, decimal salaryTo = 2000)
+            WorkType workType = WorkType.Hybrid, decimal salaryFrom = 1000, decimal salaryTo = 2000,
+            DateTime? expiresAt = null)
             => new JobAdvertisement
             {
                 Id = id,
@@ -48,9 +50,9 @@ namespace JobLess.Tests.Advertisement
                 SalaryFrom = salaryFrom,
                 SalaryTo = salaryTo,
                 IsSalaryVisible = true,
-                Status = JobPostingStatus.Draft,
                 IsActive = true,
-                PostedAt = System.DateTime.UtcNow
+                ExpiresAt = expiresAt,
+                PostedAt = DateTime.UtcNow
             };
 
         [Fact]
@@ -178,6 +180,28 @@ namespace JobLess.Tests.Advertisement
             result.TotalCount.Should().Be(5);
             result.TotalPages.Should().Be(3);
             result.PageNumber.Should().Be(2);
+        }
+
+        [Fact]
+        public async Task Handle_Should_Not_Return_Expired_Advertisements_In_Search()
+        {
+            // Arrange
+            SetupDbSet(new List<JobAdvertisement>
+            {
+                CreateAd(1, title: "Backend Developer",  expiresAt: DateTime.UtcNow.AddDays(10)),   // validan
+                CreateAd(2, title: "Frontend Developer", expiresAt: DateTime.UtcNow.AddDays(5)),    // validan
+                CreateAd(3, title: "Backend Developer",  expiresAt: DateTime.UtcNow.AddDays(-1)),   // istekao
+                CreateAd(4, title: "Designer",           expiresAt: null)                           // validan, bez datuma
+            });
+
+            var query = new SearchAdvertisementQuery { PageNumber = 1, PageSize = 10 };
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.TotalCount.Should().Be(3);
+            result.Advertisements.Should().NotContain(a => a.Id == 3);
         }
     }
 }

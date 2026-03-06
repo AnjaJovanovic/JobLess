@@ -13,7 +13,6 @@ namespace JobLess.Advertisement.Application.Models
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
         public string Position { get; set; } = string.Empty;
-        public JobPostingStatus Status { get; set; }
         public DateTime PostedAt { get; set; }
         public DateTime? ExpiresAt { get; set; }
         public bool IsActive { get; set; }
@@ -41,7 +40,6 @@ namespace JobLess.Advertisement.Application.Models
                     Title = entity.Title,
                     Description = entity.Description,
                     Position = entity.Position,
-                    Status = entity.Status,
                     PostedAt = entity.PostedAt,
                     ExpiresAt = entity.ExpiresAt,
                     IsActive = entity.IsActive,

@@ -72,7 +72,6 @@ public class CreateAdvertisementCommandHandlerTests
 
         capturedAd.Should().NotBeNull();
         capturedAd!.Title.Should().Be(command.Title);
-        capturedAd.Status.Should().Be(JobPostingStatus.Draft);
         capturedAd.IsActive.Should().BeTrue();
         capturedAd.City.Should().Be(command.City);
 

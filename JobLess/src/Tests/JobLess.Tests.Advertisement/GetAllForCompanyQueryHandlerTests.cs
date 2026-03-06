@@ -6,6 +6,7 @@ using JobLess.Advertisement.Domain.Entities;
 using JobLess.Advertisement.Domain.Enums;
 using MockQueryable.Moq;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace JobLess.Tests.Advertisement
             _contextMock.Setup(c => c.JobAdvertisements).Returns(dbSetMock.Object);
         }
 
-        private JobAdvertisement CreateAd(int id, int companyId, bool isActive) => new JobAdvertisement
+        private JobAdvertisement CreateAd(int id, int companyId, bool isActive, DateTime? expiresAt = null) => new JobAdvertisement
         {
             Id = id,
             CompanyId = companyId,
@@ -46,9 +47,9 @@ namespace JobLess.Tests.Advertisement
             SalaryFrom = 1000,
             SalaryTo = 2000,
             IsSalaryVisible = true,
-            Status = JobPostingStatus.Draft,
             IsActive = isActive,
-            PostedAt = System.DateTime.UtcNow
+            ExpiresAt = expiresAt,
+            PostedAt = DateTime.UtcNow
         };
 
         [Fact]
@@ -76,7 +77,6 @@ namespace JobLess.Tests.Advertisement
             // Assert
             result.Should().NotBeNull();
             result.Advertisements.Should().HaveCount(3);
-
             result.Advertisements.Should().AllSatisfy(a =>
             {
                 a.CompanyId.Should().Be(1);
@@ -135,6 +135,7 @@ namespace JobLess.Tests.Advertisement
             result.TotalCount.Should().Be(4);
             result.TotalPages.Should().Be(2);
         }
+
         [Fact]
         public async Task Handle_Should_Not_Return_Ads_From_Other_Companies()
         {
@@ -159,9 +160,36 @@ namespace JobLess.Tests.Advertisement
 
             // Assert
             result.Advertisements.Should().HaveCount(2);
-
             result.Advertisements.Should().OnlyContain(a => a.CompanyId == 1);
         }
-    }
 
+        [Fact]
+        public async Task Handle_Should_Not_Return_Expired_Ads_For_Company()
+        {
+            // Arrange
+            SetupDbSet(new List<JobAdvertisement>
+            {
+                CreateAd(1, companyId: 1, isActive: true,  expiresAt: DateTime.UtcNow.AddDays(10)),  // validan
+                CreateAd(2, companyId: 1, isActive: false, expiresAt: DateTime.UtcNow.AddDays(5)),   // validan, neaktivan
+                CreateAd(3, companyId: 1, isActive: true,  expiresAt: DateTime.UtcNow.AddDays(-1)),  // istekao
+                CreateAd(4, companyId: 1, isActive: true,  expiresAt: null),                         // validan, bez datuma
+                CreateAd(5, companyId: 2, isActive: true,  expiresAt: DateTime.UtcNow.AddDays(10))   // druga kompanija
+            });
+
+            var query = new GetAllForCompanyQuery
+            {
+                CompanyId = 1,
+                PageNumber = 1,
+                PageSize = 10
+            };
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.Advertisements.Should().HaveCount(3);
+            result.Advertisements.Should().OnlyContain(a => a.CompanyId == 1);
+            result.Advertisements.Should().NotContain(a => a.Id == 3);
+        }
+    }
 }

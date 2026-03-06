@@ -13,7 +13,6 @@ namespace JobLess.Advertisement.Application.Commands.Update
         public EmploymentType? EmploymentType { get; set; }
         public WorkSchedule? WorkSchedule { get; set; }
         public SeniorityLevel? SeniorityLevel { get; set; }
-        public JobPostingStatus? Status { get; set; }
         public int? MinExperience { get; set; }
         public int? MaxExperience { get; set; }
         public string? City { get; init; }

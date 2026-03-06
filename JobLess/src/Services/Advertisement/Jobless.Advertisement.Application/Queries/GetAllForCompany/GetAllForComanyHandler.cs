@@ -33,7 +33,7 @@ public class GetAllForComapnyQueryHandler : IRequestHandler<GetAllForCompanyQuer
 
         var advertisements = await filteredQuery
             .Select(AdvertisementModel.Projection)
-            .Where(x => x.ExpiresAt >= DateTime.UtcNow)
+            .Where(x => (x.ExpiresAt == null || x.ExpiresAt >= DateTime.UtcNow))
             .Skip((query.PageNumber - 1) * query.PageSize)
             .Take(query.PageSize)
             .ToListAsync(cancellationToken);

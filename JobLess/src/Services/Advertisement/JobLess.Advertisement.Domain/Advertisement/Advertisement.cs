@@ -8,7 +8,6 @@ public class JobAdvertisement : BaseEntity
     public required string Title { get; set; }
     public string? Description { get; set; }
     public required string Position { get; set; }
-    public required JobPostingStatus Status { get; set; }
     public required DateTime PostedAt { get; set; }
     public DateTime? ExpiresAt { get; set; }
     public required bool IsActive { get; set; }

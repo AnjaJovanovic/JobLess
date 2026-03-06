@@ -5,6 +5,7 @@ using JobLess.Advertisement.Domain.Entities;
 using JobLess.Advertisement.Domain.Enums;
 using MockQueryable.Moq;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace JobLess.Tests.Advertisement
             _contextMock.Setup(c => c.JobAdvertisements).Returns(dbSetMock.Object);
         }
 
-        private JobAdvertisement CreateAd(int id, bool isActive) => new JobAdvertisement
+        private JobAdvertisement CreateAd(int id, bool isActive, DateTime? expiresAt = null) => new JobAdvertisement
         {
             Id = id,
             CompanyId = 1,
@@ -45,9 +46,9 @@ namespace JobLess.Tests.Advertisement
             SalaryFrom = 1000,
             SalaryTo = 2000,
             IsSalaryVisible = true,
-            Status = JobPostingStatus.Draft,
             IsActive = isActive,
-            PostedAt = System.DateTime.UtcNow
+            ExpiresAt = expiresAt,
+            PostedAt = DateTime.UtcNow
         };
 
         [Fact]
@@ -115,6 +116,90 @@ namespace JobLess.Tests.Advertisement
 
             // Assert
             result.Advertisements.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task Handle_Should_Not_Return_Expired_Advertisements()
+        {
+            // Arrange
+            SetupDbSet(new List<JobAdvertisement>
+            {
+                CreateAd(1, isActive: true,  expiresAt: DateTime.UtcNow.AddDays(10)),
+                CreateAd(2, isActive: true,  expiresAt: DateTime.UtcNow.AddDays(5)),
+                CreateAd(3, isActive: true,  expiresAt: DateTime.UtcNow.AddDays(-1)),
+                CreateAd(4, isActive: true,  expiresAt: DateTime.UtcNow.AddDays(-10))
+            });
+
+            var query = new GetAllAdvertisementQuery { PageNumber = 1, PageSize = 10 };
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.Advertisements.Should().HaveCount(2);
+            result.Advertisements.Should().AllSatisfy(a =>
+                a.ExpiresAt!.Value.Should().BeAfter(DateTime.UtcNow));
+        }
+
+        [Fact]
+        public async Task Handle_Should_Return_Empty_When_All_Advertisements_Are_Expired()
+        {
+            // Arrange
+            SetupDbSet(new List<JobAdvertisement>
+            {
+                CreateAd(1, isActive: true, expiresAt: DateTime.UtcNow.AddDays(-5)),
+                CreateAd(2, isActive: true, expiresAt: DateTime.UtcNow.AddDays(-1))
+            });
+
+            var query = new GetAllAdvertisementQuery { PageNumber = 1, PageSize = 10 };
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.Advertisements.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task Handle_Should_Not_Return_Expired_And_Inactive_Advertisements()
+        {
+            // Arrange
+            SetupDbSet(new List<JobAdvertisement>
+            {
+                CreateAd(1, isActive: true,  expiresAt: DateTime.UtcNow.AddDays(10)),
+                CreateAd(2, isActive: false, expiresAt: DateTime.UtcNow.AddDays(10)),
+                CreateAd(3, isActive: true,  expiresAt: DateTime.UtcNow.AddDays(-1)),
+                CreateAd(4, isActive: false, expiresAt: DateTime.UtcNow.AddDays(-1))
+            });
+
+            var query = new GetAllAdvertisementQuery { PageNumber = 1, PageSize = 10 };
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.Advertisements.Should().HaveCount(1);
+            result.Advertisements.Single().Id.Should().Be(1);
+        }
+
+        [Fact]
+        public async Task Handle_Should_Return_Advertisements_Without_ExpiresAt()
+        {
+            // Arrange
+            SetupDbSet(new List<JobAdvertisement>
+            {
+                CreateAd(1, isActive: true,  expiresAt: null),
+                CreateAd(2, isActive: true,  expiresAt: null),
+                CreateAd(3, isActive: false, expiresAt: null)
+            });
+
+            var query = new GetAllAdvertisementQuery { PageNumber = 1, PageSize = 10 };
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.Advertisements.Should().HaveCount(2);
         }
     }
 }

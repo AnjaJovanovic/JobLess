@@ -25,7 +25,6 @@ namespace JobLess.Advertisement.Application.Commands.Create
                 Title = request.Title,
                 Description = request.Description,
                 Position = request.Position,
-                Status = JobPostingStatus.Draft,
                 PostedAt = DateTime.UtcNow,
                 ExpiresAt = request.ExpiresAt,
                 EmploymentType = request.EmploymentType,

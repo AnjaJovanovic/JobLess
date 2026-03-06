@@ -42,7 +42,6 @@ namespace JobLess.Tests.Advertisement
             SalaryFrom = 1000,
             SalaryTo = 2000,
             IsSalaryVisible = true,
-            Status = JobPostingStatus.Draft,
             IsActive = isActive,
             PostedAt = System.DateTime.UtcNow
         };

@@ -66,9 +66,6 @@ namespace JobLess.Advertisement.Application.Commands.Update
             if (command.SeniorityLevel.HasValue && command.SeniorityLevel.Value != advertisement.SeniorityLevel)
                 advertisement.SeniorityLevel = command.SeniorityLevel.Value;
 
-            if (command.Status.HasValue && command.Status.Value != advertisement.Status)
-                advertisement.Status = command.Status.Value;
-
             if (command.WorkType.HasValue && command.WorkType.Value != advertisement.WorkType)
                 advertisement.WorkType = command.WorkType.Value;
 

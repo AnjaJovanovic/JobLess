@@ -19,7 +19,7 @@ public class SearchAdvertisementQueryHandler : IRequestHandler<SearchAdvertiseme
         CancellationToken cancellationToken)
     {
         var advertisementsQuery = _context.JobAdvertisements
-            .Where(x => x.IsActive == true && x.ExpiresAt >= DateTime.UtcNow)
+            .Where(x => x.IsActive == true && (x.ExpiresAt == null || x.ExpiresAt >= DateTime.UtcNow))
             .AsQueryable();
 
         // === FILTERS ===

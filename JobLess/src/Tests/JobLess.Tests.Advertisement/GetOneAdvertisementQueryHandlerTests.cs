@@ -6,6 +6,7 @@ using JobLess.Advertisement.Domain.Enums;
 using JobLess.Shared.Domain.Common.Interfaces;
 using MockQueryable.Moq;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace JobLess.Tests.Advertisement
             _contextMock.Setup(c => c.JobAdvertisements).Returns(dbSetMock.Object);
         }
 
-        private JobAdvertisement CreateAd(int id, bool isActive) => new JobAdvertisement
+        private JobAdvertisement CreateAd(int id, bool isActive, DateTime? expiresAt = null) => new JobAdvertisement
         {
             Id = id,
             CompanyId = 1,
@@ -48,9 +49,9 @@ namespace JobLess.Tests.Advertisement
             SalaryFrom = 1000,
             SalaryTo = 2000,
             IsSalaryVisible = true,
-            Status = JobPostingStatus.Draft,
             IsActive = isActive,
-            PostedAt = System.DateTime.UtcNow
+            ExpiresAt = expiresAt,
+            PostedAt = DateTime.UtcNow
         };
 
         [Fact]
@@ -97,6 +98,29 @@ namespace JobLess.Tests.Advertisement
         {
             // Arrange
             SetupDbSet(new List<JobAdvertisement> { CreateAd(1, isActive: false) });
+
+            _validationThrowerMock
+                .Setup(v => v.ThrowValidationException("Id", "Advertisement does not exist or is not active."))
+                .Throws(new Exception("Advertisement does not exist or is not active."));
+
+            var query = new GetOneAdvertisementQuery { Id = 1 };
+
+            // Act
+            var act = async () => await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<Exception>()
+                .WithMessage("Advertisement does not exist or is not active.");
+        }
+
+        [Fact]
+        public async Task Handle_Should_Throw_When_Advertisement_Is_Expired()
+        {
+            // Arrange
+            SetupDbSet(new List<JobAdvertisement>
+            {
+                CreateAd(1, isActive: true, expiresAt: DateTime.UtcNow.AddDays(-1))
+            });
 
             _validationThrowerMock
                 .Setup(v => v.ThrowValidationException("Id", "Advertisement does not exist or is not active."))

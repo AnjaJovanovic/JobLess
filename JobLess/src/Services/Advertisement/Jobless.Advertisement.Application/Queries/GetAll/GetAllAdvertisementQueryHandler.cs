@@ -30,7 +30,7 @@ public class GetAllAdvertisementQueryHandler : IRequestHandler<GetAllAdvertiseme
         var totalCount = await advertisementsQuery.CountAsync(cancellationToken);
 
         var advertisements = await advertisementsQuery
-            .Where(x => x.IsActive == true && x.ExpiresAt >= DateTime.UtcNow)
+            .Where(x => x.IsActive == true && (x.ExpiresAt == null || x.ExpiresAt >= DateTime.UtcNow))
             .Select(AdvertisementModel.Projection)
             .Skip((query.PageNumber - 1) * query.PageSize)
             .Take(query.PageSize)
