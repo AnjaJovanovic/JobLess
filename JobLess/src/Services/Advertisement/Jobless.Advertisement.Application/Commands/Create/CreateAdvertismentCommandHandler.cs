@@ -36,6 +36,7 @@ namespace JobLess.Advertisement.Application.Commands.Create
                 IsActive = true,
                 SalaryFrom = request.SalaryFrom,
                 SalaryTo = request.SalaryTo,
+                Currency = request.Currency,
                 IsSalaryVisible = request.IsSalaryVisible,
                 MinExperience = request.MinExperience,
                 MaxExperience = request.MaxExperience
