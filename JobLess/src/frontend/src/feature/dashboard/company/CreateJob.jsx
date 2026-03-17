@@ -1,4 +1,6 @@
-import { useState,useCallback } from "react";
+import { useState, useCallback } from "react";
+
+
 function useToast() {
   const [toasts, setToasts] = useState([]);
 
@@ -25,6 +27,57 @@ function ToastPortal({ toasts }) {
     </div>
   );
 }
+
+
+function validate(form) {
+  const errors = {};
+
+  if (!form.Naslov?.trim())
+    errors.Naslov = "Naslov je obavezan.";
+  else if (form.Naslov.trim().length < 3)
+    errors.Naslov = "Naslov mora imati najmanje 3 karaktera.";
+
+  if (!form.Pozicija?.trim())
+    errors.Pozicija = "Pozicija je obavezna.";
+
+  if (!form.Grad?.trim())
+    errors.Grad = "Grad je obavezan.";
+
+  if (form.DatumIsteka) {
+    const expiry = new Date(form.DatumIsteka);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (expiry < today)
+      errors.DatumIsteka = "Datum isteka ne može biti u prošlosti.";
+  }
+
+  const min = form.IskustvoMin !== "" && form.IskustvoMin != null ? Number(form.IskustvoMin) : null;
+  const max = form.IskustvoMax !== "" && form.IskustvoMax != null ? Number(form.IskustvoMax) : null;
+
+  if (min !== null && min < 0)
+    errors.IskustvoMin = "Iskustvo ne može biti negativno.";
+  if (max !== null && max < 0)
+    errors.IskustvoMax = "Iskustvo ne može biti negativno.";
+  if (min !== null && max !== null && min > max)
+    errors.IskustvoMin = "Minimalno iskustvo ne može biti veće od maksimalnog.";
+
+  const od = form.PlataOd !== "" && form.PlataOd != null ? Number(form.PlataOd) : null;
+  const do_ = form.PlataDo !== "" && form.PlataDo != null ? Number(form.PlataDo) : null;
+
+  if (od !== null && od < 0)
+    errors.PlataOd = "Plata ne može biti negativna.";
+  if (do_ !== null && do_ < 0)
+    errors.PlataDo = "Plata ne može biti negativna.";
+  if (od !== null && do_ !== null && od > do_)
+    errors.PlataOd = "Plata od ne može biti veća od plate do.";
+
+  if (form.PlataVidljiva && !form.Valuta)
+    errors.Valuta = "Valuta je obavezna kada je plata vidljiva.";
+
+  return errors;
+}
+
+
 const INITIAL = {
   Naslov: "",
   Pozicija: "",
@@ -46,12 +99,12 @@ const INITIAL = {
 
 export default function CreateJob({ onSuccess }) {
   const [form, setForm] = useState(INITIAL);
+  const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const { toasts, show: showToast } = useToast();
 
   const handle = (e) => {
     const { name, value, type, checked } = e.target;
-
     setForm((prev) => ({
       ...prev,
       [name]:
@@ -61,10 +114,20 @@ export default function CreateJob({ onSuccess }) {
           ? Number(value)
           : value,
     }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errs = validate(form);
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+    setErrors({});
     setSubmitting(true);
 
     try {
@@ -73,25 +136,17 @@ export default function CreateJob({ onSuccess }) {
         Title: form.Naslov,
         Description: form.Opis || null,
         Position: form.Pozicija,
-
-        ExpiresAt: form.DatumIsteka
-          ? new Date(form.DatumIsteka).toISOString()
-          : null,
-
+        ExpiresAt: form.DatumIsteka ? new Date(form.DatumIsteka).toISOString() : null,
         EmploymentType: Number(form.TipZaposlenja),
         WorkSchedule: Number(form.RadnoVreme),
         SeniorityLevel: Number(form.Senioritet),
         WorkType: Number(form.TipRada),
-
         MinExperience: form.IskustvoMin === "" ? null : Number(form.IskustvoMin),
         MaxExperience: form.IskustvoMax === "" ? null : Number(form.IskustvoMax),
-
         City: form.Grad,
         Country: form.Drzava || null,
-
         SalaryFrom: form.PlataOd === "" ? null : Number(form.PlataOd),
         SalaryTo: form.PlataDo === "" ? null : Number(form.PlataDo),
-
         Currency: form.Valuta || null,
         IsSalaryVisible: form.PlataVidljiva,
       };
@@ -124,18 +179,30 @@ export default function CreateJob({ onSuccess }) {
       <form onSubmit={handleSubmit}>
         <div className="form-card">
 
-          {/* ── Osnovno ── */}
+  
           <fieldset style={fs}>
             <legend style={leg}>Osnovno</legend>
 
             <div className="form-group">
               <label>Naslov *</label>
-              <input name="Naslov" value={form.Naslov} onChange={handle} required />
+              <input
+                name="Naslov"
+                value={form.Naslov}
+                onChange={handle}
+                className={errors.Naslov ? "input-error" : ""}
+              />
+              {errors.Naslov && <span className="field-error">{errors.Naslov}</span>}
             </div>
 
             <div className="form-group">
               <label>Pozicija *</label>
-              <input name="Pozicija" value={form.Pozicija} onChange={handle} required />
+              <input
+                name="Pozicija"
+                value={form.Pozicija}
+                onChange={handle}
+                className={errors.Pozicija ? "input-error" : ""}
+              />
+              {errors.Pozicija && <span className="field-error">{errors.Pozicija}</span>}
             </div>
 
             <div className="form-group">
@@ -151,11 +218,13 @@ export default function CreateJob({ onSuccess }) {
                 value={form.DatumIsteka}
                 onChange={handle}
                 min={new Date().toISOString().split("T")[0]}
+                className={errors.DatumIsteka ? "input-error" : ""}
               />
+              {errors.DatumIsteka && <span className="field-error">{errors.DatumIsteka}</span>}
             </div>
           </fieldset>
 
-          {/* ── Vrsta posla ── */}
+  
           <fieldset style={fs}>
             <legend style={leg}>Vrsta posla</legend>
 
@@ -196,7 +265,6 @@ export default function CreateJob({ onSuccess }) {
             </div>
           </fieldset>
 
-          {/* ── Iskustvo ── */}
           <fieldset style={fs}>
             <legend style={leg}>Iskustvo (godine)</legend>
 
@@ -210,7 +278,9 @@ export default function CreateJob({ onSuccess }) {
                   onChange={handle}
                   min={0}
                   placeholder="npr. 1"
+                  className={errors.IskustvoMin ? "input-error" : ""}
                 />
+                {errors.IskustvoMin && <span className="field-error">{errors.IskustvoMin}</span>}
               </div>
 
               <div className="form-group">
@@ -222,19 +292,26 @@ export default function CreateJob({ onSuccess }) {
                   onChange={handle}
                   min={0}
                   placeholder="npr. 5"
+                  className={errors.IskustvoMax ? "input-error" : ""}
                 />
+                {errors.IskustvoMax && <span className="field-error">{errors.IskustvoMax}</span>}
               </div>
             </div>
           </fieldset>
 
-          {/* ── Lokacija ── */}
           <fieldset style={fs}>
             <legend style={leg}>Lokacija</legend>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
               <div className="form-group">
                 <label>Grad *</label>
-                <input name="Grad" value={form.Grad} onChange={handle} required />
+                <input
+                  name="Grad"
+                  value={form.Grad}
+                  onChange={handle}
+                  className={errors.Grad ? "input-error" : ""}
+                />
+                {errors.Grad && <span className="field-error">{errors.Grad}</span>}
               </div>
 
               <div className="form-group">
@@ -244,7 +321,6 @@ export default function CreateJob({ onSuccess }) {
             </div>
           </fieldset>
 
-          {/* ── Plata ── */}
           <fieldset style={fs}>
             <legend style={leg}>Plata</legend>
 
@@ -258,7 +334,9 @@ export default function CreateJob({ onSuccess }) {
                   onChange={handle}
                   min={0}
                   placeholder="npr. 50000"
+                  className={errors.PlataOd ? "input-error" : ""}
                 />
+                {errors.PlataOd && <span className="field-error">{errors.PlataOd}</span>}
               </div>
 
               <div className="form-group">
@@ -270,30 +348,39 @@ export default function CreateJob({ onSuccess }) {
                   onChange={handle}
                   min={0}
                   placeholder="npr. 100000"
+                  className={errors.PlataDo ? "input-error" : ""}
                 />
+                {errors.PlataDo && <span className="field-error">{errors.PlataDo}</span>}
               </div>
 
               <div className="form-group">
                 <label>Valuta</label>
-                <select name="Valuta" value={form.Valuta} onChange={handle}>
+                <select
+                  name="Valuta"
+                  value={form.Valuta}
+                  onChange={handle}
+                  className={errors.Valuta ? "input-error" : ""}
+                >
+                  <option value="">— Izaberi —</option>
                   <option value="RSD">RSD</option>
                   <option value="EUR">EUR</option>
                   <option value="USD">USD</option>
                 </select>
+                {errors.Valuta && <span className="field-error">{errors.Valuta}</span>}
               </div>
             </div>
 
             <div className="form-group" style={{ marginTop: "0.75rem" }}>
-  <label className="form-toggle">
-    <input
-      type="checkbox"
-      name="PlataVidljiva"
-      checked={form.PlataVidljiva}
-      onChange={handle}
-    />
-    <span>Prikaži platu kandidatima</span>
-  </label>
-</div>
+              <label className="form-toggle">
+                <input
+                  type="checkbox"
+                  name="PlataVidljiva"
+                  checked={form.PlataVidljiva}
+                  onChange={handle}
+                />
+                <span>Prikaži platu kandidatima</span>
+              </label>
+            </div>
           </fieldset>
 
           <button type="submit" className="btn-primary" disabled={submitting} style={{ marginTop: "1rem" }}>
@@ -302,11 +389,12 @@ export default function CreateJob({ onSuccess }) {
 
         </div>
       </form>
+
+      <ToastPortal toasts={toasts} />
     </div>
   );
 }
 
-// inline styles za fieldset / legend
 const fs = {
   border: "1px solid #e2e8f0",
   borderRadius: 8,
