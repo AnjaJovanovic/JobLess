@@ -1,5 +1,11 @@
 <Solution>
   <Folder Name="/src/" />
+  <Folder Name="/src/Security/">
+    <Project Path="src/Security/JobLess.IdentityServer.API/JobLess.IdentityServer.API.csproj" />
+    <Project Path="src/Security/JobLess.IdentityServer.Application/JobLess.IdentityServer.Application.csproj" />
+    <Project Path="src/Security/JobLess.IdentityServer.Domain/JobLess.IdentityServer.Domain.csproj" />
+    <Project Path="src/Security/JobLess.IdentityServer.Infrastructure/JobLess.IdentityServer.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/src/Services/" />
   <Folder Name="/src/Services/Advertisement/">
     <Project Path="src/Services/Advertisement/JobLess.Advertisement.API/JobLess.Advertisement.API.csproj" />
