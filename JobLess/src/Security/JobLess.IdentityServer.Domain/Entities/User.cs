@@ -1,7 +1,7 @@
-using IdentityServer.Enums;
+using JobLess.IdentityServer.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
-namespace IdentityServer.Entities;
+namespace JobLess.IdentityServer.Domain.Entities;
 
 public class User : IdentityUser<Guid>
 {

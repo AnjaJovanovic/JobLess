@@ -1,4 +1,4 @@
-namespace IdentityServer.Enums;
+namespace JobLess.IdentityServer.Domain.Enums;
 
 public enum Roles
 {
