@@ -6,5 +6,5 @@ namespace JobLess.IdentityServer.Domain.Entities;
 public class User : IdentityUser<Guid>
 {
     //id, email and password are already defined 
-    public Roles UserRole {get; private set;}
+    public Roles UserRole {get; set;}
 }
