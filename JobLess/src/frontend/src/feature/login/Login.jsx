@@ -103,7 +103,7 @@ function useForm(initial, schema) {
 
   const err = (name) => (touched[name] ? errors[name] : null);
 
-  return { field, err, validate };
+  return { field, err, validate , values};
 }
 
 // ============================================================
@@ -274,7 +274,7 @@ export default function Login() {
           return;
         }
         login(data);
-        navigate(data.role === "Company" ? "/company" : "/user");
+        navigate(data.role === "company" ? "/company" : "/user");
       } else {
         const res = await fetch("/api/Auth/register", {
           method: "POST",
