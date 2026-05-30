@@ -1,0 +1,29 @@
+<Solution>
+  <Folder Name="/src/" />
+
+  <Folder Name="/src/Services/" />
+
+  <Folder Name="/src/Services/Advertisement/">
+    <Project Path="src/Services/Advertisement/JobLess.Advertisement.API/JobLess.Advertisement.API.csproj" />
+    <Project Path="src/Services/Advertisement/Jobless.Advertisement.Application/Jobless.Advertisement.Application.csproj" />
+    <Project Path="src/Services/Advertisement/JobLess.Advertisement.Domain/JobLess.Advertisement.Domain.csproj" Id="88b96743-c5be-441c-8461-15e9d473accb" />
+    <Project Path="src/Services/Advertisement/JobLess.Advertisement.Infrastructure/JobLess.Advertisement.Infrastructure.csproj" Id="596a73aa-d8a9-41e0-a3bb-913b930d26c2" />
+  </Folder>
+
+  <Folder Name="/src/Services/Company/">
+    <Project Path="src/Services/Company/JobLess.Company.API/JobLess.Company.API.csproj" Id="965c0a62-e51c-49f6-a31a-3c6db0e4c6bd" />
+    <Project Path="src/Services/Company/JobLess.Company.Application/JobLess.Company.Application.csproj" Id="442d5bb7-dbc5-4d3a-a6ee-313da0c34097" />
+    <Project Path="src/Services/Company/JobLess.Company.Domain/JobLess.Company.Domain.csproj" Id="9c54926f-16e6-467e-b2b3-4f3e910d215c" />
+    <Project Path="src/Services/Company/JobLess.Company.Infrastructure/JobLess.Company.Infrastructure.csproj" Id="58d281cd-401b-4a90-bb1d-3cf7cb126086" />
+  </Folder>
+
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/JobLess.Shared.Domain/JobLess.Shared.Domain.csproj" />
+  </Folder>
+
+  <Folder Name="/src/Tests/" />
+
+  <Folder Name="/src/Tests/Advertisement/">
+    <Project Path="src/Tests/JobLess.Tests.Advertisement/JobLess.Tests.Advertisement.csproj" Id="d2a103d7-7cb1-4495-9447-4bc46ac5e77a" />
+  </Folder>
+</Solution>

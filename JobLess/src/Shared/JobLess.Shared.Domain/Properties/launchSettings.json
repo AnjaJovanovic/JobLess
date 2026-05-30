@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "JobLess.Shared.Domain": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\jelena.mitrovic\\Desktop\\RS2\\JobLess\\JobLess\\src\\Services\\Oglasi\\JobLess.Oglasi.API\\JobLess.Advertisement.API.http"
+    },
+    "Profile 2": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\jelena.mitrovic\\Desktop\\JobLess\\JobLess\\src\\Services\\Oglasi\\JobLess.Oglasi.API\\JobLess.Oglasi.API.csproj",
+      "commandLineArgs": "oglasi\r\n"
+    }
+  }
+}
