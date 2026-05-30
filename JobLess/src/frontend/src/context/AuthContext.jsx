@@ -12,10 +12,9 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const login = (email, role) => {
-    const fakeUser = { email, role };
-    localStorage.setItem("user", JSON.stringify(fakeUser));
-    setUser(fakeUser);
+  const login = (authData) => {
+    localStorage.setItem("user", JSON.stringify(authData));
+    setUser(authData);
   };
 
   const logout = () => {
@@ -30,7 +29,6 @@ export function AuthProvider({ children }) {
   );
 }
 
-// 🔥 DODAJ OVO
 export function useAuth() {
   return useContext(AuthContext);
 }

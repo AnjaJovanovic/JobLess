@@ -12,9 +12,9 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      // sve zahteve ka /api prosledi na tvoj backend
+      // sve zahteve ka /api prosledjujemo na backend
       "/api": {
-        target: "http://localhost:5104", // tvoj backend URL
+        target: "http://localhost:5218", // backend
         changeOrigin: true,
         secure: false, // dozvoljava self-signed certifikat
       },
