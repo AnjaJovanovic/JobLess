@@ -17,18 +17,18 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
-        policy.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost:80")
+        policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader()
               .AllowAnyMethod());
 });
 
 var app = builder.Build();
 
-// Auto-apply DB schema on startup (dev/demo)
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<IdentityContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 }
 
 if (app.Environment.IsDevelopment())
