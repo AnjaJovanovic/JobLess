@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="true" name="IdentityService.API" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
+    <option name="LAUNCH_PROFILE_NAME" value="http" />
+    <option name="PROJECT_PATH" value="$PROJECT_DIR$/IdentityService.API.csproj" />
+    <option name="SCRIPT_PARAMETERS" value="" />
+    <option name="USE_EXTERNAL_CONSOLE" value="0" />
+    <envs>
+      <env name="DOTNET_ROOT" value="/usr/share/dotnet" />
+      <env name="DOTNET_MULTILEVEL_LOOKUP" value="1" />
+      <env name="ASPNETCORE_ENVIRONMENT" value="Development" />
+    </envs>
+    <method v="2">
+      <option name="Build" />
+    </method>
+  </configuration>
+</component>

@@ -8,11 +8,111 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="053fb399-85c6-4c9b-b6bb-9d9bcae30349" name="Changes" comment="" />
+    <list default="true" id="053fb399-85c6-4c9b-b6bb-9d9bcae30349" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/JobLess.Identity.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/JobLess.Identity.Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/bin/Debug/net8.0/JobLess.Identity.Application.deps.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/bin/Debug/net8.0/JobLess.Identity.Application.deps.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/bin/Debug/net8.0/JobLess.Identity.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/bin/Debug/net8.0/JobLess.Identity.Application.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/bin/Debug/net8.0/JobLess.Identity.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/bin/Debug/net8.0/JobLess.Identity.Application.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/bin/Debug/net8.0/JobLess.Identity.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/bin/Debug/net8.0/JobLess.Identity.Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/bin/Debug/net8.0/JobLess.Identity.Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/bin/Debug/net8.0/JobLess.Identity.Domain.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/JobLess.Identity.Application.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/ref/JobLess.Identity.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/ref/JobLess.Identity.Application.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/refint/JobLess.Identity.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/Debug/net8.0/refint/JobLess.Identity.Application.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/JobLess.Identity.Application.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/JobLess.Identity.Application.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/JobLess.Identity.Application.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/JobLess.Identity.Application.csproj.nuget.g.targets" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Application/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/bin/Debug/net8.0/JobLess.Identity.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/bin/Debug/net8.0/JobLess.Identity.Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/bin/Debug/net8.0/JobLess.Identity.Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/bin/Debug/net8.0/JobLess.Identity.Domain.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/JobLess.Identity.Domain.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/ref/JobLess.Identity.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/ref/JobLess.Identity.Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/refint/JobLess.Identity.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/Debug/net8.0/refint/JobLess.Identity.Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/JobLess.Identity.Domain.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/JobLess.Identity.Domain.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Domain/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Application.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Application.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Domain.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Infrastructure.deps.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Infrastructure.deps.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Infrastructure.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Infrastructure.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/bin/Debug/net8.0/JobLess.Identity.Infrastructure.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/JobLess.Identity.Infrastructure.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/ref/JobLess.Identity.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/ref/JobLess.Identity.Infrastructure.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/refint/JobLess.Identity.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/Debug/net8.0/refint/JobLess.Identity.Infrastructure.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/JobLess.Identity.Infrastructure.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/JobLess.Identity.Infrastructure.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/../JobLess.Identity.Infrastructure/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.UserService/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UserService/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IdentityService.API.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/IdentityService.API.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/launchSettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/IdentityService.API" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/IdentityService.API.deps.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0/IdentityService.API.deps.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/IdentityService.API.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0/IdentityService.API.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/IdentityService.API.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0/IdentityService.API.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/IdentityService.API.runtimeconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0/IdentityService.API.runtimeconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Application.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Application.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Domain.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Domain.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Domain.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Domain.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Infrastructure.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Infrastructure.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0/JobLess.Identity.Infrastructure.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0/global.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0/global.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/global.json" beforeDir="false" afterPath="$PROJECT_DIR$/global.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.csproj.FileListAbsolute.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.genruntimeconfig.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/IdentityService.API.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/apphost" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/apphost" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/ref/IdentityService.API.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/ref/IdentityService.API.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0/refint/IdentityService.API.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0/refint/IdentityService.API.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/IdentityService.API.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/IdentityService.API.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.restore.info" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -47,24 +147,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.UserService.API: http.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "feature/mikroservisKorisnik",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.UserService.API: http.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/mikroservisKorisnik&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.UserService.API: http">
     <configuration name="UserService.API: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/IdentityService.API.csproj" />
@@ -106,7 +206,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1779219235901</updated>
-      <workItem from="1779219239361" duration="18952000" />
+      <workItem from="1779219239361" duration="26762000" />
     </task>
     <servers />
   </component>

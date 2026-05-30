@@ -1975,7 +1975,9 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Aspire.Npgsql.EntityFrameworkCore.PostgreSQL": "13.3.0",
+          "FluentValidation.DependencyInjectionExtensions": "12.1.1",
           "JobLess.Identity.Domain": "1.0.0",
+          "MediatR": "14.0.0",
           "Microsoft.EntityFrameworkCore": "8.0.27",
           "Microsoft.EntityFrameworkCore.Relational": "8.0.27",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.27"
@@ -5061,7 +5063,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/home/anja/.dotnet/sdk/8.0.419/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.421/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

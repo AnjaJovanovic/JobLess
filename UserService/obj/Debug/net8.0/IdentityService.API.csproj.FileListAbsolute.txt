@@ -1,7 +1,6 @@
 /home/anja/Desktop/JobLess/UserService/bin/Debug/net8.0/appsettings.Development.json
 /home/anja/Desktop/JobLess/UserService/bin/Debug/net8.0/appsettings.json
 /home/anja/Desktop/JobLess/UserService/bin/Debug/net8.0/global.json
-/home/anja/Desktop/JobLess/UserService/bin/Debug/net8.0/IdentityService.API
 /home/anja/Desktop/JobLess/UserService/bin/Debug/net8.0/IdentityService.API.deps.json
 /home/anja/Desktop/JobLess/UserService/bin/Debug/net8.0/IdentityService.API.runtimeconfig.json
 /home/anja/Desktop/JobLess/UserService/bin/Debug/net8.0/IdentityService.API.dll

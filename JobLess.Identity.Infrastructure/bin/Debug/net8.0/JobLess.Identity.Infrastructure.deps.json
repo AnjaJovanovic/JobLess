@@ -1269,7 +1269,9 @@
       "JobLess.Identity.Application/1.0.0": {
         "dependencies": {
           "Aspire.Npgsql.EntityFrameworkCore.PostgreSQL": "13.3.0",
+          "FluentValidation.DependencyInjectionExtensions": "12.1.1",
           "JobLess.Identity.Domain": "1.0.0",
+          "MediatR": "14.0.0",
           "Microsoft.EntityFrameworkCore": "8.0.27",
           "Microsoft.EntityFrameworkCore.Relational": "8.0.27",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.27"
