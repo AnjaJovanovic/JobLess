@@ -32,7 +32,7 @@ namespace JobLess.Advertisement.Application.Commands.Update
             {
                 _validationExceptionThrower
                     .ThrowValidationException("Id",
-                        "Advertisement does not exist or has already been deactivated.");
+                        "Oglas ne postoji ili je prethodno deaktiviran.");
                 throw new InvalidOperationException();
             }
 
@@ -81,8 +81,8 @@ namespace JobLess.Advertisement.Application.Commands.Update
             if (command.SalaryTo.HasValue && command.SalaryTo.Value != advertisement.SalaryTo)
                 advertisement.SalaryTo = command.SalaryTo.Value;
 
-            if (command.IsSalaryVisible.HasValue && command.IsSalaryVisible.Value != advertisement.IsSalaryVisible)
-                advertisement.IsSalaryVisible = command.IsSalaryVisible.Value;
+            if (command.IsSalaryVisible && command.IsSalaryVisible != advertisement.IsSalaryVisible)
+                advertisement.IsSalaryVisible = command.IsSalaryVisible;
 
             await _context.SaveChangesAsync(cancellationToken);
 

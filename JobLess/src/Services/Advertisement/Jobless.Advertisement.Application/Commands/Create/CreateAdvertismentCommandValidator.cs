@@ -8,105 +8,102 @@ namespace JobLess.Advertisement.Application.Commands.Create
         {
             RuleFor(x => x.CompanyId)
                 .GreaterThan(0)
-                .WithMessage("Company is required.");
+                .WithMessage("Kompanija je obavezna.");
 
             RuleFor(x => x.Title)
                 .NotEmpty()
-                .WithMessage("Job title is required.")
+                .WithMessage("Naziv posla je obavezan.")
                 .MaximumLength(255)
-                .WithMessage("Title can have at most 255 characters.");
+                .WithMessage("Naziv može imati najviše 255 karaktera.");
 
             RuleFor(x => x.Position)
                 .NotEmpty()
-                .WithMessage("Position is required.")
+                .WithMessage("Pozicija je obavezna.")
                 .MaximumLength(255)
-                .WithMessage("Position name can have at most 255 characters.");
+                .WithMessage("Naziv pozicije može imati najviše 255 karaktera.");
 
             RuleFor(x => x.Description)
                 .MaximumLength(5000)
-                .WithMessage("Description can have at most 5000 characters.");
+                .WithMessage("Opis može imati najviše 5000 karaktera.");
 
             RuleFor(x => x.City)
                 .NotEmpty()
-                .WithMessage("City is required.");
+                .WithMessage("Grad je obavezan.");
 
             RuleFor(x => x.Country)
                 .MaximumLength(100)
-                .WithMessage("Country name can have at most 100 characters.");
+                .WithMessage("Naziv države može imati najviše 100 karaktera.");
 
             RuleFor(x => x.ExpiresAt)
                 .Must(d => d == null || d > DateTime.UtcNow)
-                .WithMessage("Expiration date must be in the future.");
+                .WithMessage("Datum isteka mora biti u budućnosti.");
 
-            // ===================== EXPERIENCE =====================
 
             RuleFor(x => x.MinExperience)
                 .GreaterThanOrEqualTo(0)
                 .When(x => x.MinExperience.HasValue)
-                .WithMessage("Minimum experience cannot be negative.");
+                .WithMessage("Minimalno iskustvo ne može biti negativno.");
 
             RuleFor(x => x.MaxExperience)
                 .GreaterThanOrEqualTo(0)
                 .When(x => x.MaxExperience.HasValue)
-                .WithMessage("Maximum experience cannot be negative.");
+                .WithMessage("Maksimalno iskustvo ne može biti negativno.");
 
             RuleFor(x => x)
                 .Must(x => !x.MinExperience.HasValue ||
                            !x.MaxExperience.HasValue ||
                            x.MinExperience <= x.MaxExperience)
-                .WithMessage("Minimum experience cannot be greater than maximum.");
+                .WithMessage("Minimalno iskustvo ne može biti veće od maksimalnog.");
 
-            // ===================== SALARY =====================
 
             RuleFor(x => x.SalaryFrom)
                 .GreaterThan(0)
                 .When(x => x.SalaryFrom.HasValue)
-                .WithMessage("Salary from must be greater than 0.");
+                .WithMessage("Minimalna plata mora biti veća od 0.");
 
             RuleFor(x => x.SalaryTo)
                 .GreaterThan(0)
                 .When(x => x.SalaryTo.HasValue)
-                .WithMessage("Salary to must be greater than 0.");
+                .WithMessage("Maksimalna plata mora biti veća od 0.");
 
             RuleFor(x => x)
                 .Must(x => !x.SalaryFrom.HasValue ||
                            !x.SalaryTo.HasValue ||
                            x.SalaryFrom <= x.SalaryTo)
-                .WithMessage("Salary from cannot be greater than salary to.");
+                .WithMessage("Minimalna plata ne može biti veća od maksimalne plate.");
 
             RuleFor(x => x.Currency)
                 .NotEmpty()
                 .When(x => x.SalaryFrom.HasValue || x.SalaryTo.HasValue)
-                .WithMessage("Currency is required when salary is provided.");
+                .WithMessage("Valuta je obavezna kada je plata navedena.");
 
             RuleFor(x => x.Currency)
                 .MaximumLength(10)
                 .When(x => !string.IsNullOrWhiteSpace(x.Currency))
-                .WithMessage("Currency can have at most 10 characters.");
+                .WithMessage("Valuta može imati najviše 10 karaktera.");
 
             RuleFor(x => x)
                 .Must(x => !x.IsSalaryVisible ||
                            x.SalaryFrom.HasValue ||
                            x.SalaryTo.HasValue)
-                .WithMessage("If salary is marked as visible, at least one salary amount must be provided.");
+                .WithMessage("Ako je plata označena kao vidljiva, mora biti unos bar jedan iznos.");
 
-            // ===================== ENUM VALIDATIONS =====================
 
             RuleFor(x => x.EmploymentType)
                 .IsInEnum()
-                .WithMessage("Invalid employment type.");
+                .WithMessage("Nevažeći tip zaposlenja.");
 
             RuleFor(x => x.WorkSchedule)
                 .IsInEnum()
-                .WithMessage("Invalid work schedule.");
+                .WithMessage("Nevažeći raspored rada.");
 
             RuleFor(x => x.SeniorityLevel)
                 .IsInEnum()
-                .WithMessage("Invalid seniority level.");
+                .WithMessage("Nevažeći nivo iskustva.");
 
             RuleFor(x => x.WorkType)
                 .IsInEnum()
-                .WithMessage("Invalid work type.");
+                .WithMessage("Nevažeći tip rada.");
         }
     }
 }

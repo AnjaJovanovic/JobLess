@@ -21,6 +21,6 @@ namespace JobLess.Advertisement.Application.Commands.Update
         public decimal? SalaryFrom { get; set; }
         public decimal? SalaryTo { get; set; }
         public string? Currency { get; set; }
-        public bool? IsSalaryVisible { get; set; }
+        public bool IsSalaryVisible { get; set; }
     }
 }

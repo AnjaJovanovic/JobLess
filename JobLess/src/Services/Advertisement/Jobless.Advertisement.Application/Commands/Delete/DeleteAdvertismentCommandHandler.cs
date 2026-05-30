@@ -32,7 +32,7 @@ namespace JobLess.Advertisement.Application.Commands.Delete
             {
                 _validationExceptionThrower
                     .ThrowValidationException("Id",
-                        "Advertisement does not exist or has already been deactivated.");
+                        "Oglas ne postoji je prethodno deaktiviran");
             }
 
             advertisement!.IsActive = false;

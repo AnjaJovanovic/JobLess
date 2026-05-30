@@ -38,16 +38,9 @@ namespace JobLess.Advertisement.Application.Commands.Activate
             {
                 _validationExceptionThrower
                     .ThrowValidationException("Id",
-                        "Advertisement don't exists.");
+                        "Oglas ne postoji je prethodno deaktiviran");
             }
-            /*
-            if (advertisement!.IsActive == true)
-            {
-                _validationExceptionThrower
-                    .ThrowValidationException("Active",
-                        "Advertisement is already active.");
-            }
-            */
+          
             advertisement!.IsActive = true;
 
             await _context.SaveChangesAsync(cancellationToken);
