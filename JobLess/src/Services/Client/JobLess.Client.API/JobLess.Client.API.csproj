@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseAppHost>false</UseAppHost>
+        <RollForward>Minor</RollForward>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.27">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\JobLess.Client.Application\JobLess.Client.Application.csproj" />
+      <ProjectReference Include="..\JobLess.Client.Domain\JobLess.Client.Domain.csproj" />
+      <ProjectReference Include="..\JobLess.Client.Infrastructure\JobLess.Client.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>
