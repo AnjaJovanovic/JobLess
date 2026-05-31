@@ -2,7 +2,9 @@
 using JobLess.Company.Application.Commands.Delete;
 using JobLess.Company.Application.Commands.Update;
 using JobLess.Company.Application.Queries.GetAll;
+using JobLess.Company.Application.Queries.GetByName;
 using JobLess.Company.Application.Queries.GetOne;
+using JobLess.Company.Application.Queries.GetByName;
 using JobLess.Company.Application.Queries.Search;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -64,6 +66,16 @@ namespace JobLess.Company.API.Controllers
             if (result == null)
                 return NotFound("Tražena kompanija ne postoji");
 
+            return Ok(result);
+        }
+
+        [HttpGet("ByName")]
+        public async Task<IActionResult> GetByName([FromQuery] string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return BadRequest("Naziv kompanije je obavezan.");
+
+            var result = await _mediator.Send(new GetByNameCompanyQuery { Name = name });
             return Ok(result);
         }
 

@@ -1,118 +1,198 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function CompanyProfile() {
-  const [form, setForm] = useState({
-    naziv: "Tech Solutions d.o.o.",
-    email: "kontakt@techsolutions.rs",
-    telefon: "+381 11 123 4567",
-    website: "https://techsolutions.rs",
-    pib: "123456789",
-    mb: "87654321",
-    grad: "Beograd",
-    adresa: "Knez Mihailova 10",
-    delatnost: "Razvoj softvera",
-    opis: "Vodeća kompanija u oblasti razvoja softvera i digitalnih rešenja na Balkanu.",
-  });
+    const { user } = useAuth();
+    const companyId = user?.id;
 
-  const [saved, setSaved] = useState(false);
+    const [form, setForm] = useState({
+        naziv: "",
+        email: "",
+        telefon: "",
+        website: "",
+        pib: "",
+        mb: "",
+        grad: "",
+        adresa: "",
+        delatnost: "",
+        opis: "",
+    });
 
-  const handle = (e) => {
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
-    setSaved(false);
-  };
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [saved, setSaved] = useState(false);
+    const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // TODO: API call
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
-  };
+    // ─── Učitaj profil kompanije pri mount-u ───────────────────
+    useEffect(() => {
+        if (!companyId) {
+            setError("Niste prijavljeni kao kompanija.");
+            setLoading(false);
+            return;
+        }
 
-  return (
-    <div>
-      <h2>Profil kompanije</h2>
+        fetch(`/api/Companies/One?id=${companyId}`)
+            .then((res) => {
+                if (!res.ok) throw new Error("Greška pri učitavanju profila.");
+                return res.json();
+            })
+            .then((data) => {
+                const c = data.company;
+                setForm({
+                    naziv: c.name ?? "",
+                    email: c.email ?? "",
+                    telefon: c.phoneNumber ?? "",
+                    website: c.website ?? "",
+                    pib: c.taxIdentificationNumber ?? "",
+                    mb: c.registrationNumber ?? "",
+                    grad: c.location ?? "",
+                    adresa: c.address ?? "",
+                    delatnost: c.industry ?? "",
+                    opis: c.description ?? "",
+                });
+            })
+            .catch((err) => setError(err.message))
+            .finally(() => setLoading(false));
+    }, [companyId]);
 
-      <form onSubmit={handleSubmit}>
-        <div className="form-card">
+    // ─── Handlers ──────────────────────────────────────────────
+    const handle = (e) => {
+        setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+        setSaved(false);
+    };
 
-          <h3>Osnovne informacije</h3>
-          <div className="form-grid">
-            <div className="form-group form-col-span-2">
-              <label>Naziv kompanije</label>
-              <input name="naziv" value={form.naziv} onChange={handle} placeholder="Naziv kompanije" />
-            </div>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSaving(true);
+        setError(null);
 
-            <div className="form-group">
-              <label>Email</label>
-              <input type="email" name="email" value={form.email} onChange={handle} placeholder="kontakt@kompanija.rs" />
-            </div>
+        try {
+            const response = await fetch("/api/Companies/Update", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    companyId: companyId,
+                    name: form.naziv,
+                    email: form.email,
+                    phoneNumber: form.telefon,
+                    website: form.website || null,
+                    taxIdentificationNumber: form.pib,
+                    registrationNumber: form.mb,
+                    location: form.grad,
+                    address: form.adresa || null,
+                    industry: form.delatnost,
+                    description: form.opis || null,
+                }),
+            });
 
-            <div className="form-group">
-              <label>Telefon</label>
-              <input name="telefon" value={form.telefon} onChange={handle} placeholder="+381..." />
-            </div>
+            if (!response.ok) {
+                const text = await response.text();
+                throw new Error(text || "Greška pri čuvanju profila.");
+            }
 
-            <div className="form-group">
-              <label>Website</label>
-              <input name="website" value={form.website} onChange={handle} placeholder="https://..." />
-            </div>
+            setSaved(true);
+            setTimeout(() => setSaved(false), 3000);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setSaving(false);
+        }
+    };
 
-            <div className="form-group">
-              <label>Delatnost</label>
-              <input name="delatnost" value={form.delatnost} onChange={handle} placeholder="Npr. IT, Finansije..." />
-            </div>
-          </div>
+    // ─── Render ────────────────────────────────────────────────
+    if (loading) return <div>Učitavanje profila...</div>;
 
-          <h3>Pravne informacije</h3>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>PIB</label>
-              <input name="pib" value={form.pib} onChange={handle} placeholder="PIB" />
-            </div>
-            <div className="form-group">
-              <label>Matični broj</label>
-              <input name="mb" value={form.mb} onChange={handle} placeholder="Matični broj" />
-            </div>
-          </div>
+    return (
+        <div>
+            <h2>Profil kompanije</h2>
 
-          <h3>Lokacija</h3>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Grad</label>
-              <input name="grad" value={form.grad} onChange={handle} placeholder="Beograd" />
-            </div>
-            <div className="form-group">
-              <label>Adresa</label>
-              <input name="adresa" value={form.adresa} onChange={handle} placeholder="Ulica i broj" />
-            </div>
-          </div>
-
-          <h3>O kompaniji</h3>
-          <div className="form-grid cols-1">
-            <div className="form-group">
-              <label>Opis</label>
-              <textarea
-                name="opis"
-                value={form.opis}
-                onChange={handle}
-                placeholder="Kratki opis vaše kompanije..."
-                style={{ minHeight: 120 }}
-              />
-            </div>
-          </div>
-
-          <div className="form-actions">
-            <button type="submit" className="btn-primary">
-              {saved ? "✓ Sačuvano" : "Sačuvaj izmene"}
-            </button>
-            {saved && (
-              <span style={{ fontSize: 13, color: "var(--success)" }}>
-                Profil uspešno ažuriran
-              </span>
+            {error && (
+                <div style={{ color: "var(--danger, red)", marginBottom: "1rem", padding: "0.75rem", background: "#fff0f0", borderRadius: 6 }}>
+                    {error}
+                </div>
             )}
-          </div>
+
+            <form onSubmit={handleSubmit}>
+                <div className="form-card">
+
+                    <h3>Osnovne informacije</h3>
+                    <div className="form-grid">
+                        <div className="form-group form-col-span-2">
+                            <label>Naziv kompanije</label>
+                            <input name="naziv" value={form.naziv} onChange={handle} placeholder="Naziv kompanije" />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" value={form.email} onChange={handle} placeholder="kontakt@kompanija.rs" />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Telefon</label>
+                            <input name="telefon" value={form.telefon} onChange={handle} placeholder="+381..." />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Website</label>
+                            <input name="website" value={form.website} onChange={handle} placeholder="https://..." />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Delatnost</label>
+                            <input name="delatnost" value={form.delatnost} onChange={handle} placeholder="Npr. IT, Finansije..." />
+                        </div>
+                    </div>
+
+                    <h3>Pravne informacije</h3>
+                    <div className="form-grid">
+                        <div className="form-group">
+                            <label>PIB</label>
+                            <input name="pib" value={form.pib} onChange={handle} placeholder="PIB" />
+                        </div>
+                        <div className="form-group">
+                            <label>Matični broj</label>
+                            <input name="mb" value={form.mb} onChange={handle} placeholder="Matični broj" />
+                        </div>
+                    </div>
+
+                    <h3>Lokacija</h3>
+                    <div className="form-grid">
+                        <div className="form-group">
+                            <label>Grad</label>
+                            <input name="grad" value={form.grad} onChange={handle} placeholder="Beograd" />
+                        </div>
+                        <div className="form-group">
+                            <label>Adresa</label>
+                            <input name="adresa" value={form.adresa} onChange={handle} placeholder="Ulica i broj" />
+                        </div>
+                    </div>
+
+                    <h3>O kompaniji</h3>
+                    <div className="form-grid cols-1">
+                        <div className="form-group">
+                            <label>Opis</label>
+                            <textarea
+                                name="opis"
+                                value={form.opis}
+                                onChange={handle}
+                                placeholder="Kratki opis vaše kompanije..."
+                                style={{ minHeight: 120 }}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="form-actions">
+                        <button type="submit" className="btn-primary" disabled={saving}>
+                            {saving ? "Čuvanje..." : saved ? "✓ Sačuvano" : "Sačuvaj izmene"}
+                        </button>
+                        {saved && (
+                            <span style={{ fontSize: 13, color: "var(--success)" }}>
+                                Profil uspešno ažuriran
+                            </span>
+                        )}
+                    </div>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
-  );
+    );
 }

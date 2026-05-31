@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-
+import { useAuth } from "../../../context/AuthContext";
 
 function useToast() {
   const [toasts, setToasts] = useState([]);
@@ -98,6 +98,9 @@ const INITIAL = {
 };
 
 export default function CreateJob({ onSuccess }) {
+    const { user } = useAuth();
+    const companyId = user?.id;
+
   const [form, setForm] = useState(INITIAL);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -132,7 +135,7 @@ export default function CreateJob({ onSuccess }) {
 
     try {
       const payload = {
-        CompanyId: 1,
+        CompanyId: companyId,
         Title: form.Naslov,
         Description: form.Opis || null,
         Position: form.Pozicija,
