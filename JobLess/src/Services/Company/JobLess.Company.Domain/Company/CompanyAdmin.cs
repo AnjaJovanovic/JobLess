@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JobLess.Company.Domain.Company 
 {
-    public class CompanyAdmin : BaseEntity //razmisliti da li nam je ovo potrebno 
+    public class CompanyAdmin : BaseEntity //mislim da nam ovo ne treba, ali neka za sad ostane  
     {
         public int CompanyId { get; set; } 
         public int UserId { get; set; }

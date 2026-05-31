@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useAuth } from "../../../context/AuthContext";
 
 function useToast() {
     const [toasts, setToasts] = useState([]);
@@ -103,6 +104,8 @@ const leg = {
 
 // ── Komponenta ────────────────────────────────────────────────
 export default function CreateJob({ onSuccess }) {
+    const { user } = useAuth();
+    const companyId = user?.id;
     const [form, setForm] = useState(INITIAL);
     const [submitting, setSubmitting] = useState(false);
     const { toasts, show: showToast } = useToast();
@@ -126,7 +129,7 @@ export default function CreateJob({ onSuccess }) {
 
         try {
             const payload = {
-                CompanyId: 1,
+                CompanyId: companyId,
                 Title: form.Naslov,
                 Description: form.Opis || null,
                 Position: form.Pozicija,

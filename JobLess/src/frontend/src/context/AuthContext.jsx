@@ -12,10 +12,16 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const login = (email, role) => {
-    const fakeUser = { email, role };
-    localStorage.setItem("user", JSON.stringify(fakeUser));
-    setUser(fakeUser);
+ // const login = (email, role) => {
+ //   const fakeUser = { email, role };
+ //   localStorage.setItem("user", JSON.stringify(fakeUser));
+ //   setUser(fakeUser);
+ // };
+
+  const login = (email, role, id) => {
+     const user = { email, role, id };
+     localStorage.setItem("user", JSON.stringify(user));
+     setUser(user);
   };
 
   const logout = () => {

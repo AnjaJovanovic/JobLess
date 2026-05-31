@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useAuth } from "../../../context/AuthContext";
 
 function useToast() {
     const [toasts, setToasts] = useState([]);
@@ -98,21 +99,25 @@ async function parseError(response) {
 }
 
 export default function CompanyJobs({ onCreateNew }) {
+    const { user } = useAuth();
+    const companyId = user?.id;
+
     const [jobs, setJobs] = useState([]);
     const [editing, setEditing] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const [confirmState, setConfirmState] = useState(null);
     const { toasts, show: showToast } = useToast();
 
     useEffect(() => {
         fetchJobs();
-    }, []);
+    }, [companyId]);
 
     const fetchJobs = async () => {
         try {
             setLoading(true);
             const response = await fetch(
-                "/api/Advertisements/GetAdvertisementsForCompany?CompanyId=1"
+                `/api/Advertisements/GetAdvertisementsForCompany?CompanyId=${companyId}`
             );
             if (!response.ok) throw new Error(await parseError(response));
             const data = await response.json();
@@ -134,6 +139,7 @@ export default function CompanyJobs({ onCreateNew }) {
             }));
             setJobs(mapped);
         } catch (err) {
+            setError("Greška pri učitavanju oglasa: " + err.message);
             showToast("Greška pri učitavanju oglasa: " + err.message, "error");
         } finally {
             setLoading(false);
@@ -171,6 +177,15 @@ export default function CompanyJobs({ onCreateNew }) {
 
     if (loading) return <div>Učitavanje oglasa...</div>;
 
+    if (error) return (
+        <div>
+            <div style={{ color: "var(--danger, red)", padding: "1rem", background: "#fff0f0", borderRadius: 6, marginBottom: "1rem" }}>
+                {error}
+            </div>
+            <button className="btn-secondary" onClick={fetchJobs}>Pokušaj ponovo</button>
+        </div>
+    );
+
     return (
         <div>
             <h2>Moji oglasi</h2>
@@ -184,6 +199,12 @@ export default function CompanyJobs({ onCreateNew }) {
                     + Novi oglas
                 </button>
             </div>
+
+            {jobs.length === 0 && (
+                <div style={{ textAlign: "center", padding: "60px 0", color: "var(--text-3)", fontSize: 14 }}>
+                    Nemate nijedan oglas. Kreirajte prvi oglas klikom na "+ Novi oglas".
+                </div>
+            )}
 
             {jobs.map((job) => (
                 <div className={`company-job-card${!job.Aktivan ? " job-card-inactive" : ""}`} key={job.Id}>
