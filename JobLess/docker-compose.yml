@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: jobless-sql
+    environment:
+      SA_PASSWORD: "JobLess123!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - jobless-network
+
+  company-service:
+    build:
+      context: .
+      dockerfile: src/Services/Company/JobLess.Company.API/Dockerfile
+    container_name: jobless-company
+    ports:
+      - "5287:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+
+      ConnectionStrings__DefaultConnection: >-
+        Server=sql-server,1433;
+        Database=JobLessCompanyDatabase;
+        User Id=sa;
+        Password=JobLess123!;
+        TrustServerCertificate=True;
+        MultipleActiveResultSets=True;
+
+    depends_on:
+      - sql-server
+
+    networks:
+      - jobless-network
+
+    restart: on-failure
+
+volumes:
+  sqlserver_data:
+
+networks:
+  jobless-network:
+    driver: bridge
