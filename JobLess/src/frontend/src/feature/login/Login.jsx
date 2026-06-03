@@ -358,14 +358,14 @@ function CompanyRegister({ formRef }) {
                 <label className="form-label">Delatnost</label>
                 <select className={`form-input${err("industry") ? " input-error" : ""}`} {...field("industry")}>
                     <option value="">Odaberite delatnost</option>
-                    <option value="it">Informacione tehnologije</option>
-                    <option value="finance">Finansije i bankarstvo</option>
-                    <option value="retail">Maloprodaja i usluge</option>
-                    <option value="industry">Industrija i proizvodnja</option>
-                    <option value="health">Zdravstvo</option>
-                    <option value="construction">Građevinarstvo</option>
-                    <option value="media">Mediji i marketing</option>
-                    <option value="other">Ostalo</option>
+                    <option value="Informacione tehnologije">Informacione tehnologije</option>
+                    <option value="Finansije i bankarstvo">Finansije i bankarstvo</option>
+                    <option value="Maloprodaja i usluge">Maloprodaja i usluge</option>
+                    <option value="induIndustrija i proizvodnjastry">Industrija i proizvodnja</option>
+                    <option value="heaZdravstvolth">Zdravstvo</option>
+                    <option value="Građevinarstvo">Građevinarstvo</option>
+                    <option value="Mediji i marketing">Mediji i marketing</option>
+                    <option value="Ostalo">Ostalo</option>
                 </select>
                 <FieldError msg={err("industry")} />
             </div>
