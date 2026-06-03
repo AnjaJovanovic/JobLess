@@ -29,7 +29,7 @@ namespace JobLess.Company.Application.Commands.Create
         public string PhoneNumber { get; set; }
 
         public string Address { get; set; }
-        public string CompanySize { get; set; }
+        public required string CompanySize { get; set; }
     }
 }
 

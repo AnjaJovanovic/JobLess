@@ -28,8 +28,18 @@ namespace JobLess.Company.API.Controllers
             if (command == null)
                 return BadRequest("Podaci nisu validni.");
 
-            var companyId = await _mediator.Send(command);
-            return CreatedAtAction(nameof(Create), new { id = companyId }, companyId);
+            try
+            {
+                var companyId = await _mediator.Send(command);
+                return CreatedAtAction(nameof(Create), new { id = companyId }, companyId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    message = "Kompanija sa unetim PIB-om, matičnim brojem ili email adresom već postoji."
+                });
+            }
         }
 
         [HttpDelete]

@@ -1,12 +1,7 @@
 ﻿using JobLess.Company.Application.Interfaces;
 using JobLess.Company.Domain.Company;
-using JobLess.Company.Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobLess.Company.Application.Commands.Create
 {
@@ -45,7 +40,18 @@ namespace JobLess.Company.Application.Commands.Create
                 UpdatedAt = DateTime.UtcNow
             };
 
-        _context.Companies.Add(company);
+            var exists = await _context.Companies.AnyAsync(x =>
+                x.Email == request.Email ||
+                x.TaxIdentificationNumber == request.TaxIdentificationNumber ||
+                x.RegistrationNumber == request.RegistrationNumber,
+                cancellationToken);
+
+                        if (exists)
+                        {
+                            throw new Exception("Kompanija sa unetim PIB-om, matičnim brojem ili email adresom već postoji.");
+                        }
+
+            _context.Companies.Add(company);
             await _context.SaveChangesAsync(cancellationToken);
 
             var admin = new CompanyAdmin
