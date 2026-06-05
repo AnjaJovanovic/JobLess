@@ -10,14 +10,23 @@ export default defineConfig({
       },
     }),
   ],
-  server: {
-    proxy: {
-      // sve zahteve ka /api prosledjujemo na backend
-      "/api": {
-        target: "http://localhost:5218", // backend
-        changeOrigin: true,
-        secure: false, // dozvoljava self-signed certifikat
-      },
+    server: {
+        proxy: {
+            "/api/clients": {
+                target: "http://localhost:5263",
+                changeOrigin: true,
+                secure: false,
+            },
+            "/api/Advertisements": {
+                target: "http://localhost:5104",
+                changeOrigin: true,
+                secure: false,
+            },
+            "/api": {
+                target: "http://localhost:5218",
+                changeOrigin: true,
+                secure: false,
+            },
+        },
     },
-  },
 })
