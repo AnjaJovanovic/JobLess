@@ -17,6 +17,13 @@
     <Project Path="src/Services/Company/JobLess.Company.Infrastructure/JobLess.Company.Infrastructure.csproj" Id="58d281cd-401b-4a90-bb1d-3cf7cb126086" />
   </Folder>
 
+  <Folder Name="/src/Services/Client/">
+    <Project Path="src/Services/Client/JobLess.Client.API/JobLess.Client.API.csproj" />
+    <Project Path="src/Services/Client/JobLess.Client.Application/JobLess.Client.Application.csproj" />
+    <Project Path="src/Services/Client/JobLess.Client.Domain/JobLess.Client.Domain.csproj" />
+    <Project Path="src/Services/Client/JobLess.Client.Infrastructure/JobLess.Client.Infrastructure.csproj" />
+  </Folder>
+
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/JobLess.Shared.Domain/JobLess.Shared.Domain.csproj" />
   </Folder>

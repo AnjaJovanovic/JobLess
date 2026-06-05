@@ -10,8 +10,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DOTNET_ROOT": "/usr/share/dotnet",
-        "DOTNET_MULTILEVEL_LOOKUP": "1",
-        "PATH": "/usr/share/dotnet:/usr/bin:${PATH}"
+        "DOTNET_MULTILEVEL_LOOKUP": "1"
       }
     },
     "https": {
@@ -23,8 +22,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DOTNET_ROOT": "/usr/share/dotnet",
-        "DOTNET_MULTILEVEL_LOOKUP": "1",
-        "PATH": "/usr/share/dotnet:/usr/bin:${PATH}"
+        "DOTNET_MULTILEVEL_LOOKUP": "1"
       }
     }
   }

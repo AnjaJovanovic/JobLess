@@ -8,10 +8,16 @@ export ASPNETCORE_ENVIRONMENT="${ASPNETCORE_ENVIRONMENT:-Development}"
 
 cd "$(dirname "$0")"
 
-if command -v ss >/dev/null 2>&1 && ss -tln | grep -q ':5263 '; then
-  echo "Port 5263 je zauzet. Zaustavljam stari JobLess.Client.API..."
-  pkill -f 'JobLess.Client.API' 2>/dev/null || true
-  sleep 1
-fi
+free_port() {
+  local port=$1
+  if command -v ss >/dev/null 2>&1 && ss -tln | grep -q ":${port} "; then
+    echo "Port ${port} je zauzet. Zaustavljam stari proces..."
+    fuser -k "${port}/tcp" 2>/dev/null || pkill -f 'JobLess.Client.API' 2>/dev/null || true
+    sleep 1
+  fi
+}
+
+free_port 5263
+free_port 7259
 
 dotnet run --project JobLess.Client.API/JobLess.Client.API.csproj --launch-profile http
