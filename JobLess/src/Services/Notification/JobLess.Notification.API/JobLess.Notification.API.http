@@ -1,0 +1,6 @@
+@JobLess.Notification.API_HostAddress = http://localhost:5271
+
+GET {{JobLess.Notification.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
