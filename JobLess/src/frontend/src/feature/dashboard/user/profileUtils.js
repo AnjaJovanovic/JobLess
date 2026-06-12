@@ -5,7 +5,7 @@ export function emptyProfileForm() {
     firstName: "",
     lastName: "",
     phoneNumber: "",
-    gender: "",
+    gender: null,
   };
 }
 
@@ -14,17 +14,20 @@ export function profileToForm(profile) {
     firstName: profile.firstName ?? "",
     lastName: profile.lastName ?? "",
     phoneNumber: profile.phoneNumber ?? "",
-    gender: profile.gender ?? "",
+    gender: profile.gender ?? null,
   };
 }
 
-export function formToPayload(form) {
+export function formToPayload(form, email) {
   return {
+    email,
     firstName: form.firstName.trim(),
     lastName: form.lastName.trim(),
     phoneNumber: form.phoneNumber.trim() || null,
     gender: Number(form.gender),
     isActive: true,
+    clientId: 0,
+    createdAt: new Date().toISOString(),
   };
 }
 
@@ -33,7 +36,7 @@ export function validateProfileForm(form) {
 
   if (!form.firstName.trim()) errors.firstName = "Ime je obavezno.";
   if (!form.lastName.trim()) errors.lastName = "Prezime je obavezno.";
-  if (form.gender === "" || form.gender === null || form.gender === undefined) {
+  if (form.gender === null || form.gender === undefined || form.gender === "") {
     errors.gender = "Pol je obavezan.";
   } else if (![GENDER.MALE, GENDER.FEMALE].includes(Number(form.gender))) {
     errors.gender = "Izaberite pol.";
@@ -49,4 +52,8 @@ export function getStoredEmail() {
   } catch {
     return "";
   }
+}
+
+export function isCandidateRole(role) {
+  return role?.toLowerCase() === "candidate";
 }

@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../../../context/AuthContext";
 import {
-  getClientProfile,
-  getStoredClientId,
+  getClientProfileByEmail,
   storeClientId,
 } from "../../../api/clientApi";
-import { getStoredEmail } from "./profileUtils";
 import ProfileEdit from "./ProfileEdit";
 import ProfileSetup from "./ProfileSetup";
 import ProfileView from "./ProfileView";
 
 export default function Profile({ onProfileStatusChange }) {
+  const { user } = useAuth();
   const [mode, setMode] = useState("loading");
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState(null);
-  const email = getStoredEmail();
+  const email = user?.email ?? "";
 
   useEffect(() => {
     let cancelled = false;
@@ -22,8 +22,7 @@ export default function Profile({ onProfileStatusChange }) {
       setMode("loading");
       setError(null);
 
-      const clientId = getStoredClientId();
-      if (!clientId) {
+      if (!email) {
         if (!cancelled) {
           setProfile(null);
           setMode("setup");
@@ -33,17 +32,17 @@ export default function Profile({ onProfileStatusChange }) {
       }
 
       try {
-        const data = await getClientProfile(clientId);
+        const data = await getClientProfileByEmail(email);
         if (cancelled) return;
 
         if (!data) {
-          localStorage.removeItem("clientProfileId");
           setProfile(null);
           setMode("setup");
           onProfileStatusChange?.(false);
           return;
         }
 
+        storeClientId(data.clientId);
         setProfile(data);
         setMode("view");
         onProfileStatusChange?.(true);
@@ -58,7 +57,7 @@ export default function Profile({ onProfileStatusChange }) {
 
     loadProfile();
     return () => { cancelled = true; };
-  }, [onProfileStatusChange]);
+  }, [email, onProfileStatusChange]);
 
   const handleCompleted = (result) => {
     setProfile(result);

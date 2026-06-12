@@ -26,6 +26,7 @@ public class UpdateClientProfileCommandHandler(IApplicationDbContext context)
 
         return new ClientProfileDto(
             client.ClientId,
+            client.Email,
             client.FirstName,
             client.LastName,
             client.PhoneNumber,

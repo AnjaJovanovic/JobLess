@@ -5,6 +5,7 @@ using MediatR;
 namespace JobLess.Client.Application.Clients.Commands.CreateClientProfile;
 
 public record CreateClientProfileCommand(
+    string Email,
     string FirstName,
     string LastName,
     string? PhoneNumber,

@@ -2,6 +2,7 @@ using ClientEntity = JobLess.Client.Domain.Entities.Client;
 using JobLess.Client.Application.Interfaces;
 using JobLess.Client.Application.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobLess.Client.Application.Clients.Commands.CreateClientProfile;
 
@@ -10,9 +11,17 @@ public class CreateClientProfileCommandHandler(IApplicationDbContext context)
 {
     public async Task<ClientProfileDto> Handle(CreateClientProfileCommand request, CancellationToken cancellationToken)
     {
+        var email = request.Email.Trim().ToLowerInvariant();
+
+        var emailExists = await context.Clients
+            .AnyAsync(c => c.Email.ToLower() == email, cancellationToken);
+
+        if (emailExists)
+            throw new InvalidOperationException("Profil za ovaj email već postoji.");
+
         var client = new ClientEntity
         {
-            Email = string.Empty,
+            Email = email,
             PasswordHash = string.Empty,
             FirstName = request.FirstName,
             LastName = request.LastName,
@@ -31,6 +40,7 @@ public class CreateClientProfileCommandHandler(IApplicationDbContext context)
     private static ClientProfileDto ToDto(ClientEntity client) =>
         new(
             client.ClientId,
+            client.Email,
             client.FirstName,
             client.LastName,
             client.PhoneNumber,

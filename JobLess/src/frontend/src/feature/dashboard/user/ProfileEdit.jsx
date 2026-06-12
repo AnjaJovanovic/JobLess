@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../../../context/AuthContext";
 import { updateClientProfile } from "../../../api/clientApi";
 import ProfileForm from "./ProfileForm";
 import {
   formToPayload,
-  getStoredEmail,
   profileToForm,
   validateProfileForm,
 } from "./profileUtils";
 
 export default function ProfileEdit({ profile, onSaved, onCancel }) {
+  const { user } = useAuth();
   const [form, setForm] = useState(() => profileToForm(profile));
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
-  const email = getStoredEmail();
+  const email = profile?.email ?? user?.email ?? "";
 
   useEffect(() => {
     setForm(profileToForm(profile));
@@ -39,7 +40,10 @@ export default function ProfileEdit({ profile, onSaved, onCancel }) {
     setError(null);
 
     try {
-      const result = await updateClientProfile(profile.clientId, formToPayload(form));
+      const result = await updateClientProfile(
+        profile.clientId,
+        formToPayload(form, email),
+      );
       onSaved(result);
     } catch (err) {
       setError(err.message || "Greška pri čuvanju profila.");

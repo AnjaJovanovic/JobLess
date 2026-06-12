@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
+import { clearStoredClientId } from "../api/clientApi";
 
 export const AuthContext = createContext();
 
@@ -19,6 +20,7 @@ export function AuthProvider({ children }) {
 
   const logout = () => {
     localStorage.removeItem("user");
+    clearStoredClientId();
     setUser(null);
   };
 

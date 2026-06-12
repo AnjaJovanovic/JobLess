@@ -1,6 +1,8 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { syncClientProfileAfterAuth } from "../../api/clientApi";
+import { isCandidateRole } from "../dashboard/user/profileUtils";
 
 import "./Login.css";
 
@@ -274,7 +276,12 @@ export default function Login() {
           return;
         }
         login(data);
-        navigate(data.role === "company" ? "/company" : "/user");
+        if (isCandidateRole(data.role)) {
+          await syncClientProfileAfterAuth(data.email);
+          navigate("/user");
+        } else {
+          navigate("/company");
+        }
       } else {
         const res = await fetch("/api/Auth/register", {
           method: "POST",
@@ -291,7 +298,12 @@ export default function Login() {
           return;
         }
         login(data);
-        navigate(data.role === "Company" ? "/company" : "/user");
+        if (isCandidateRole(data.role)) {
+          await syncClientProfileAfterAuth(data.email);
+          navigate("/user");
+        } else {
+          navigate("/company");
+        }
       }
     } catch {
       setServerError("Nije moguće povezati se sa serverom.");

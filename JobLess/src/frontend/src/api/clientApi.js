@@ -10,6 +10,15 @@ async function handleResponse(response) {
   return response.json();
 }
 
+export async function getClientProfileByEmail(email) {
+  const encoded = encodeURIComponent(email);
+  const response = await fetch(`/api/clients/profile/by-email?email=${encoded}`);
+
+  if (response.status === 404) return null;
+
+  return handleResponse(response);
+}
+
 export async function createClientProfile(payload) {
   const response = await fetch("/api/clients/profile", {
     method: "PUT",
@@ -48,13 +57,25 @@ export function storeClientId(clientId) {
   localStorage.setItem(CLIENT_ID_KEY, String(clientId));
 }
 
-export function getStoredEmail() {
-  try {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
-    return user?.email ?? "";
-  } catch {
-    return "";
+export function clearStoredClientId() {
+  localStorage.removeItem(CLIENT_ID_KEY);
+}
+
+export async function syncClientProfileAfterAuth(email) {
+  if (!email) {
+    clearStoredClientId();
+    return null;
   }
+
+  const profile = await getClientProfileByEmail(email);
+
+  if (profile) {
+    storeClientId(profile.clientId);
+    return profile;
+  }
+
+  clearStoredClientId();
+  return null;
 }
 
 export const GENDER = {
@@ -63,7 +84,9 @@ export const GENDER = {
 };
 
 export function genderLabel(gender) {
-  if (gender === GENDER.FEMALE) return "Ženski";
-  if (gender === GENDER.MALE) return "Muški";
+  if (gender === "" || gender === null || gender === undefined) return "Nepoznato";
+  const value = Number(gender);
+  if (value === GENDER.FEMALE) return "Ženski";
+  if (value === GENDER.MALE) return "Muški";
   return "Nepoznato";
 }

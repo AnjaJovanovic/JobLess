@@ -6,6 +6,11 @@ public class CreateClientProfileCommandValidator : AbstractValidator<CreateClien
 {
     public CreateClientProfileCommandValidator()
     {
+        RuleFor(x => x.Email)
+            .NotEmpty()
+            .EmailAddress()
+            .MaximumLength(256);
+
         RuleFor(x => x.FirstName)
             .NotEmpty()
             .MaximumLength(30);

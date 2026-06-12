@@ -64,8 +64,8 @@ export default function ProfileForm({
             <input
               type="radio"
               name="gender"
-              value={GENDER.MALE}
-              checked={Number(form.gender) === GENDER.MALE}
+              value="0"
+              checked={form.gender !== null && form.gender !== "" && Number(form.gender) === GENDER.MALE}
               onChange={onChange}
             />
             <span>Muški</span>
@@ -74,8 +74,8 @@ export default function ProfileForm({
             <input
               type="radio"
               name="gender"
-              value={GENDER.FEMALE}
-              checked={Number(form.gender) === GENDER.FEMALE}
+              value="1"
+              checked={form.gender !== null && form.gender !== "" && Number(form.gender) === GENDER.FEMALE}
               onChange={onChange}
             />
             <span>Ženski</span>

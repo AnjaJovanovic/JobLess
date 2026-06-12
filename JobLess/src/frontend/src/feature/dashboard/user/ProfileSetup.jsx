@@ -1,19 +1,20 @@
 import { useState } from "react";
+import { useAuth } from "../../../context/AuthContext";
 import { createClientProfile, storeClientId } from "../../../api/clientApi";
 import ProfileForm from "./ProfileForm";
 import {
   emptyProfileForm,
   formToPayload,
-  getStoredEmail,
   validateProfileForm,
 } from "./profileUtils";
 
 export default function ProfileSetup({ onCompleted }) {
+  const { user } = useAuth();
   const [form, setForm] = useState(emptyProfileForm());
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
-  const email = getStoredEmail();
+  const email = user?.email ?? "";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,6 +26,11 @@ export default function ProfileSetup({ onCompleted }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!email) {
+      setError("Niste prijavljeni. Prijavite se ponovo.");
+      return;
+    }
+
     const validationErrors = validateProfileForm(form);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -35,7 +41,7 @@ export default function ProfileSetup({ onCompleted }) {
     setError(null);
 
     try {
-      const result = await createClientProfile(formToPayload(form));
+      const result = await createClientProfile(formToPayload(form, email));
       storeClientId(result.clientId);
       onCompleted(result);
     } catch (err) {

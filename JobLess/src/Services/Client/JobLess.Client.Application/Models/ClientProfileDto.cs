@@ -4,6 +4,7 @@ namespace JobLess.Client.Application.Models;
 
 public record ClientProfileDto(
     int ClientId,
+    string Email,
     string FirstName,
     string LastName,
     string? PhoneNumber,
