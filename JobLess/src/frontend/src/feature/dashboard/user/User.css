@@ -97,6 +97,17 @@
   border-radius: 0 4px 4px 0;
 }
 
+.user-logout-btn {
+  margin-top: auto;
+  color: var(--danger) !important;
+  border: 1px solid rgba(255, 91, 107, 0.25);
+}
+
+.user-logout-btn:hover {
+  background: rgba(255, 91, 107, 0.12) !important;
+  color: var(--danger) !important;
+}
+
 /* ─── MAIN CONTENT ───────────────────────────────────── */
 .user-content {
   flex: 1;
