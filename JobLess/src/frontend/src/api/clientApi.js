@@ -90,3 +90,51 @@ export function genderLabel(gender) {
   if (value === GENDER.MALE) return "Muški";
   return "Nepoznato";
 }
+
+export const APPLICATION_STATUS = {
+  PENDING: 0,
+  ACCEPTED: 1,
+  REJECTED: 2,
+};
+
+export function applicationStatusLabel(status) {
+  const value = Number(status);
+  if (value === APPLICATION_STATUS.ACCEPTED) return "Prihvaćen";
+  if (value === APPLICATION_STATUS.REJECTED) return "Odbijen";
+  return "U razmatranju";
+}
+
+export async function applyToJob(clientId, advertisementId) {
+  const response = await fetch(`/api/clients/${clientId}/applications`, {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ advertisementId }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    try {
+      const parsed = JSON.parse(text);
+      throw new Error(parsed.message ?? "Greška pri prijavi.");
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        throw new Error(text || "Greška pri prijavi.");
+      }
+      throw err;
+    }
+  }
+
+  return response.json();
+}
+
+export async function getClientApplications(clientId) {
+  const response = await fetch(`/api/clients/${clientId}/applications`);
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || "Greška pri učitavanju prijava.");
+  }
+
+  const data = await response.json();
+  return Array.isArray(data) ? data : [];
+}

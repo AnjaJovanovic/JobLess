@@ -62,6 +62,45 @@ namespace JobLess.Client.Infrastructure.Migrations
 
                     b.ToTable("Clients");
                 });
+
+            modelBuilder.Entity("JobLess.Client.Domain.Entities.JobApplication", b =>
+                {
+                    b.Property<int>("ApplicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationId"));
+
+                    b.Property<int>("AdvertisementId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("AppliedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("ApplicationId");
+
+                    b.HasIndex("ClientId", "AdvertisementId")
+                        .IsUnique();
+
+                    b.ToTable("JobApplications");
+                });
+
+            modelBuilder.Entity("JobLess.Client.Domain.Entities.JobApplication", b =>
+                {
+                    b.HasOne("JobLess.Client.Domain.Entities.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
 #pragma warning restore 612, 618
         }
     }

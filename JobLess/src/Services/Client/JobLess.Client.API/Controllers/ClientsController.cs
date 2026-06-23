@@ -1,5 +1,7 @@
+using JobLess.Client.Application.Clients.Commands.ApplyToJob;
 using JobLess.Client.Application.Clients.Commands.CreateClientProfile;
 using JobLess.Client.Application.Clients.Commands.UpdateClientProfile;
+using JobLess.Client.Application.Clients.Queries.GetClientApplications;
 using JobLess.Client.Application.Clients.Queries.GetClientProfile;
 using JobLess.Client.Application.Clients.Queries.GetClientProfileByEmail;
 using JobLess.Client.Application.Models;
@@ -89,4 +91,39 @@ public class ClientsController(IMediator mediator) : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPost("{id:int}/applications")]
+    public async Task<ActionResult<JobApplicationDto>> ApplyToJob(
+        int id,
+        [FromBody] ApplyToJobRequest request,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await mediator.Send(
+                new ApplyToJobCommand(id, request.AdvertisementId),
+                cancellationToken);
+
+            return CreatedAtAction(nameof(GetApplications), new { id }, result);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpGet("{id:int}/applications")]
+    public async Task<ActionResult<IReadOnlyList<JobApplicationDto>>> GetApplications(
+        int id,
+        CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetClientApplicationsQuery(id), cancellationToken);
+        return Ok(result);
+    }
 }
+
+public record ApplyToJobRequest(int AdvertisementId);

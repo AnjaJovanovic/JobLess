@@ -739,6 +739,17 @@
   margin-top: 20px;
 }
 
+.job-apply-message {
+  color: var(--success);
+  margin-top: 12px;
+}
+
+.application-date {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 4px;
+}
+
 .job-pagination {
   display: flex;
   align-items: center;

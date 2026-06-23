@@ -1,4 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
+import {
+  applyToJob,
+  getClientApplications,
+  getStoredClientId,
+} from "../../../api/clientApi";
 
 /* ─── ENUM OPCIJE ───────────────────────────────────── */
 
@@ -89,8 +94,22 @@ export default function JobList() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [appliedAdIds, setAppliedAdIds] = useState(new Set());
+  const [applyingJobId, setApplyingJobId] = useState(null);
+  const [applyMessage, setApplyMessage] = useState(null);
 
+  const clientId = getStoredClientId();
   const PAGE_SIZE = 10;
+
+  useEffect(() => {
+    if (!clientId) return;
+
+    getClientApplications(clientId)
+      .then((items) => {
+        setAppliedAdIds(new Set(items.map((item) => item.advertisementId)));
+      })
+      .catch(() => {});
+  }, [clientId]);
 
   const fetchJobs = useCallback(async (activeFilters, activePage) => {
     try {
@@ -151,6 +170,26 @@ export default function JobList() {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") applyFilters();
+  };
+
+  const handleApply = async (jobId) => {
+    if (!clientId) {
+      setApplyMessage("Popunite profil pre prijave na oglas.");
+      return;
+    }
+
+    setApplyingJobId(jobId);
+    setApplyMessage(null);
+
+    try {
+      await applyToJob(clientId, jobId);
+      setAppliedAdIds((prev) => new Set(prev).add(jobId));
+      setApplyMessage("Uspešno ste se prijavili na oglas.");
+    } catch (err) {
+      setApplyMessage(err.message || "Greška pri prijavi.");
+    } finally {
+      setApplyingJobId(null);
+    }
   };
 
   return (
@@ -245,6 +284,7 @@ export default function JobList() {
       {/* STANJA */}
       {loading && <p className="job-empty">Učitavanje...</p>}
       {error && <p className="job-error">{error}</p>}
+      {applyMessage && <p className="job-apply-message">{applyMessage}</p>}
       {!loading && jobs.length === 0 && !error && (
         <p className="job-empty">Trenutno nema aktivnih oglasa.</p>
       )}
@@ -288,8 +328,17 @@ export default function JobList() {
             </div>
 
             <div className="jcf-actions">
-              <button className="btn-apply" type="button" disabled title="Uskoro">
-                Prijavi se
+              <button
+                className="btn-apply"
+                type="button"
+                disabled={!clientId || appliedAdIds.has(job.id) || applyingJobId === job.id}
+                onClick={() => handleApply(job.id)}
+              >
+                {appliedAdIds.has(job.id)
+                  ? "Prijavljen"
+                  : applyingJobId === job.id
+                    ? "Prijavljivanje..."
+                    : "Prijavi se"}
               </button>
             </div>
           </div>

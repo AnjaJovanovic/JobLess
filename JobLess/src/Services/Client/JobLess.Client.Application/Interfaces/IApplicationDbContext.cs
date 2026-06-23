@@ -1,4 +1,5 @@
 using ClientEntity = JobLess.Client.Domain.Entities.Client;
+using JobLess.Client.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobLess.Client.Application.Interfaces;
@@ -6,6 +7,6 @@ namespace JobLess.Client.Application.Interfaces;
 public interface IApplicationDbContext
 {
     DbSet<ClientEntity> Clients { get; set; }
-    // Asinhrana metoda za čuvanje izmena
+    DbSet<JobApplication> JobApplications { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
