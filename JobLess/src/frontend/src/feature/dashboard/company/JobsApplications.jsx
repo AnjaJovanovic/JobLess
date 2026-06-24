@@ -1,94 +1,208 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "../../../context/AuthContext";
+import {
+  APPLICATION_STATUS,
+  applicationStatusLabel,
+  getApplicationsByAdvertisements,
+  updateApplicationStatus,
+} from "../../../api/clientApi";
 
 const STATUS_OPTIONS = [
-  { value: "Primljeno",    label: "Primljeno",    cls: "s-pending"  },
-  { value: "U razmatranju",label: "U razmatranju",cls: "s-review"   },
-  { value: "Prihvaćen",   label: "Prihvaćen",    cls: "s-accepted" },
-  { value: "Odbijen",     label: "Odbijen",       cls: "s-rejected" },
+  { value: APPLICATION_STATUS.PENDING, label: "U razmatranju", cls: "s-review" },
+  { value: APPLICATION_STATUS.ACCEPTED, label: "Prihvaćen", cls: "s-accepted" },
+  { value: APPLICATION_STATUS.REJECTED, label: "Odbijen", cls: "s-rejected" },
 ];
 
-const MOCK_APPLICATIONS = [
-  { id: 1, ime: "Marko Nikolić",    email: "marko@email.com", oglas: "Senior React Developer",   status: "U razmatranju", datum: "2025-01-15" },
-  { id: 2, ime: "Jovana Petrović", email: "jovana@email.com", oglas: "Senior React Developer",   status: "Primljeno",     datum: "2025-01-14" },
-  { id: 3, ime: "Stefan Ilić",     email: "stefan@email.com", oglas: "Backend .NET Developer",   status: "Prihvaćen",    datum: "2025-01-12" },
-  { id: 4, ime: "Ana Đorđević",    email: "ana@email.com",    oglas: "Backend .NET Developer",   status: "Odbijen",      datum: "2025-01-10" },
+const FILTERS = [
+  { key: "all", label: "Sve", status: null },
+  { key: "pending", label: "U razmatranju", status: APPLICATION_STATUS.PENDING },
+  { key: "accepted", label: "Prihvaćen", status: APPLICATION_STATUS.ACCEPTED },
+  { key: "rejected", label: "Odbijen", status: APPLICATION_STATUS.REJECTED },
 ];
 
-const FILTERS = ["Sve", "Primljeno", "U razmatranju", "Prihvaćen", "Odbijen"];
+async function fetchCompanyAdvertisements(companyId) {
+  const response = await fetch(
+    `/api/Advertisements/GetAdvertisementsForCompany?CompanyId=${companyId}&pageNumber=1&pageSize=100`
+  );
+
+  if (!response.ok) {
+    throw new Error("Greška pri učitavanju oglasa kompanije.");
+  }
+
+  const data = await response.json();
+  const ads = data.advertisements ?? data.Advertisements ?? [];
+  return Array.isArray(ads) ? ads : [];
+}
 
 export default function JobApplications() {
-  const [applications, setApplications] = useState(MOCK_APPLICATIONS);
-  const [activeFilter, setActiveFilter] = useState("Sve");
+  const { user } = useAuth();
+  const companyId = user?.companyId ?? user?.id;
 
-  const changeStatus = (id, newStatus) => {
-    setApplications(apps =>
-      apps.map(a => a.id === id ? { ...a, status: newStatus } : a)
-    );
+  const [applications, setApplications] = useState([]);
+  const [adTitles, setAdTitles] = useState({});
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [updatingId, setUpdatingId] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadApplications() {
+      if (!companyId) {
+        setLoading(false);
+        setApplications([]);
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const ads = await fetchCompanyAdvertisements(companyId);
+        if (cancelled) return;
+
+        const titles = {};
+        const adIds = ads.map((ad) => {
+          const id = ad.id ?? ad.Id;
+          titles[id] = ad.title ?? ad.Title ?? `Oglas #${id}`;
+          return id;
+        });
+
+        setAdTitles(titles);
+
+        const items = await getApplicationsByAdvertisements(adIds);
+        if (!cancelled) setApplications(items);
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || "Greška pri učitavanju prijava.");
+          setApplications([]);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadApplications();
+    return () => { cancelled = true; };
+  }, [companyId]);
+
+  const filtered = useMemo(() => {
+    const filter = FILTERS.find((f) => f.key === activeFilter);
+    if (!filter || filter.status === null) return applications;
+    return applications.filter((app) => Number(app.status) === filter.status);
+  }, [applications, activeFilter]);
+
+  const countByStatus = (status) =>
+    applications.filter((app) => Number(app.status) === status).length;
+
+  const changeStatus = async (applicationId, newStatus) => {
+    setUpdatingId(applicationId);
+    setError(null);
+
+    try {
+      await updateApplicationStatus(applicationId, newStatus);
+      setApplications((apps) =>
+        apps.map((app) =>
+          app.applicationId === applicationId
+            ? { ...app, status: Number(newStatus) }
+            : app
+        )
+      );
+    } catch (err) {
+      setError(err.message || "Greška pri promeni statusa.");
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
-  const filtered = activeFilter === "Sve"
-    ? applications
-    : applications.filter(a => a.status === activeFilter);
-
   const getStatusCls = (status) =>
-    STATUS_OPTIONS.find(s => s.value === status)?.cls || "s-pending";
+    STATUS_OPTIONS.find((s) => s.value === Number(status))?.cls || "s-pending";
+
+  if (!companyId) {
+    return (
+      <div>
+        <h2>Prijave kandidata</h2>
+        <p style={{ color: "var(--text-3)" }}>Nije moguće učitati prijave — nedostaje ID kompanije.</p>
+      </div>
+    );
+  }
 
   return (
     <div>
       <h2>Prijave kandidata</h2>
 
       <div className="applications-filter">
-        {FILTERS.map(f => (
+        {FILTERS.map((filter) => (
           <button
-            key={f}
-            className={`filter-btn ${activeFilter === f ? "active" : ""}`}
-            onClick={() => setActiveFilter(f)}
+            key={filter.key}
+            type="button"
+            className={`filter-btn ${activeFilter === filter.key ? "active" : ""}`}
+            onClick={() => setActiveFilter(filter.key)}
           >
-            {f}
-            {f !== "Sve" && (
-              <span style={{ marginLeft: 6, opacity: 0.6, fontSize: 11 }}>
-                {applications.filter(a => a.status === f).length}
-              </span>
-            )}
-            {f === "Sve" && (
-              <span style={{ marginLeft: 6, opacity: 0.6, fontSize: 11 }}>
-                {applications.length}
-              </span>
-            )}
+            {filter.label}
+            <span style={{ marginLeft: 6, opacity: 0.6, fontSize: 11 }}>
+              {filter.status === null
+                ? applications.length
+                : countByStatus(filter.status)}
+            </span>
           </button>
         ))}
       </div>
 
-      {filtered.map((app, i) => (
+      {loading && (
+        <div style={{ textAlign: "center", padding: "40px 0", color: "var(--text-3)" }}>
+          Učitavanje prijava...
+        </div>
+      )}
+
+      {error && (
+        <div className="server-error" role="alert" style={{ marginBottom: 16 }}>
+          {error}
+        </div>
+      )}
+
+      {!loading && filtered.map((app, i) => (
         <div
           className="application-row"
-          key={app.id}
+          key={app.applicationId}
           style={{ animationDelay: `${i * 0.05}s` }}
         >
           <div className="ar-info">
-            <h4>{app.ime}</h4>
-            <p>{app.email} &nbsp;·&nbsp; {app.oglas} &nbsp;·&nbsp; {app.datum}</p>
+            <h4>{`${app.firstName} ${app.lastName}`}</h4>
+            <p>
+              {app.email}
+              {" · "}
+              {adTitles[app.advertisementId] ?? `Oglas #${app.advertisementId}`}
+              {" · "}
+              {app.appliedAt
+                ? new Date(app.appliedAt).toLocaleDateString("sr-RS")
+                : "—"}
+            </p>
           </div>
 
           <div className="status-select-wrapper">
             <select
               className={`status-select ${getStatusCls(app.status)}`}
-              value={app.status}
-              onChange={(e) => changeStatus(app.id, e.target.value)}
+              value={Number(app.status)}
+              disabled={updatingId === app.applicationId}
+              onChange={(e) => changeStatus(app.applicationId, e.target.value)}
             >
-              {STATUS_OPTIONS.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              {STATUS_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </select>
           </div>
 
-          <button className="btn-icon" title="Pregledaj CV">
-            📄
-          </button>
+          <span className={`badge badge-${Number(app.status) === APPLICATION_STATUS.ACCEPTED ? "accepted" : Number(app.status) === APPLICATION_STATUS.REJECTED ? "rejected" : "review"}`}>
+            {applicationStatusLabel(app.status)}
+          </span>
         </div>
       ))}
 
-      {filtered.length === 0 && (
+      {!loading && filtered.length === 0 && !error && (
         <div style={{ textAlign: "center", padding: "60px 0", color: "var(--text-3)", fontSize: 14 }}>
           Nema prijava za ovaj filter.
         </div>

@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
+import { useAuth } from "../../../context/AuthContext";
 import {
   applyToJob,
   getClientApplications,
+  getClientProfileByEmail,
   getStoredClientId,
+  storeClientId,
 } from "../../../api/clientApi";
 
 /* ─── ENUM OPCIJE ───────────────────────────────────── */
@@ -85,6 +88,9 @@ function buildQueryString(filters, page, pageSize) {
 /* ─── KOMPONENTA ───────────────────────────────────── */
 
 export default function JobList() {
+  const { user } = useAuth();
+  const email = user?.email ?? "";
+  const [clientId, setClientId] = useState(() => getStoredClientId());
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -98,8 +104,41 @@ export default function JobList() {
   const [applyingJobId, setApplyingJobId] = useState(null);
   const [applyMessage, setApplyMessage] = useState(null);
 
-  const clientId = getStoredClientId();
   const PAGE_SIZE = 10;
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function resolveClientId() {
+      const storedId = getStoredClientId();
+      if (storedId) {
+        if (!cancelled) setClientId(storedId);
+        return;
+      }
+
+      if (!email) {
+        if (!cancelled) setClientId(null);
+        return;
+      }
+
+      try {
+        const profile = await getClientProfileByEmail(email);
+        if (cancelled) return;
+
+        if (profile?.clientId) {
+          storeClientId(profile.clientId);
+          setClientId(String(profile.clientId));
+        } else {
+          setClientId(null);
+        }
+      } catch {
+        if (!cancelled) setClientId(null);
+      }
+    }
+
+    resolveClientId();
+    return () => { cancelled = true; };
+  }, [email]);
 
   useEffect(() => {
     if (!clientId) return;
@@ -138,7 +177,12 @@ export default function JobList() {
       const data = await response.json();
       const ads = data.advertisements ?? data.Advertisements ?? [];
 
-      setJobs(Array.isArray(ads) ? ads : []);
+      setJobs(
+        (Array.isArray(ads) ? ads : []).map((job) => ({
+          ...job,
+          id: job.id ?? job.Id,
+        }))
+      );
       setTotalPages(data.totalPages ?? data.TotalPages ?? 1);
       setTotalCount(data.totalCount ?? data.TotalCount ?? 0);
     } catch (err) {

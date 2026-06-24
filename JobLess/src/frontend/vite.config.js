@@ -22,6 +22,11 @@ export default defineConfig({
                 changeOrigin: true,
                 secure: false,
             },
+            "/api/Companies": {
+                target: "http://localhost:5287",
+                changeOrigin: true,
+                secure: false,
+            },
             "/api": {
                 target: "http://localhost:5218",
                 changeOrigin: true,

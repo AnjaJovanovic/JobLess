@@ -104,31 +104,39 @@ export function applicationStatusLabel(status) {
   return "U razmatranju";
 }
 
+function parseApiError(text, fallback) {
+  try {
+    const parsed = JSON.parse(text);
+    return parsed.message ?? fallback;
+  } catch {
+    return text || fallback;
+  }
+}
+
 export async function applyToJob(clientId, advertisementId) {
-  const response = await fetch(`/api/clients/${clientId}/applications`, {
+  const numericClientId = Number(clientId);
+  const numericAdId = Number(advertisementId);
+
+  if (!numericClientId || !numericAdId) {
+    throw new Error("Nedostaju podaci za prijavu. Popunite profil i pokušajte ponovo.");
+  }
+
+  const response = await fetch(`/api/clients/${numericClientId}/applications`, {
     method: "POST",
     headers: JSON_HEADERS,
-    body: JSON.stringify({ advertisementId }),
+    body: JSON.stringify({ advertisementId: numericAdId }),
   });
 
   if (!response.ok) {
     const text = await response.text();
-    try {
-      const parsed = JSON.parse(text);
-      throw new Error(parsed.message ?? "Greška pri prijavi.");
-    } catch (err) {
-      if (err instanceof SyntaxError) {
-        throw new Error(text || "Greška pri prijavi.");
-      }
-      throw err;
-    }
+    throw new Error(parseApiError(text, "Greška pri prijavi."));
   }
 
   return response.json();
 }
 
 export async function getClientApplications(clientId) {
-  const response = await fetch(`/api/clients/${clientId}/applications`);
+  const response = await fetch(`/api/clients/${Number(clientId)}/applications`);
 
   if (!response.ok) {
     const text = await response.text();
@@ -137,4 +145,39 @@ export async function getClientApplications(clientId) {
 
   const data = await response.json();
   return Array.isArray(data) ? data : [];
+}
+
+export async function getApplicationsByAdvertisements(advertisementIds, status = null) {
+  if (!advertisementIds?.length) return [];
+
+  const params = new URLSearchParams();
+  advertisementIds.forEach((id) => params.append("advertisementIds", String(id)));
+  if (status !== null && status !== undefined && status !== "") {
+    params.set("status", String(status));
+  }
+
+  const response = await fetch(`/api/clients/applications/by-advertisements?${params.toString()}`);
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(parseApiError(text, "Greška pri učitavanju prijava."));
+  }
+
+  const data = await response.json();
+  return Array.isArray(data) ? data : [];
+}
+
+export async function updateApplicationStatus(applicationId, status) {
+  const response = await fetch(`/api/clients/applications/${applicationId}/status`, {
+    method: "PUT",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ status: Number(status) }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(parseApiError(text, "Greška pri ažuriranju statusa."));
+  }
+
+  return response.json();
 }

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 import CompanyProfile from "./CompanyProfile";
 import CreateJob from "./CreateJob";
 import CompanyJobs from "./CompanyJobs";
@@ -13,7 +15,14 @@ const tabs = [
 ];
 
 export default function CompanyDashboard() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("profile");
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <div className="company-layout">
@@ -27,6 +36,9 @@ export default function CompanyDashboard() {
             {tab.label}
           </button>
         ))}
+        <button type="button" className="company-logout-btn" onClick={handleLogout}>
+          Odjavi se
+        </button>
       </aside>
 
       <main className="company-content">

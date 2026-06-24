@@ -63,18 +63,11 @@ const schemas = {
         password: [v.required],
     },
     companyLogin: {
-        pibOrMaticni: [v.required],
         email: [v.required, v.email],
         password: [v.required],
     },
     candidateRegister: {
-        firstName: [v.required],
-        lastName: [v.required],
         email: [v.required, v.email],
-        phone: [v.required, v.phone],
-        education: [v.required, v.select],
-        workArea: [v.required, v.select],
-        experience: [v.required, v.select],
         password: [v.required, v.password],
         confirmPassword: [v.required, v.confirmPassword],
     },
@@ -173,11 +166,11 @@ function FieldError({ msg }) {
 // CANDIDATE LOGIN
 // ============================================================
 function CandidateLogin({ formRef }) {
-    const { field, err, validate } = useForm(
+    const { field, err, validate, values } = useForm(
         { email: "", password: "" },
         schemas.candidateLogin
     );
-    formRef.current = { validate };
+    formRef.current = { validate, values };
 
   return (
     <>
@@ -202,7 +195,7 @@ function CandidateLogin({ formRef }) {
 function CompanyLogin({ formRef }) {
   const { field, err, validate, values } = useForm(
     { email: "", password: "" },
-    schemas.login
+    schemas.companyLogin
   );
   formRef.current = { validate, values };
 
@@ -227,13 +220,11 @@ function CompanyLogin({ formRef }) {
 // CANDIDATE REGISTER
 // ============================================================
 function CandidateRegister({ formRef }) {
-  const { field, err, validate , values} = useForm(
-    {
-      email: "",  password: "", confirmPassword: "",
-    },
-    schemas.register
+  const { field, err, validate, values } = useForm(
+    { email: "", password: "", confirmPassword: "" },
+    schemas.candidateRegister
   );
-  formRef.current = { validate , values};
+  formRef.current = { validate, values };
   return (
     <>
       <div className="form-group">
@@ -378,12 +369,55 @@ function CompanyRegister({ formRef }) {
 }
 
 // ============================================================
+// AUTH HELPERS
+// ============================================================
+async function parseAuthResponse(res) {
+  const text = await res.text();
+  if (!res.ok) {
+    try {
+      const json = JSON.parse(text);
+      throw new Error(json.message || "Greška pri autentifikaciji.");
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        throw new Error(text || "Greška pri autentifikaciji.");
+      }
+      throw err;
+    }
+  }
+  return text ? JSON.parse(text) : null;
+}
+
+async function authRequest(path, body) {
+  const res = await fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseAuthResponse(res);
+}
+
+async function findCompanyIdByEmail(email) {
+  const res = await fetch(
+    `/api/Companies/Search?query=${encodeURIComponent(email)}&pageNumber=1&pageSize=20`
+  );
+  if (!res.ok) return null;
+
+  const data = await res.json();
+  const companies = data.companies || [];
+  const match = companies.find(
+    (c) => c.email?.toLowerCase() === email.toLowerCase()
+  );
+  return match?.id ?? null;
+}
+
+// ============================================================
 // MAIN COMPONENT
 // ============================================================
 export default function Login() {
   const [mode, setMode] = useState("login");
   const [role, setRole] = useState("candidate");
   const [serverError, setServerError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const { login } = useAuth();
@@ -402,122 +436,100 @@ export default function Login() {
     if (!isValid) return;
 
     const values = formRef.current?.values ?? {};
+    setLoading(true);
 
-        try {
-            if (isLogin) {
-                // ── PRIJAVA KOMPANIJE ─────────────────────────────────────
-                if (!isCandidate) {
-                    const vals = formRef.current?.values;
+    try {
+      if (isLogin) {
+        const data = await authRequest("/api/Auth/login", {
+          email: values.email,
+          password: values.password,
+        });
 
-                    // Pronađi kompaniju po PIB/matičnom broju i emailu
-                    const res = await fetch(
-                        `/api/Companies/Search?query=${encodeURIComponent(vals.pibOrMaticni)}&pageNumber=1&pageSize=10`
-                    );
-
-                    if (!res.ok) throw new Error("Greška pri prijavi.");
-                    const data = await res.json();
-                    const companies = data.companies || [];
-
-                    // Pronađi kompaniju koja odgovara emailu i PIB/matičnom broju
-                    const match = companies.find(
-                        (c) =>
-                            c.email === vals.email &&
-                            (c.taxIdentificationNumber === vals.pibOrMaticni ||
-                                c.registrationNumber === vals.pibOrMaticni)
-                    );
-
-                    if (!match) {
-                        setServerError("Kompanija sa ovim podacima ne postoji.");
-                        return;
-                    }
-
-                    // NAPOMENA: Trenutno nema auth servisa — poredimo passwordHash direktno.
-                    // Kada bude auth servis, zameniti ovaj blok sa pravim JWT loginom.
-                    if (match.passwordHash !== vals.password) {
-                        setServerError("Pogrešna lozinka.");
-                        return;
-                    }
-
-                    login(match.email, "company", match.id);
-                    navigate("/company");
-
-                } else {
-                    // ── PRIJAVA KANDIDATA (TODO kad bude user servis) ────────
-                    // const res = await fetch("/api/Users/Login", { ... });
-                    login(formRef.current?.values?.email ?? "kandidat@email.com", "candidate", 0);
-                    navigate("/user");
-                }
-
-            } else {
-                // ── REGISTRACIJA KOMPANIJE ────────────────────────────────
-                if (!isCandidate) {
-                    const vals = formRef.current?.values;
-
-                    // Razdvoji contactName na ime i prezime
-                    //const nameParts = (vals.contactName || "").trim().split(" ");
-                    //const contactFirstName = nameParts[0] || "";
-                    //const contactLastName = nameParts.slice(1).join(" ") || "";
-
-                    const payload = {
-                        name: vals.companyName,
-                        taxIdentificationNumber: vals.pib,
-                        registrationNumber: vals.maticniBroj,
-                        email: vals.email,
-                        phoneNumber: vals.phone,
-                        industry: vals.industry,
-                        companySize: companySizeMap[vals.employeeCount],
-                        location: vals.city,
-                        website: vals.website || null,
-                        //contactPersonFirstName: contactFirstName,
-                        //contactPersonLastName: contactLastName,
-                        //ownerName: vals.contactName,
-                        contactPersonFirstName: vals.contactFirstName,
-                        contactPersonLastName: vals.contactLastName,
-                        ownerName: `${vals.contactFirstName} ${vals.contactLastName}`,
-                        contactPersonPosition: vals.contactPosition,
-                        contactPersonPhoneNumber: vals.phone,
-                        passwordHash: vals.password,
-                        // polja koja backend zahteva a nemamo ih na formi
-                        ownerId: 0,
-                        description: null,
-                        address: vals.city,
-                    };
-
-                    const res = await fetch("/api/Companies", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload),
-                    });
-
-                    if (!res.ok) {
-                        const text = await res.text();
-                        // Pokušaj da parsiraš validation grešku
-                        try {
-                            const json = JSON.parse(text);
-                            const firstError = Object.values(json.errors || {})[0]?.[0];
-                            setServerError(firstError || "Greška pri registraciji.");
-                        } catch {
-                            setServerError(text || "Greška pri registraciji.");
-                        }
-                        return;
-                    }
-
-                    const newCompanyId = await res.json();
-                    login(vals.email, "company", newCompanyId);
-                    navigate("/company");
-
-                } else {
-                    // ── REGISTRACIJA KANDIDATA (TODO kad bude user servis) ───
-                    login(formRef.current?.values?.email ?? "kandidat@email.com", "candidate", 0);
-                    navigate("/user");
-                }
-            }
-        } catch (err) {
-            setServerError("Greška: " + err.message);
-        } finally {
-            setLoading(false);
+        if (!data) {
+          setServerError("Pogrešni kredencijali.");
+          return;
         }
-    };
+
+        if (isCandidateRole(data.role)) {
+          login(data);
+          await syncClientProfileAfterAuth(data.email);
+          navigate("/user");
+          return;
+        }
+
+        const companyId = await findCompanyIdByEmail(data.email);
+        login({ ...data, id: companyId, companyId });
+        navigate("/company");
+        return;
+      }
+
+      if (isCandidate) {
+        const data = await authRequest("/api/Auth/register", {
+          email: values.email,
+          password: values.password,
+          role: "Candidate",
+        });
+
+        login(data);
+        await syncClientProfileAfterAuth(data.email);
+        navigate("/user");
+        return;
+      }
+
+      const payload = {
+        name: values.companyName,
+        taxIdentificationNumber: values.pib,
+        registrationNumber: values.maticniBroj,
+        email: values.email,
+        phoneNumber: values.phone,
+        industry: values.industry,
+        companySize: companySizeMap[values.employeeCount],
+        location: values.city,
+        website: values.website || null,
+        contactPersonFirstName: values.contactFirstName,
+        contactPersonLastName: values.contactLastName,
+        ownerName: `${values.contactFirstName} ${values.contactLastName}`,
+        contactPersonPosition: values.contactPosition,
+        contactPersonPhoneNumber: values.phone,
+        passwordHash: values.password,
+        ownerId: 0,
+        description: null,
+        address: values.city,
+      };
+
+      const authData = await authRequest("/api/Auth/register", {
+        email: values.email,
+        password: values.password,
+        role: "Company",
+      });
+
+      const res = await fetch("/api/Companies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        try {
+          const json = JSON.parse(text);
+          const firstError = Object.values(json.errors || {})[0]?.[0];
+          setServerError(firstError || json.message || "Greška pri kreiranju profila kompanije.");
+        } catch {
+          setServerError(text || "Greška pri kreiranju profila kompanije.");
+        }
+        return;
+      }
+
+      const companyId = await res.json();
+      login({ ...authData, id: companyId, companyId });
+      navigate("/company");
+    } catch (err) {
+      setServerError(err.message || "Došlo je do greške.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -580,8 +592,8 @@ export default function Login() {
                 : <CompanyRegister formRef={formRef} />
             }
 
-            <button type="submit" className="submit-btn">
-              {isLogin ? "Prijavite se" : "Kreirajte nalog"}
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? "Molimo sačekajte..." : isLogin ? "Prijavite se" : "Kreirajte nalog"}
             </button>
           </form>
 

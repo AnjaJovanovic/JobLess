@@ -22,21 +22,61 @@ namespace JobLess.Company.Infrastructure.Migrations
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "Industry",
+            migrationBuilder.AddColumn<int>(
+                name: "IndustryTemp",
                 table: "Companies",
                 type: "int",
                 nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                defaultValue: 8);
 
-            migrationBuilder.AlterColumn<int>(
-                name: "CompanySize",
+            migrationBuilder.Sql("""
+                UPDATE Companies SET IndustryTemp = CASE Industry
+                    WHEN N'Informacione tehnologije' THEN 1
+                    WHEN N'Finansije i bankarstvo' THEN 2
+                    WHEN N'Maloprodaja i usluge' THEN 3
+                    WHEN N'Industrija i proizvodnja' THEN 4
+                    WHEN N'Zdravstvo' THEN 5
+                    WHEN N'Građevinarstvo' THEN 6
+                    WHEN N'Mediji i marketing' THEN 7
+                    ELSE 8
+                END
+                """);
+
+            migrationBuilder.DropColumn(
+                name: "Industry",
+                table: "Companies");
+
+            migrationBuilder.RenameColumn(
+                name: "IndustryTemp",
+                table: "Companies",
+                newName: "Industry");
+
+            migrationBuilder.AddColumn<int>(
+                name: "CompanySizeTemp",
                 table: "Companies",
                 type: "int",
                 nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                defaultValue: 1);
+
+            migrationBuilder.Sql("""
+                UPDATE Companies SET CompanySizeTemp = CASE CompanySize
+                    WHEN N'1-10' THEN 1
+                    WHEN N'11-50' THEN 2
+                    WHEN N'51-200' THEN 3
+                    WHEN N'201-500' THEN 4
+                    WHEN N'500+' THEN 5
+                    ELSE 1
+                END
+                """);
+
+            migrationBuilder.DropColumn(
+                name: "CompanySize",
+                table: "Companies");
+
+            migrationBuilder.RenameColumn(
+                name: "CompanySizeTemp",
+                table: "Companies",
+                newName: "CompanySize");
         }
 
         /// <inheritdoc />
