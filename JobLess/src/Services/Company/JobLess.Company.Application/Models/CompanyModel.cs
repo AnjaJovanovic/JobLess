@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+﻿using JobLess.Company.Domain.Enums;
+using JobLess.Company.Domain.Entities;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +23,7 @@ namespace JobLess.Company.Application.Models
         public string ContactPersonLastName { get; set; }
         public string ContactPersonPosition { get; set; }
         public string ContactPersonPhoneNumber { get; set; }
-        public string Industry { get; set; } = string.Empty;
+        public Industry Industry { get; set; } 
         public string? Website { get; set; }
         public string Location { get; set; } = string.Empty;
 
@@ -30,8 +32,8 @@ namespace JobLess.Company.Application.Models
 
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
-        public string CompanySize { get; set; }
-        public string? LogoUrl { get; set; }
+        public CompanySize CompanySize { get; set; }
+        //public int EmployeeCount { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -62,7 +64,6 @@ namespace JobLess.Company.Application.Models
                     Industry = entity.Industry,
                     Website = entity.Website,
                     Location = entity.Location,
-                    LogoUrl = entity.LogoUrl,
                     IsActive = entity.IsActive,
                     CreatedAt = entity.CreatedAt,
                     UpdatedAt = entity.UpdatedAt

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JobLess.Company.Domain.Company 
+namespace JobLess.Company.Domain.Entities
 {
     public class CompanyAdmin : BaseEntity //mislim da nam ovo ne treba, ali neka za sad ostane  
     {

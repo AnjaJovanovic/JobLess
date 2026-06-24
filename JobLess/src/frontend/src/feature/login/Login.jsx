@@ -3,6 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 
+const companySizeMap = {
+    "1-10": 1,
+    "11-50": 2,
+    "51-200": 3,
+    "201-500": 4,
+    "500+": 5,
+};
+
 // ============================================================
 // VALIDATORS
 // ============================================================
@@ -77,7 +85,9 @@ const schemas = {
         employeeCount: [v.required, v.select],
         city: [v.required],
         website: [v.url],
-        contactName: [v.required],
+        //contactName: [v.required],
+        contactFirstName: [v.required],
+        contactLastName: [v.required],
         contactPosition: [v.required],
         password: [v.required, v.password],
         confirmPassword: [v.required, v.confirmPassword],
@@ -316,7 +326,7 @@ function CompanyRegister({ formRef }) {
         {
             companyName: "", pib: "", maticniBroj: "", email: "", phone: "",
             industry: "", employeeCount: "", city: "", website: "",
-            contactName: "", contactPosition: "", password: "", confirmPassword: "",
+            contactFirstName: "", contactLastName: "", contactPosition: "", password: "", confirmPassword: "",
         },
         schemas.companyRegister
     );
@@ -361,8 +371,8 @@ function CompanyRegister({ formRef }) {
                     <option value="Informacione tehnologije">Informacione tehnologije</option>
                     <option value="Finansije i bankarstvo">Finansije i bankarstvo</option>
                     <option value="Maloprodaja i usluge">Maloprodaja i usluge</option>
-                    <option value="induIndustrija i proizvodnjastry">Industrija i proizvodnja</option>
-                    <option value="heaZdravstvolth">Zdravstvo</option>
+                    <option value="Industrija i proizvodnja">Industrija i proizvodnja</option>
+                    <option value="Zdravstvo">Zdravstvo</option>
                     <option value="Građevinarstvo">Građevinarstvo</option>
                     <option value="Mediji i marketing">Mediji i marketing</option>
                     <option value="Ostalo">Ostalo</option>
@@ -398,17 +408,21 @@ function CompanyRegister({ formRef }) {
 
             <div className="form-row">
                 <div className="form-group">
-                    <label className="form-label">Ime i prezime</label>
-                    <input className={`form-input${err("contactName") ? " input-error" : ""}`} type="text" placeholder="Kontakt osoba" {...field("contactName")} />
-                    <FieldError msg={err("contactName")} />
+                    <label className="form-label">Ime kontakt osobe</label>
+                    <input className={`form-input${err("contactFirstName") ? " input-error" : ""}`} type="text" placeholder="Marko" {...field("contactFirstName")} />
+                    <FieldError msg={err("contactFirstName")} />
                 </div>
                 <div className="form-group">
-                    <label className="form-label">Pozicija</label>
-                    <input className={`form-input${err("contactPosition") ? " input-error" : ""}`} type="text" placeholder="HR Menadžer" {...field("contactPosition")} />
-                    <FieldError msg={err("contactPosition")} />
+                    <label className="form-label">Prezime kontakt osobe</label>
+                    <input className={`form-input${err("contactLastName") ? " input-error" : ""}`} type="text" placeholder="Petrović" {...field("contactLastName")} />
+                    <FieldError msg={err("contactLastName")} />
                 </div>
             </div>
-
+            <div className="form-group">
+                <label className="form-label">Pozicija</label>
+                <input className={`form-input${err("contactPosition") ? " input-error" : ""}`} type="text" placeholder="HR Menadžer" {...field("contactPosition")} />
+                <FieldError msg={err("contactPosition")} />
+            </div>
             <div className="form-section-label">Sigurnost naloga</div>
 
             <div className="form-group">
@@ -501,9 +515,9 @@ export default function Login() {
                     const vals = formRef.current?.values;
 
                     // Razdvoji contactName na ime i prezime
-                    const nameParts = (vals.contactName || "").trim().split(" ");
-                    const contactFirstName = nameParts[0] || "";
-                    const contactLastName = nameParts.slice(1).join(" ") || "";
+                    //const nameParts = (vals.contactName || "").trim().split(" ");
+                    //const contactFirstName = nameParts[0] || "";
+                    //const contactLastName = nameParts.slice(1).join(" ") || "";
 
                     const payload = {
                         name: vals.companyName,
@@ -512,17 +526,20 @@ export default function Login() {
                         email: vals.email,
                         phoneNumber: vals.phone,
                         industry: vals.industry,
-                        companySize: vals.employeeCount,
+                        companySize: companySizeMap[vals.employeeCount],
                         location: vals.city,
                         website: vals.website || null,
-                        contactPersonFirstName: contactFirstName,
-                        contactPersonLastName: contactLastName,
+                        //contactPersonFirstName: contactFirstName,
+                        //contactPersonLastName: contactLastName,
+                        //ownerName: vals.contactName,
+                        contactPersonFirstName: vals.contactFirstName,
+                        contactPersonLastName: vals.contactLastName,
+                        ownerName: `${vals.contactFirstName} ${vals.contactLastName}`,
                         contactPersonPosition: vals.contactPosition,
                         contactPersonPhoneNumber: vals.phone,
                         passwordHash: vals.password,
                         // polja koja backend zahteva a nemamo ih na formi
                         ownerId: 0,
-                        ownerName: vals.contactName,
                         description: null,
                         address: vals.city,
                     };

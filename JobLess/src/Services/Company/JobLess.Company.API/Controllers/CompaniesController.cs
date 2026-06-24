@@ -35,12 +35,26 @@ namespace JobLess.Company.API.Controllers
             }
             catch (Exception ex)
             {
+                // PRIVREMENO - da vidimo šta se dešava
                 return BadRequest(new
                 {
-                    message = "Kompanija sa unetim PIB-om, matičnim brojem ili email adresom već postoji."
+                    exceptionType = ex.GetType().Name,
+                    message = ex.Message,
+                    inner = ex.InnerException?.Message
                 });
             }
         }
+        /*
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateCompanyCommand command)
+        {
+            if (command == null)
+                return BadRequest("Podaci nisu validni.");
+
+            var companyId = await _mediator.Send(command);
+            return CreatedAtAction(nameof(Create), new { id = companyId }, companyId);
+        }
+        */
 
         [HttpDelete]
         public async Task<IActionResult> Delete(DeleteCompanyCommand command)
