@@ -97,6 +97,17 @@
   border-radius: 0 4px 4px 0;
 }
 
+.user-logout-btn {
+  margin-top: auto;
+  color: var(--danger) !important;
+  border: 1px solid rgba(255, 91, 107, 0.25);
+}
+
+.user-logout-btn:hover {
+  background: rgba(255, 91, 107, 0.12) !important;
+  color: var(--danger) !important;
+}
+
 /* ─── MAIN CONTENT ───────────────────────────────────── */
 .user-content {
   flex: 1;
@@ -189,6 +200,185 @@
   box-shadow: 0 4px 20px var(--accent-glow);
 }
 
+.profile-form .btn-save:disabled,
+.profile-form .btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.profile-form input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.profile-form input.input-error {
+  border-color: var(--danger);
+}
+
+.profile-form .field-error {
+  color: var(--danger);
+  font-size: 12px;
+}
+
+.profile-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.profile-form .btn-secondary {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 26px;
+  background: var(--surface-2);
+  color: var(--text-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.profile-gender-group {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-gender-group legend {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.profile-gender-options {
+  display: flex;
+  gap: 16px;
+}
+
+.profile-gender-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-1);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.profile-gender-option input {
+  width: auto;
+  accent-color: var(--accent);
+}
+
+.profile-setup-notice,
+.profile-edit-intro {
+  max-width: 520px;
+  color: var(--text-2);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.profile-setup-notice {
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-dim);
+  border: 1px solid rgba(91, 139, 255, 0.25);
+  color: var(--text-1);
+}
+
+.profile-view {
+  max-width: 520px;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.btn-edit-profile {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  padding: 11px 24px;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+}
+
+.btn-edit-profile:hover {
+  background: var(--accent-dim);
+  box-shadow: 0 0 0 3px rgba(91, 139, 255, 0.12);
+}
+
+.btn-edit-profile:active {
+  transform: translateY(1px);
+}
+
+.profile-detail-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-detail-row dt {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.profile-detail-row dd {
+  font-size: 15px;
+  color: var(--text-1);
+}
+
+.profile-message {
+  max-width: 520px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.profile-message--error {
+  background: rgba(255, 91, 107, 0.12);
+  border: 1px solid rgba(255, 91, 107, 0.35);
+  color: var(--danger);
+}
+
+.user-sidebar button.disabled,
+.user-sidebar button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.user-sidebar button.disabled:hover,
+.user-sidebar button:disabled:hover {
+  color: var(--text-2);
+  background: transparent;
+}
+
 /* ─── JOB CARDS ──────────────────────────────────────── */
 .job-card-full {
   background: var(--surface);
@@ -228,6 +418,21 @@
   font-weight: 600;
   color: var(--text-1);
   letter-spacing: -0.01em;
+}
+
+.jcf-position {
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--accent-dim);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.jcf-description {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+  margin-bottom: 10px;
 }
 
 .jcf-meta {
@@ -532,6 +737,17 @@
 .job-error {
   color: var(--danger);
   margin-top: 20px;
+}
+
+.job-apply-message {
+  color: var(--success);
+  margin-top: 12px;
+}
+
+.application-date {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 4px;
 }
 
 .job-pagination {

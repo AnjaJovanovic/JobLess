@@ -1,6 +1,9 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { syncClientProfileAfterAuth } from "../../api/clientApi";
+import { isCandidateRole } from "../dashboard/user/profileUtils";
+
 import "./Login.css";
 
 const companySizeMap = {
@@ -115,55 +118,55 @@ function validateAll(values, schema) {
 // useForm HOOK
 // ============================================================
 function useForm(initial, schema) {
-    const [values, setValues] = useState(initial);
-    const [errors, setErrors] = useState({});
-    const [touched, setTouched] = useState({});
+  const [values, setValues] = useState(initial);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
 
-    const handleChange = useCallback((e) => {
-        const { name, value } = e.target;
-        setValues((prev) => {
-            const next = { ...prev, [name]: value };
-            if (touched[name]) {
-                const err = validateField(name, value, next, schema);
-                setErrors((pe) => ({ ...pe, [name]: err }));
-            }
-            return next;
-        });
-    }, [touched, schema]);
-
-    const handleBlur = useCallback((e) => {
-        const { name, value } = e.target;
-        setTouched((prev) => ({ ...prev, [name]: true }));
-        const err = validateField(name, value, values, schema);
-        setErrors((prev) => ({ ...prev, [name]: err }));
-    }, [values, schema]);
-
-    const validate = useCallback(() => {
-        const allTouched = Object.keys(schema).reduce((a, k) => ({ ...a, [k]: true }), {});
-        setTouched(allTouched);
-        const errs = validateAll(values, schema);
-        setErrors(errs);
-        return Object.values(errs).every((e) => !e);
-    }, [values, schema]);
-
-    const field = (name) => ({
-        name,
-        value: values[name] ?? "",
-        onChange: handleChange,
-        onBlur: handleBlur,
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setValues((prev) => {
+      const next = { ...prev, [name]: value };
+      if (touched[name]) {
+        const err = validateField(name, value, next, schema);
+        setErrors((pe) => ({ ...pe, [name]: err }));
+      }
+      return next;
     });
+  }, [touched, schema]);
 
-    const err = (name) => (touched[name] ? errors[name] : null);
+  const handleBlur = useCallback((e) => {
+    const { name, value } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    const err = validateField(name, value, values, schema);
+    setErrors((prev) => ({ ...prev, [name]: err }));
+  }, [values, schema]);
 
-    return { field, err, validate, values };
+  const validate = useCallback(() => {
+    const allTouched = Object.keys(schema).reduce((a, k) => ({ ...a, [k]: true }), {});
+    setTouched(allTouched);
+    const errs = validateAll(values, schema);
+    setErrors(errs);
+    return Object.values(errs).every((e) => !e);
+  }, [values, schema]);
+
+  const field = (name) => ({
+    name,
+    value: values[name] ?? "",
+    onChange: handleChange,
+    onBlur: handleBlur,
+  });
+
+  const err = (name) => (touched[name] ? errors[name] : null);
+
+  return { field, err, validate , values};
 }
 
 // ============================================================
 // FIELD ERROR
 // ============================================================
 function FieldError({ msg }) {
-    if (!msg) return null;
-    return <span className="field-error">{msg}</span>;
+  if (!msg) return null;
+  return <span className="field-error">{msg}</span>;
 }
 
 // ============================================================
@@ -176,150 +179,85 @@ function CandidateLogin({ formRef }) {
     );
     formRef.current = { validate };
 
-    return (
-        <>
-            <div className="form-group">
-                <label className="form-label">Email adresa</label>
-                <input className={`form-input${err("email") ? " input-error" : ""}`} type="email" placeholder="vase.ime@email.com" {...field("email")} />
-                <FieldError msg={err("email")} />
-            </div>
-            <div className="form-group">
-                <label className="form-label">Lozinka</label>
-                <button className="forgot-link" type="button">Zaboravili ste?</button>
-                <input className={`form-input${err("password") ? " input-error" : ""}`} type="password" placeholder="••••••••" {...field("password")} />
-                <FieldError msg={err("password")} />
-            </div>
-        </>
-    );
+  return (
+    <>
+      <div className="form-group">
+        <label className="form-label">Email adresa</label>
+        <input className={`form-input${err("email") ? " input-error" : ""}`} type="email" placeholder="vase.ime@email.com" {...field("email")} />
+        <FieldError msg={err("email")} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Lozinka</label>
+        <button className="forgot-link" type="button">Zaboravili ste?</button>
+        <input className={`form-input${err("password") ? " input-error" : ""}`} type="password" placeholder="••••••••" {...field("password")} />
+        <FieldError msg={err("password")} />
+      </div>
+    </>
+  );
 }
 
 // ============================================================
-// COMPANY LOGIN — vraća values za API poziv
+// COMPANY LOGIN
 // ============================================================
 function CompanyLogin({ formRef }) {
-    const { field, err, validate, values } = useForm(
-        { pibOrMaticni: "", email: "", password: "" },
-        schemas.companyLogin
-    );
-    formRef.current = { validate, values };
+  const { field, err, validate, values } = useForm(
+    { email: "", password: "" },
+    schemas.login
+  );
+  formRef.current = { validate, values };
 
-    return (
-        <>
-            <div className="form-group">
-                <label className="form-label">PIB / Matični broj</label>
-                <input className={`form-input${err("pibOrMaticni") ? " input-error" : ""}`} type="text" placeholder="npr. 101234567" {...field("pibOrMaticni")} />
-                <FieldError msg={err("pibOrMaticni")} />
-            </div>
-            <div className="form-group">
-                <label className="form-label">Email kompanije</label>
-                <input className={`form-input${err("email") ? " input-error" : ""}`} type="email" placeholder="kontakt@kompanija.rs" {...field("email")} />
-                <FieldError msg={err("email")} />
-            </div>
-            <div className="form-group">
-                <label className="form-label">Lozinka</label>
-                <button className="forgot-link" type="button">Zaboravili ste?</button>
-                <input className={`form-input${err("password") ? " input-error" : ""}`} type="password" placeholder="••••••••" {...field("password")} />
-                <FieldError msg={err("password")} />
-            </div>
-        </>
-    );
+  return (
+    <>
+      <div className="form-group">
+        <label className="form-label">Email kompanije</label>
+        <input className={`form-input${err("email") ? " input-error" : ""}`} type="email" placeholder="kontakt@kompanija.rs" {...field("email")} />
+        <FieldError msg={err("email")} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Lozinka</label>
+        <button className="forgot-link" type="button">Zaboravili ste?</button>
+        <input className={`form-input${err("password") ? " input-error" : ""}`} type="password" placeholder="••••••••" {...field("password")} />
+        <FieldError msg={err("password")} />
+      </div>
+    </>
+  );
 }
 
 // ============================================================
 // CANDIDATE REGISTER
 // ============================================================
 function CandidateRegister({ formRef }) {
-    const { field, err, validate } = useForm(
-        { firstName: "", lastName: "", email: "", phone: "", education: "", workArea: "", experience: "", password: "", confirmPassword: "" },
-        schemas.candidateRegister
-    );
-    formRef.current = { validate };
-
-    return (
-        <>
-            <div className="form-row">
-                <div className="form-group">
-                    <label className="form-label">Ime</label>
-                    <input className={`form-input${err("firstName") ? " input-error" : ""}`} type="text" placeholder="Marko" {...field("firstName")} />
-                    <FieldError msg={err("firstName")} />
-                </div>
-                <div className="form-group">
-                    <label className="form-label">Prezime</label>
-                    <input className={`form-input${err("lastName") ? " input-error" : ""}`} type="text" placeholder="Petrović" {...field("lastName")} />
-                    <FieldError msg={err("lastName")} />
-                </div>
-            </div>
-            <div className="form-group">
-                <label className="form-label">Email adresa</label>
-                <input className={`form-input${err("email") ? " input-error" : ""}`} type="email" placeholder="vase.ime@email.com" {...field("email")} />
-                <FieldError msg={err("email")} />
-            </div>
-            <div className="form-group">
-                <label className="form-label">Broj telefona</label>
-                <input className={`form-input${err("phone") ? " input-error" : ""}`} type="tel" placeholder="+381 60 123 4567" {...field("phone")} />
-                <FieldError msg={err("phone")} />
-            </div>
-
-            <div className="form-section-label">Profesionalni podaci</div>
-
-            <div className="form-group">
-                <label className="form-label">Stručna sprema</label>
-                <select className={`form-input${err("education") ? " input-error" : ""}`} {...field("education")}>
-                    <option value="">Odaberite stepen obrazovanja</option>
-                    <option value="highschool">Srednja škola</option>
-                    <option value="higher">Viša škola / strukovne studije</option>
-                    <option value="bachelor">Osnovne akademske studije</option>
-                    <option value="master">Master / Magistratura</option>
-                    <option value="phd">Doktorat</option>
-                </select>
-                <FieldError msg={err("education")} />
-            </div>
-            <div className="form-group">
-                <label className="form-label">Oblast rada</label>
-                <select className={`form-input${err("workArea") ? " input-error" : ""}`} {...field("workArea")}>
-                    <option value="">Odaberite oblast</option>
-                    <option value="it">IT i tehnologija</option>
-                    <option value="marketing">Marketing i PR</option>
-                    <option value="finance">Finansije i računovodstvo</option>
-                    <option value="law">Pravo</option>
-                    <option value="engineering">Inžinjerstvo</option>
-                    <option value="medicine">Medicina i farmacija</option>
-                    <option value="education">Obrazovanje</option>
-                    <option value="other">Ostalo</option>
-                </select>
-                <FieldError msg={err("workArea")} />
-            </div>
-            <div className="form-group">
-                <label className="form-label">Godine iskustva</label>
-                <select className={`form-input${err("experience") ? " input-error" : ""}`} {...field("experience")}>
-                    <option value="">Odaberite iskustvo</option>
-                    <option value="0">Bez iskustva (Junior)</option>
-                    <option value="1-2">1–2 godine</option>
-                    <option value="3-5">3–5 godina</option>
-                    <option value="6-10">6–10 godina</option>
-                    <option value="10+">10+ godina</option>
-                </select>
-                <FieldError msg={err("experience")} />
-            </div>
-
-            <div className="form-section-label">Sigurnost naloga</div>
-
-            <div className="form-group">
-                <label className="form-label">Lozinka</label>
-                <input className={`form-input${err("password") ? " input-error" : ""}`} type="password" placeholder="Min. 8 karaktera" {...field("password")} />
-                <FieldError msg={err("password")} />
-            </div>
-            <div className="form-group">
-                <label className="form-label">Potvrdite lozinku</label>
-                <input className={`form-input${err("confirmPassword") ? " input-error" : ""}`} type="password" placeholder="••••••••" {...field("confirmPassword")} />
-                <FieldError msg={err("confirmPassword")} />
-            </div>
-        </>
-    );
+  const { field, err, validate , values} = useForm(
+    {
+      email: "",  password: "", confirmPassword: "",
+    },
+    schemas.register
+  );
+  formRef.current = { validate , values};
+  return (
+    <>
+      <div className="form-group">
+        <label className="form-label">Email adresa</label>
+        <input className={`form-input${err("email") ? " input-error" : ""}`} type="email" placeholder="vase.ime@email.com" {...field("email")} />
+        <FieldError msg={err("email")} />
+      </div>
+      <div className="form-section-label">Sigurnost naloga</div>
+      <div className="form-group">
+        <label className="form-label">Lozinka</label>
+        <input className={`form-input${err("password") ? " input-error" : ""}`} type="password" placeholder="Min. 8 karaktera" {...field("password")} />
+        <FieldError msg={err("password")} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Potvrdite lozinku</label>
+        <input className={`form-input${err("confirmPassword") ? " input-error" : ""}`} type="password" placeholder="••••••••" {...field("confirmPassword")} />
+        <FieldError msg={err("confirmPassword")} />
+      </div>
+    </>
+  );
 }
 
 // ============================================================
-// COMPANY REGISTER — vraća values za API poziv
+// COMPANY REGISTER
 // ============================================================
 function CompanyRegister({ formRef }) {
     const { field, err, validate, values } = useForm(
@@ -443,26 +381,27 @@ function CompanyRegister({ formRef }) {
 // MAIN COMPONENT
 // ============================================================
 export default function Login() {
-    const [mode, setMode] = useState("login");
-    const [role, setRole] = useState("candidate");
-    const [serverError, setServerError] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
-    const { login } = useAuth();
+  const [mode, setMode] = useState("login");
+  const [role, setRole] = useState("candidate");
+  const [serverError, setServerError] = useState(null);
+  const navigate = useNavigate();
 
-    const isLogin = mode === "login";
-    const isCandidate = role === "candidate";
+  const { login } = useAuth();
 
-    const formRef = { current: null };
+  const isLogin = mode === "login";
+  const isCandidate = role === "candidate";
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setServerError(null);
+  // formRef daje pristup validate() funkciji aktivne pod-forme
+  const formRef = { current: null };
 
-        const isValid = formRef.current?.validate?.();
-        if (!isValid) return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setServerError(null);
 
-        setLoading(true);
+    const isValid = formRef.current?.validate?.();
+    if (!isValid) return;
+
+    const values = formRef.current?.values ?? {};
 
         try {
             if (isLogin) {
@@ -580,91 +519,87 @@ export default function Login() {
         }
     };
 
-    return (
-        <>
-            <div className="auth-root">
-                <div className="auth-card">
-                    <div className="auth-logo">
-                        Job<span>Link</span>
-                    </div>
-                    <p className="auth-subtitle">
-                        {isLogin ? "Dobrodošli nazad. Prijavite se da nastavite." : "Kreirajte nalog i pronađite svoju priliku."}
-                    </p>
+  return (
+    <>
+      <div className="auth-root">
+        <div className="auth-card">
+          <div className="auth-logo">
+            Job<span>Link</span>
+          </div>
+          <p className="auth-subtitle">
+            {isLogin ? "Dobrodošli nazad. Prijavite se da nastavite." : "Kreirajte nalog i pronađite svoju priliku."}
+          </p>
 
-                    {/* Login / Register toggle */}
-                    <div className="mode-toggle">
-                        <button
-                            className={`mode-btn ${isLogin ? "active" : ""}`}
-                            onClick={() => { setMode("login"); setServerError(null); }}
-  
+          {/* Login / Register toggle */}
+          <div className="mode-toggle">
+            <button
+              className={`mode-btn ${isLogin ? "active" : ""}`}
+              onClick={() => { setMode("login"); setServerError(null); }}
+            >
+              Prijava
+            </button>
+            <button
+              className={`mode-btn ${!isLogin ? "active" : ""}`}
+              onClick={() => { setMode("register"); setServerError(null); }}
+            >
+              Registracija
+            </button>
+          </div>
 
-                        >
-                            Prijava
-                        </button>
-                        <button
-                            className={`mode-btn ${!isLogin ? "active" : ""}`}
-                            onClick={() => { setMode("register"); setServerError(null); }}
-                        >
-                            Registracija
-                        </button>
-                    </div>
+          {/* Role tabs */}
+          <div className="role-tabs">
+            <button
+              className={`role-tab ${isCandidate ? "active" : ""}`}
+              onClick={() => { setRole("candidate"); setServerError(null); }}
+            >
+              <span className="role-icon">👤</span>
+              Kandidat
+            </button>
+            <button
+              className={`role-tab ${!isCandidate ? "active" : ""}`}
+              onClick={() => { setRole("company"); setServerError(null); }}
+            >
+              <span className="role-icon">🏢</span>
+              Kompanija
+            </button>
+          </div>
 
-                    {/* Role tabs */}
-                    <div className="role-tabs">
-                        <button
-                            className={`role-tab ${isCandidate ? "active" : ""}`}
-                            onClick={() => { setRole("candidate"); setServerError(null); }}
-                        >
-                            <span className="role-icon">👤</span>
-                            Kandidat
-                        </button>
-                        <button
-                            className={`role-tab ${!isCandidate ? "active" : ""}`}
-                            onClick={() => { setRole("company"); setServerError(null); }}
-                        >
-                            <span className="role-icon">🏢</span>
-                            Kompanija
-                        </button>
-                    </div>
+          {/* Server greška */}
+          {serverError && (
+            <div className="server-error" role="alert">{serverError}</div>
+          )}
 
-                    {/* Server greška */}
-                    {serverError && (
-                        <div className="server-error" role="alert">{serverError}</div>
-                    )}
+          {/* Form */}
+          <form onSubmit={handleSubmit} noValidate>
+            {isLogin
+              ? isCandidate
+                ? <CandidateLogin formRef={formRef} />
+                : <CompanyLogin formRef={formRef} />
+              : isCandidate
+                ? <CandidateRegister formRef={formRef} />
+                : <CompanyRegister formRef={formRef} />
+            }
 
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} noValidate>
-                        {isLogin
-                            ? isCandidate
-                                ? <CandidateLogin formRef={formRef} />
-                                : <CompanyLogin formRef={formRef} />
-                            : isCandidate
-                                ? <CandidateRegister formRef={formRef} />
-                                : <CompanyRegister formRef={formRef} />
-                        }
+            <button type="submit" className="submit-btn">
+              {isLogin ? "Prijavite se" : "Kreirajte nalog"}
+            </button>
+          </form>
 
-                        <button type="submit" className="submit-btn" disabled={loading}>
-                            {loading
-                                ? "Molimo sačekajte..."
-                                : isLogin ? "Prijavite se" : "Kreirajte nalog"}
-                        </button>
-                    </form>
-
-                    <div className="toggle-link">
-                        {isLogin ? (
-                            <>
-                                Nemate nalog?
-                                <button onClick={() => { setMode("register"); setServerError(null); }}>Registrujte se</button>
-                            </>
-                        ) : (
-                            <>
-                                Već imate nalog?
-                                <button onClick={() => { setMode("login"); setServerError(null); }}>Prijavite se</button>
-                            </>
-                        )}
-                    </div>
-                </div>
-            </div>
-        </>
-    );
+          <div className="toggle-link">
+            {isLogin ? (
+              <>
+                Nemate nalog?
+                <button onClick={() => { setMode("register"); setServerError(null); }}>Registrujte se</button>
+              </>
+            ) : (
+              <>
+                Već imate nalog?
+                <button onClick={() => { setMode("login"); setServerError(null); }}>Prijavite se</button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
