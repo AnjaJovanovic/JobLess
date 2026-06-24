@@ -19,7 +19,6 @@ services:
       retries: 10
       start_period: 30s
 
-  # AUTHENTICATION SERVICE
   auth-service:
     build:
       context: .
@@ -44,6 +43,94 @@ services:
     depends_on:
       sql-server:
         condition: service_healthy
+    networks:
+      - jobless-network
+    restart: on-failure
+
+  client-service:
+    build:
+      context: .
+      dockerfile: src/Services/Client/JobLess.Client.API/Dockerfile
+    container_name: jobless-client
+    ports:
+      - "5263:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: >-
+        Server=sql-server,1433;
+        Database=JobLessClientDb;
+        User Id=sa;
+        Password=JobLess_Pass123!;
+        TrustServerCertificate=True;
+        MultipleActiveResultSets=True;
+    depends_on:
+      sql-server:
+        condition: service_healthy
+    networks:
+      - jobless-network
+    restart: on-failure
+
+  advertisement-service:
+    build:
+      context: .
+      dockerfile: src/Services/Advertisement/JobLess.Advertisement.API/Dockerfile
+    container_name: jobless-advertisement
+    ports:
+      - "5104:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: >-
+        Server=sql-server,1433;
+        Database=JobLessDatabase;
+        User Id=sa;
+        Password=JobLess_Pass123!;
+        TrustServerCertificate=True;
+        MultipleActiveResultSets=True;
+    depends_on:
+      sql-server:
+        condition: service_healthy
+    networks:
+      - jobless-network
+    restart: on-failure
+
+  company-service:
+    build:
+      context: .
+      dockerfile: src/Services/Company/JobLess.Company.API/Dockerfile
+    container_name: jobless-company
+    ports:
+      - "5287:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: >-
+        Server=sql-server,1433;
+        Database=JobLessCompanyDatabase;
+        User Id=sa;
+        Password=JobLess_Pass123!;
+        TrustServerCertificate=True;
+        MultipleActiveResultSets=True;
+    depends_on:
+      sql-server:
+        condition: service_healthy
+    networks:
+      - jobless-network
+    restart: on-failure
+
+  frontend:
+    build:
+      context: .
+      dockerfile: src/frontend/Dockerfile
+    container_name: jobless-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - auth-service
+      - client-service
+      - advertisement-service
+      - company-service
     networks:
       - jobless-network
     restart: on-failure
