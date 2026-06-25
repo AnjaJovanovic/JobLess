@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import {
   APPLICATION_STATUS,
-  applicationStatusLabel,
   getApplicationsByAdvertisements,
   updateApplicationStatus,
 } from "../../../api/clientApi";
+import CandidateProfileModal from "./CandidateProfileModal";
 
 const STATUS_OPTIONS = [
   { value: APPLICATION_STATUS.PENDING, label: "U razmatranju", cls: "s-review" },
@@ -44,6 +44,7 @@ export default function JobApplications() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -162,50 +163,80 @@ export default function JobApplications() {
         </div>
       )}
 
-      {!loading && filtered.map((app, i) => (
-        <div
-          className="application-row"
-          key={app.applicationId}
-          style={{ animationDelay: `${i * 0.05}s` }}
-        >
-          <div className="ar-info">
-            <h4>{`${app.firstName} ${app.lastName}`}</h4>
-            <p>
-              {app.email}
-              {" · "}
-              {adTitles[app.advertisementId] ?? `Oglas #${app.advertisementId}`}
-              {" · "}
-              {app.appliedAt
-                ? new Date(app.appliedAt).toLocaleDateString("sr-RS")
-                : "—"}
-            </p>
-          </div>
+      {!loading && filtered.map((app, i) => {
+        const applicationId = app.applicationId ?? app.ApplicationId;
+        const clientId = app.clientId ?? app.ClientId;
+        const firstName = app.firstName ?? app.FirstName ?? "";
+        const lastName = app.lastName ?? app.LastName ?? "";
+        const email = app.email ?? app.Email ?? "";
+        const advertisementId = app.advertisementId ?? app.AdvertisementId;
+        const appliedAt = app.appliedAt ?? app.AppliedAt;
+        const status = app.status ?? app.Status;
 
-          <div className="status-select-wrapper">
-            <select
-              className={`status-select ${getStatusCls(app.status)}`}
-              value={Number(app.status)}
-              disabled={updatingId === app.applicationId}
-              onChange={(e) => changeStatus(app.applicationId, e.target.value)}
-            >
-              {STATUS_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </div>
+        return (
+          <div
+            className="application-row"
+            key={applicationId}
+            style={{ animationDelay: `${i * 0.05}s` }}
+          >
+            <div className="ar-info">
+              <h4>{`${firstName} ${lastName}`.trim() || "Kandidat"}</h4>
+              <p>
+                {email}
+                {" · "}
+                {adTitles[advertisementId] ?? `Oglas #${advertisementId}`}
+                {" · "}
+                {appliedAt
+                  ? new Date(appliedAt).toLocaleDateString("sr-RS")
+                  : "—"}
+              </p>
+            </div>
 
-          <span className={`badge badge-${Number(app.status) === APPLICATION_STATUS.ACCEPTED ? "accepted" : Number(app.status) === APPLICATION_STATUS.REJECTED ? "rejected" : "review"}`}>
-            {applicationStatusLabel(app.status)}
-          </span>
-        </div>
-      ))}
+            <div className="ar-actions">
+              <button
+                type="button"
+                className="btn-view-profile"
+                onClick={() =>
+                  setSelectedCandidate({
+                    clientId,
+                    name: `${firstName} ${lastName}`.trim(),
+                  })
+                }
+              >
+                Prikaži podatke o kandidatu
+              </button>
+
+              <div className="status-select-wrapper">
+                <select
+                  className={`status-select ${getStatusCls(status)}`}
+                  value={Number(status)}
+                  disabled={updatingId === applicationId}
+                  onChange={(e) => changeStatus(applicationId, e.target.value)}
+                >
+                  {STATUS_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        );
+      })}
 
       {!loading && filtered.length === 0 && !error && (
         <div style={{ textAlign: "center", padding: "60px 0", color: "var(--text-3)", fontSize: 14 }}>
           Nema prijava za ovaj filter.
         </div>
+      )}
+
+      {selectedCandidate && (
+        <CandidateProfileModal
+          clientId={selectedCandidate.clientId}
+          candidateName={selectedCandidate.name}
+          onClose={() => setSelectedCandidate(null)}
+        />
       )}
     </div>
   );

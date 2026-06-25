@@ -20,8 +20,8 @@
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Jobless.Advertisement.Application\Jobless.Advertisement.Application.csproj" />
+  <ItemGroup>
+    <ProjectReference Include="..\Jobless.Advertisement.Application\Jobless.Advertisement.Application.csproj" />
 		<ProjectReference Include="..\JobLess.Advertisement.Infrastructure\JobLess.Advertisement.Infrastructure.csproj" />
 	</ItemGroup>
 

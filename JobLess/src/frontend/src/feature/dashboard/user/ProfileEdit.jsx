@@ -42,7 +42,7 @@ export default function ProfileEdit({ profile, onSaved, onCancel }) {
     try {
       const result = await updateClientProfile(
         profile.clientId,
-        formToPayload(form, email),
+        formToPayload(form, email, profile.clientId),
       );
       onSaved(result);
     } catch (err) {
@@ -55,7 +55,9 @@ export default function ProfileEdit({ profile, onSaved, onCancel }) {
   return (
     <div>
       <h2>Izmena profila</h2>
-      <p className="profile-edit-intro">Ažurirajte svoje lične podatke i sačuvajte izmene.</p>
+      <p className="profile-edit-intro">
+        Ažurirajte svoje podatke za prijavu na posao. Email se ne može menjati.
+      </p>
 
       {error && <div className="profile-message profile-message--error" role="alert">{error}</div>}
 

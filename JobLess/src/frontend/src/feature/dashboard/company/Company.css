@@ -422,12 +422,26 @@
   border-radius: var(--radius);
   padding: 18px 24px;
   margin-bottom: 10px;
-  display: grid;
-  grid-template-columns: 1fr auto auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 20px;
+  justify-content: space-between;
+  gap: 16px;
   animation: slideUp 0.3s ease both;
   transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.ar-info {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.ar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
 }
 
 .application-row:hover { border-color: var(--border-hover); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
@@ -444,6 +458,103 @@
 }
 
 .ar-info p { font-size: 12px; color: var(--text-2); }
+
+.btn-view-profile {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: var(--accent-dim);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  line-height: 1;
+  transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+}
+
+.btn-view-profile:hover {
+  background: var(--accent-dim);
+  box-shadow: 0 0 0 3px rgba(91, 139, 255, 0.12);
+}
+
+@media (max-width: 720px) {
+  .ar-actions {
+    width: 100%;
+  }
+
+  .btn-view-profile,
+  .ar-actions .status-select-wrapper,
+  .ar-actions .status-select {
+    width: 100%;
+  }
+}
+
+/* ─── CANDIDATE PROFILE MODAL ────────────────────────── */
+.candidate-profile-modal-body {
+  padding: 0 4px 8px;
+}
+
+.candidate-profile-loading {
+  color: var(--text-3);
+  font-size: 14px;
+  padding: 24px 0;
+  text-align: center;
+}
+
+.candidate-profile-modal .profile-view {
+  max-width: none;
+}
+
+.candidate-profile-modal .profile-view-section {
+  margin-bottom: 22px;
+}
+
+.candidate-profile-modal .profile-view-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 12px;
+}
+
+.candidate-profile-modal .profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.candidate-profile-modal .profile-detail-row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.candidate-profile-modal .profile-detail-row dt {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.candidate-profile-modal .profile-detail-row dd {
+  font-size: 14px;
+  color: var(--text-1);
+  word-break: break-word;
+}
+
+.candidate-profile-modal .profile-detail-row--multiline dd {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
 
 /* ─── STATUS SELECT ──────────────────────────────────── */
 .status-select-wrapper { position: relative; }

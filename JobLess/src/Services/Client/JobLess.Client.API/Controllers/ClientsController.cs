@@ -31,6 +31,17 @@ public class ClientsController(IMediator mediator) : ControllerBase
                     request.LastName,
                     request.PhoneNumber,
                     request.Gender,
+                    request.DateOfBirth,
+                    request.City,
+                    request.Address,
+                    request.EducationLevel,
+                    request.InstitutionName,
+                    request.EducationStartYear,
+                    request.EducationEndYear,
+                    request.YearsOfExperience,
+                    request.Skills,
+                    request.ProfessionalSummary,
+                    request.LinkedInUrl,
                     request.IsActive),
                 cancellationToken);
 
@@ -67,12 +78,23 @@ public class ClientsController(IMediator mediator) : ControllerBase
         try
         {
             var result = await mediator.Send(
-                new UpdateClientProfileCommand(
+                    new UpdateClientProfileCommand(
                     id,
                     request.FirstName,
                     request.LastName,
                     request.PhoneNumber,
                     request.Gender,
+                    request.DateOfBirth,
+                    request.City,
+                    request.Address,
+                    request.EducationLevel,
+                    request.InstitutionName,
+                    request.EducationStartYear,
+                    request.EducationEndYear,
+                    request.YearsOfExperience,
+                    request.Skills,
+                    request.ProfessionalSummary,
+                    request.LinkedInUrl,
                     request.IsActive),
                 cancellationToken);
 

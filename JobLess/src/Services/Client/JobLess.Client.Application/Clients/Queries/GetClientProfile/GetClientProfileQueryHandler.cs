@@ -1,4 +1,5 @@
 using JobLess.Client.Application.Interfaces;
+using JobLess.Client.Application.Mappings;
 using JobLess.Client.Application.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -17,14 +18,6 @@ public class GetClientProfileQueryHandler(IApplicationDbContext context)
         if (client is null)
             return null;
 
-        return new ClientProfileDto(
-            client.ClientId,
-            client.Email,
-            client.FirstName,
-            client.LastName,
-            client.PhoneNumber,
-            client.Gender,
-            client.CreatedAt,
-            client.IsActive);
+        return ClientProfileMapper.ToDto(client);
     }
 }

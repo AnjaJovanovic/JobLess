@@ -138,7 +138,7 @@
 
 /* ─── PROFILE FORM ───────────────────────────────────── */
 .profile-form {
-  max-width: 520px;
+  max-width: 640px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -158,7 +158,9 @@
   text-transform: uppercase;
 }
 
-.profile-form input {
+.profile-form input,
+.profile-form select,
+.profile-form textarea {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -171,9 +173,22 @@
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 
-.profile-form input::placeholder { color: var(--text-3); }
+.profile-form textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.5;
+}
 
-.profile-form input:focus {
+.profile-form select {
+  cursor: pointer;
+}
+
+.profile-form input::placeholder,
+.profile-form textarea::placeholder { color: var(--text-3); }
+
+.profile-form input:focus,
+.profile-form select:focus,
+.profile-form textarea:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-dim);
 }
@@ -220,6 +235,44 @@
 .profile-form .field-error {
   color: var(--danger);
   font-size: 12px;
+}
+
+.profile-form .field-hint {
+  color: var(--text-3);
+  font-size: 12px;
+}
+
+.profile-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-form-section:last-of-type {
+  border-bottom: none;
+}
+
+.profile-form-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0;
+}
+
+.profile-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 560px) {
+  .profile-form-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 .profile-form-actions {
@@ -279,7 +332,7 @@
 
 .profile-setup-notice,
 .profile-edit-intro {
-  max-width: 520px;
+  max-width: 640px;
   color: var(--text-2);
   font-size: 14px;
   line-height: 1.6;
@@ -295,7 +348,20 @@
 }
 
 .profile-view {
-  max-width: 520px;
+  max-width: 640px;
+}
+
+.profile-view-section {
+  margin-bottom: 28px;
+}
+
+.profile-view-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 14px;
 }
 
 .profile-details {
@@ -351,6 +417,12 @@
 .profile-detail-row dd {
   font-size: 15px;
   color: var(--text-1);
+  word-break: break-word;
+}
+
+.profile-detail-row--multiline dd {
+  white-space: pre-wrap;
+  line-height: 1.6;
 }
 
 .profile-message {

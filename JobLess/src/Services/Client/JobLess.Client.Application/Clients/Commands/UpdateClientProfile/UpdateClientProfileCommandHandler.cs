@@ -1,4 +1,5 @@
 using JobLess.Client.Application.Interfaces;
+using JobLess.Client.Application.Mappings;
 using JobLess.Client.Application.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,16 +23,22 @@ public class UpdateClientProfileCommandHandler(IApplicationDbContext context)
         client.Gender = request.Gender;
         client.IsActive = request.IsActive;
 
+        ClientProfileMapper.ApplyProfileFields(
+            client,
+            request.DateOfBirth,
+            request.City,
+            request.Address,
+            request.EducationLevel,
+            request.InstitutionName,
+            request.EducationStartYear,
+            request.EducationEndYear,
+            request.YearsOfExperience,
+            request.Skills,
+            request.ProfessionalSummary,
+            request.LinkedInUrl);
+
         await context.SaveChangesAsync(cancellationToken);
 
-        return new ClientProfileDto(
-            client.ClientId,
-            client.Email,
-            client.FirstName,
-            client.LastName,
-            client.PhoneNumber,
-            client.Gender,
-            client.CreatedAt,
-            client.IsActive);
+        return ClientProfileMapper.ToDto(client);
     }
 }

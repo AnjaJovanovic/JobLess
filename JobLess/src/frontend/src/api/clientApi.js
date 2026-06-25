@@ -83,12 +83,36 @@ export const GENDER = {
   FEMALE: 1,
 };
 
+export const EDUCATION_LEVEL = {
+  PRIMARY_SCHOOL: 1,
+  SECONDARY_SCHOOL: 2,
+  HIGHER_PROFESSIONAL: 3,
+  BACHELOR: 4,
+  MASTER: 5,
+  DOCTORATE: 6,
+};
+
+export const EDUCATION_LEVEL_OPTIONS = [
+  { value: EDUCATION_LEVEL.PRIMARY_SCHOOL, label: "Osnovna škola" },
+  { value: EDUCATION_LEVEL.SECONDARY_SCHOOL, label: "Srednja škola" },
+  { value: EDUCATION_LEVEL.HIGHER_PROFESSIONAL, label: "Viša stručna sprema" },
+  { value: EDUCATION_LEVEL.BACHELOR, label: "Fakultet (osnovne akademske studije)" },
+  { value: EDUCATION_LEVEL.MASTER, label: "Master studije" },
+  { value: EDUCATION_LEVEL.DOCTORATE, label: "Doktorske studije" },
+];
+
 export function genderLabel(gender) {
   if (gender === "" || gender === null || gender === undefined) return "Nepoznato";
   const value = Number(gender);
   if (value === GENDER.FEMALE) return "Ženski";
   if (value === GENDER.MALE) return "Muški";
   return "Nepoznato";
+}
+
+export function educationLevelLabel(level) {
+  if (level === "" || level === null || level === undefined) return "—";
+  const option = EDUCATION_LEVEL_OPTIONS.find((item) => item.value === Number(level));
+  return option?.label ?? "—";
 }
 
 export const APPLICATION_STATUS = {

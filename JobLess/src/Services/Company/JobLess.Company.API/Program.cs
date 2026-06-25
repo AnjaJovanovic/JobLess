@@ -69,7 +69,7 @@ app.UseExceptionHandler(errorApp =>
         }
         else
         {
-            var json = System.Text.Json.JsonSerializer.Serialize(new { errors = new[] { "Doölo je do greöke." } });
+            var json = System.Text.Json.JsonSerializer.Serialize(new { errors = new[] { "Doùlo je do greùke." } });
             await context.Response.WriteAsync(json);
         }
     });

@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { syncClientProfileAfterAuth } from "../../api/clientApi";
+import { syncClientProfileAfterAuth, createClientProfile, storeClientId } from "../../api/clientApi";
 import { isCandidateRole } from "../dashboard/user/profileUtils";
 
 import "./Login.css";
@@ -27,6 +27,11 @@ const v = {
         if (!val) return "Telefon je obavezan.";
         return /^[0-9+\s\-()/]{6,20}$/.test(val) ? null : "Unesite ispravan broj telefona.";
     },
+    phoneOptional: (val) => {
+        if (!val || !String(val).trim()) return null;
+        return /^[0-9+\s\-()/]{6,20}$/.test(val) ? null : "Unesite ispravan broj telefona.";
+    },
+    gender: (val) => (val === "" || val === null || val === undefined ? "Pol je obavezan." : null),
     password: (val) => {
         if (!val) return "Lozinka je obavezna.";
         if (val.length < 8) return "Lozinka mora imati najmanje 8 karaktera.";
@@ -67,7 +72,11 @@ const schemas = {
         password: [v.required],
     },
     candidateRegister: {
+        firstName: [v.required],
+        lastName: [v.required],
         email: [v.required, v.email],
+        phoneNumber: [v.phoneOptional],
+        gender: [v.gender],
         password: [v.required, v.password],
         confirmPassword: [v.required, v.confirmPassword],
     },
@@ -221,17 +230,64 @@ function CompanyLogin({ formRef }) {
 // ============================================================
 function CandidateRegister({ formRef }) {
   const { field, err, validate, values } = useForm(
-    { email: "", password: "", confirmPassword: "" },
+    {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      gender: "",
+      password: "",
+      confirmPassword: "",
+    },
     schemas.candidateRegister
   );
   formRef.current = { validate, values };
+  const genderField = field("gender");
+
   return (
     <>
+      <div className="form-section-label">Lični podaci</div>
+
+      <div className="form-row">
+        <div className="form-group">
+          <label className="form-label">Ime</label>
+          <input className={`form-input${err("firstName") ? " input-error" : ""}`} type="text" placeholder="Marko" {...field("firstName")} />
+          <FieldError msg={err("firstName")} />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Prezime</label>
+          <input className={`form-input${err("lastName") ? " input-error" : ""}`} type="text" placeholder="Petrović" {...field("lastName")} />
+          <FieldError msg={err("lastName")} />
+        </div>
+      </div>
+
       <div className="form-group">
         <label className="form-label">Email adresa</label>
         <input className={`form-input${err("email") ? " input-error" : ""}`} type="email" placeholder="vase.ime@email.com" {...field("email")} />
         <FieldError msg={err("email")} />
       </div>
+
+      <div className="form-group">
+        <label className="form-label">Telefon</label>
+        <input className={`form-input${err("phoneNumber") ? " input-error" : ""}`} type="tel" placeholder="+381 60 123 4567" {...field("phoneNumber")} />
+        <FieldError msg={err("phoneNumber")} />
+      </div>
+
+      <div className="form-group">
+        <span className="form-label">Pol</span>
+        <div className="form-row" style={{ gap: "1rem", marginTop: "0.5rem" }}>
+          <label className="form-toggle" style={{ flex: 1 }}>
+            <input type="radio" name="gender" value="0" checked={values.gender === "0"} onChange={genderField.onChange} onBlur={genderField.onBlur} />
+            <span>Muški</span>
+          </label>
+          <label className="form-toggle" style={{ flex: 1 }}>
+            <input type="radio" name="gender" value="1" checked={values.gender === "1"} onChange={genderField.onChange} onBlur={genderField.onBlur} />
+            <span>Ženski</span>
+          </label>
+        </div>
+        <FieldError msg={err("gender")} />
+      </div>
+
       <div className="form-section-label">Sigurnost naloga</div>
       <div className="form-group">
         <label className="form-label">Lozinka</label>
@@ -374,6 +430,16 @@ function CompanyRegister({ formRef }) {
 async function parseAuthResponse(res) {
   const text = await res.text();
   if (!res.ok) {
+    if (res.status === 404) {
+      throw new Error(
+        "Auth servis nije dostupan. Pokrenite: docker compose up --build -d"
+      );
+    }
+    if (res.status === 502 || res.status === 503) {
+      throw new Error(
+        "Backend servisi nisu dostupni. Proverite da li svi kontejneri rade."
+      );
+    }
     try {
       const json = JSON.parse(text);
       throw new Error(json.message || "Greška pri autentifikaciji.");
@@ -471,7 +537,19 @@ export default function Login() {
         });
 
         login(data);
-        await syncClientProfileAfterAuth(data.email);
+
+        const profile = await createClientProfile({
+          email: values.email,
+          firstName: values.firstName.trim(),
+          lastName: values.lastName.trim(),
+          phoneNumber: values.phoneNumber.trim() || null,
+          gender: Number(values.gender),
+          isActive: true,
+          clientId: 0,
+          createdAt: new Date().toISOString(),
+        });
+
+        storeClientId(profile.clientId);
         navigate("/user");
         return;
       }

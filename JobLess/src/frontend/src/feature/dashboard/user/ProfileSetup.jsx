@@ -55,7 +55,8 @@ export default function ProfileSetup({ onCompleted }) {
     <div>
       <h2>Moj profil</h2>
       <p className="profile-setup-notice">
-        Pre nego što nastavite, popunite osnovne informacije o sebi. Ovi podaci su obavezni.
+        Pre nego što nastavite, popunite profil sa podacima potrebnim za prijavu na posao.
+        Email se ne može menjati nakon registracije.
       </p>
 
       {error && <div className="profile-message profile-message--error" role="alert">{error}</div>}

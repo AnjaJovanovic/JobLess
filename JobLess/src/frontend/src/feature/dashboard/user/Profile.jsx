@@ -7,6 +7,7 @@ import {
 import ProfileEdit from "./ProfileEdit";
 import ProfileSetup from "./ProfileSetup";
 import ProfileView from "./ProfileView";
+import { isProfileComplete } from "./profileUtils";
 
 export default function Profile({ onProfileStatusChange }) {
   const { user } = useAuth();
@@ -45,7 +46,7 @@ export default function Profile({ onProfileStatusChange }) {
         storeClientId(data.clientId);
         setProfile(data);
         setMode("view");
-        onProfileStatusChange?.(true);
+        onProfileStatusChange?.(isProfileComplete(data));
       } catch (err) {
         if (!cancelled) {
           setError(err.message || "Greška pri učitavanju profila.");
@@ -63,13 +64,13 @@ export default function Profile({ onProfileStatusChange }) {
     setProfile(result);
     storeClientId(result.clientId);
     setMode("view");
-    onProfileStatusChange?.(true);
+    onProfileStatusChange?.(isProfileComplete(result));
   };
 
   const handleSaved = (result) => {
     setProfile(result);
     setMode("view");
-    onProfileStatusChange?.(true);
+    onProfileStatusChange?.(isProfileComplete(result));
   };
 
   if (mode === "loading") {
@@ -105,14 +106,23 @@ export default function Profile({ onProfileStatusChange }) {
     );
   }
 
-  return (
-    <div>
-      <h2>Moj profil</h2>
-      <ProfileView
-        profile={profile}
-        email={email}
-        onEdit={() => setMode("edit")}
-      />
-    </div>
-  );
+  if (mode === "view") {
+    return (
+      <div>
+        <h2>Moj profil</h2>
+        {!isProfileComplete(profile) && (
+          <div className="profile-message profile-setup-notice" role="status">
+            Profil nije potpuno popunjen. Dopunite podatke pre prijave na posao.
+          </div>
+        )}
+        <ProfileView
+          profile={profile}
+          email={email}
+          onEdit={() => setMode("edit")}
+        />
+      </div>
+    );
+  }
+
+  return null;
 }

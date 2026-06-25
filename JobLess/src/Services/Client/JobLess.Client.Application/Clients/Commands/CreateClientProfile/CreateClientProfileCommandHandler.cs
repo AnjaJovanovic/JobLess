@@ -1,5 +1,6 @@
 using ClientEntity = JobLess.Client.Domain.Entities.Client;
 using JobLess.Client.Application.Interfaces;
+using JobLess.Client.Application.Mappings;
 using JobLess.Client.Application.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -31,20 +32,23 @@ public class CreateClientProfileCommandHandler(IApplicationDbContext context)
             CreatedAt = DateTime.UtcNow
         };
 
+        ClientProfileMapper.ApplyProfileFields(
+            client,
+            request.DateOfBirth,
+            request.City,
+            request.Address,
+            request.EducationLevel,
+            request.InstitutionName,
+            request.EducationStartYear,
+            request.EducationEndYear,
+            request.YearsOfExperience,
+            request.Skills,
+            request.ProfessionalSummary,
+            request.LinkedInUrl);
+
         context.Clients.Add(client);
         await context.SaveChangesAsync(cancellationToken);
 
-        return ToDto(client);
+        return ClientProfileMapper.ToDto(client);
     }
-
-    private static ClientProfileDto ToDto(ClientEntity client) =>
-        new(
-            client.ClientId,
-            client.Email,
-            client.FirstName,
-            client.LastName,
-            client.PhoneNumber,
-            client.Gender,
-            client.CreatedAt,
-            client.IsActive);
 }
