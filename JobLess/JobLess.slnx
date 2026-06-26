@@ -1,6 +1,11 @@
 <Solution>
   <Folder Name="/src/" />
-
+  <Folder Name="/src/Security/">
+    <Project Path="src/Security/JobLess.IdentityServer.API/JobLess.IdentityServer.API.csproj" />
+    <Project Path="src/Security/JobLess.IdentityServer.Application/JobLess.IdentityServer.Application.csproj" />
+    <Project Path="src/Security/JobLess.IdentityServer.Domain/JobLess.IdentityServer.Domain.csproj" />
+    <Project Path="src/Security/JobLess.IdentityServer.Infrastructure/JobLess.IdentityServer.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/src/Services/" />
 
   <Folder Name="/src/Services/Advertisement/">
@@ -23,12 +28,17 @@
     <Project Path="src/Services/Notification/JobLess.Notification.Infrastructure/JobLess.Notification.Infrastructure.csproj" />
   </Folder>
 
+  <Folder Name="/src/Services/Client/">
+    <Project Path="src/Services/Client/JobLess.Client.API/JobLess.Client.API.csproj" />
+    <Project Path="src/Services/Client/JobLess.Client.Application/JobLess.Client.Application.csproj" />
+    <Project Path="src/Services/Client/JobLess.Client.Domain/JobLess.Client.Domain.csproj" />
+    <Project Path="src/Services/Client/JobLess.Client.Infrastructure/JobLess.Client.Infrastructure.csproj" />
+  </Folder>
+
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/JobLess.Shared.Domain/JobLess.Shared.Domain.csproj" />
   </Folder>
-
   <Folder Name="/src/Tests/" />
-
   <Folder Name="/src/Tests/Advertisement/">
     <Project Path="src/Tests/JobLess.Tests.Advertisement/JobLess.Tests.Advertisement.csproj" Id="d2a103d7-7cb1-4495-9447-4bc46ac5e77a" />
   </Folder>

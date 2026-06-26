@@ -105,7 +105,7 @@ const leg = {
 // ── Komponenta ────────────────────────────────────────────────
 export default function CreateJob({ onSuccess }) {
     const { user } = useAuth();
-    const companyId = user?.id;
+    const companyId = user?.companyId ?? user?.id;
     const [form, setForm] = useState(INITIAL);
     const [submitting, setSubmitting] = useState(false);
     const { toasts, show: showToast } = useToast();
@@ -129,24 +129,28 @@ export default function CreateJob({ onSuccess }) {
 
         try {
             const payload = {
-                CompanyId: companyId,
-                Title: form.Naslov,
-                Description: form.Opis || null,
-                Position: form.Pozicija,
-                ExpiresAt: form.DatumIsteka ? new Date(form.DatumIsteka).toISOString() : null,
-                EmploymentType: Number(form.TipZaposlenja),
-                WorkSchedule: Number(form.RadnoVreme),
-                SeniorityLevel: Number(form.Senioritet),
-                WorkType: Number(form.TipRada),
-                MinExperience: form.IskustvoMin === "" ? null : Number(form.IskustvoMin),
-                MaxExperience: form.IskustvoMax === "" ? null : Number(form.IskustvoMax),
-                City: form.Grad,
-                Country: form.Drzava || null,
-                SalaryFrom: form.PlataOd === "" ? null : Number(form.PlataOd),
-                SalaryTo: form.PlataDo === "" ? null : Number(form.PlataDo),
-                Currency: form.Valuta || null,
-                IsSalaryVisible: form.PlataVidljiva,
+                companyId: companyId,
+                title: form.Naslov,
+                description: form.Opis || null,
+                position: form.Pozicija,
+                expiresAt: form.DatumIsteka ? new Date(form.DatumIsteka).toISOString() : null,
+                employmentType: Number(form.TipZaposlenja),
+                workSchedule: Number(form.RadnoVreme),
+                seniorityLevel: Number(form.Senioritet),
+                workType: Number(form.TipRada),
+                minExperience: form.IskustvoMin === "" ? null : Number(form.IskustvoMin),
+                maxExperience: form.IskustvoMax === "" ? null : Number(form.IskustvoMax),
+                city: form.Grad,
+                country: form.Drzava || null,
+                salaryFrom: form.PlataOd === "" ? null : Number(form.PlataOd),
+                salaryTo: form.PlataDo === "" ? null : Number(form.PlataDo),
+                currency: form.Valuta || null,
+                isSalaryVisible: form.PlataVidljiva,
             };
+
+            if (!companyId) {
+                throw new Error("Nije pronađen ID kompanije. Odjavite se i prijavite ponovo.");
+            }
 
             const response = await fetch("/api/Advertisements", {
                 method: "POST",

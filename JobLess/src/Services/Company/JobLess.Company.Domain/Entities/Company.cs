@@ -1,4 +1,5 @@
-﻿using JobLess.Shared.Domain.Common;
+﻿using JobLess.Company.Domain.Enums;
+using JobLess.Shared.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,11 @@ namespace JobLess.Company.Domain.Entities
     {
         public required string Name { get; set; }
         public string? Description { get; set; }
-        public required string Industry { get; set; }
+        public required Industry Industry { get; set; }
         public string? Website { get; set; }
         public required string TaxIdentificationNumber { get; set; } //PIB
         public required string RegistrationNumber    { get; set; } //maticni broj
-        public string OwnerName  { get; set; }
+        public string? OwnerName  { get; set; }
 
         public required string ContactPersonFirstName { get; set; }
         public required string ContactPersonLastName { get; set; }
@@ -27,9 +28,9 @@ namespace JobLess.Company.Domain.Entities
         public string PhoneNumber   { get; set; }
         public required string Location { get; set; }
         public string Address { get; set; }
-        public string CompanySize { get; set; }
+        public CompanySize CompanySize { get; set; }
+        //public int EmployeeCount { get; set; }
 
-        public string? LogoUrl { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

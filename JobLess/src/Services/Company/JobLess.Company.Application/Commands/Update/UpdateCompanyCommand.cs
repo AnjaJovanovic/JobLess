@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using JobLess.Company.Domain.Enums;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,24 +13,25 @@ namespace JobLess.Company.Application.Commands.Update
         public required int CompanyId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public string? Industry { get; set; }
+        //public Industry? Industry { get; set; }
         public string? Website { get; set; }
         public string? Location { get; set; }
-        public string? TaxIdentificationNumber { get; set; } //PIB
-        public string? RegistrationNumber { get; set; } //maticni broj
+        //public string? TaxIdentificationNumber { get; set; } //PIB
+        //public string? RegistrationNumber { get; set; } //maticni broj
         public string? OwnerName { get; set; }
 
         public string? ContactPersonFirstName { get; set; }
         public string? ContactPersonLastName { get; set; }
         public string? ContactPersonPosition { get; set; }
         public string? ContactPersonPhoneNumber { get; set; }
-        public string? Email { get; set; }
+        //public string? Email { get; set; }
         public string? PasswordHash { get; set; }
 
         public string? PhoneNumber { get; set; }
 
         public string? Address { get; set; }
-        public string? CompanySize { get; set; }
+        public int? EmployeeCount { get; set; }
+        // public CompanySize? CompanySize { get; set; }
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using JobLess.Company.Application.Interfaces;
+using JobLess.Company.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,26 +38,14 @@ namespace JobLess.Company.Application.Commands.Update
             if (IsValid(command.Description) && command.Description != company.Description)
                 company.Description = command.Description;
 
-            if (IsValid(command.Industry) && command.Industry != company.Industry)
-                company.Industry = command.Industry;
-
             if (IsValid(command.Website) && command.Website != company.Website)
                 company.Website = command.Website;
 
             if (IsValid(command.Location) && command.Location != company.Location)
                 company.Location = command.Location;
 
-            if (IsValid(command.Email) && command.Email != company.Email)
-                company.Email = command.Email;
-
             if (IsValid(command.ContactPersonPhoneNumber) && command.ContactPersonPhoneNumber != company.ContactPersonPhoneNumber)
                 company.ContactPersonPhoneNumber = command.ContactPersonPhoneNumber;
-
-            if (IsValid(command.TaxIdentificationNumber) && command.TaxIdentificationNumber != company.TaxIdentificationNumber)
-                company.TaxIdentificationNumber = command.TaxIdentificationNumber;
-
-            if (IsValid(command.RegistrationNumber) && command.RegistrationNumber != company.RegistrationNumber)
-                company.RegistrationNumber = command.RegistrationNumber;
 
             if (IsValid(command.OwnerName) && command.OwnerName != company.OwnerName)
                 company.OwnerName = command.OwnerName;
@@ -79,14 +68,33 @@ namespace JobLess.Company.Application.Commands.Update
             if (IsValid(command.Address) && command.Address != company.Address)
                 company.Address = command.Address;
 
-            if (IsValid(command.CompanySize) && command.CompanySize != company.CompanySize)
-                company.CompanySize = command.CompanySize;
+            if (command.EmployeeCount.HasValue)
+            {
+                company.CompanySize = GetCompanySize(command.EmployeeCount.Value);
+            }
 
             company.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;
+        }
+
+        private static CompanySize GetCompanySize(int employeeCount)
+        {
+            if (employeeCount <= 10)
+                return CompanySize.OneToTen;
+
+            if (employeeCount <= 50)
+                return CompanySize.ElevenToFifty;
+
+            if (employeeCount <= 200)
+                return CompanySize.FiftyOneToTwoHundred;
+
+            if (employeeCount <= 500)
+                return CompanySize.TwoHundredOneToFiveHundred;
+
+            return CompanySize.MoreThanFiveHundred;
         }
     }
 }

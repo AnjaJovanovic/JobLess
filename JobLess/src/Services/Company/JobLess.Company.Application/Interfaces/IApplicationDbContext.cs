@@ -1,4 +1,4 @@
-﻿using JobLess.Company.Domain.Company;
+﻿using JobLess.Company.Domain.Entities;
 using JobLess.Company.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;

@@ -1,5 +1,6 @@
 ﻿using JobLess.Company.Application.Interfaces;
 using JobLess.Company.Application.Models;
+using JobLess.Company.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -28,8 +29,13 @@ namespace JobLess.Company.Application.Queries.Search
             if (!string.IsNullOrWhiteSpace(query.Name))
                 companiesQuery = companiesQuery.Where(x => x.Name.Contains(query.Name));
 
-            if (!string.IsNullOrWhiteSpace(query.Industry))
-                companiesQuery = companiesQuery.Where(x => x.Industry.Contains(query.Industry));
+            if (query.Industry != null)
+            {
+                var industryEnum = Enum.Parse<Industry>(query.Industry);
+
+                companiesQuery = companiesQuery
+                    .Where(x => x.Industry == industryEnum);
+            }
 
             if (!string.IsNullOrWhiteSpace(query.Location))
                 companiesQuery = companiesQuery.Where(x => x.Location.Contains(query.Location));

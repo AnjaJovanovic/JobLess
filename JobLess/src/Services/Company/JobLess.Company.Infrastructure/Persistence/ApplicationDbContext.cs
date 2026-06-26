@@ -1,5 +1,4 @@
 ﻿using JobLess.Company.Application.Interfaces;
-using JobLess.Company.Domain.Company;
 using JobLess.Company.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

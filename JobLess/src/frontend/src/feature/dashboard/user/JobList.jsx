@@ -1,4 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
+import { useAuth } from "../../../context/AuthContext";
+import {
+  applyToJob,
+  getClientApplications,
+  getClientProfileByEmail,
+  getStoredClientId,
+  storeClientId,
+} from "../../../api/clientApi";
 
 /* ─── ENUM OPCIJE ───────────────────────────────────── */
 
@@ -80,6 +88,9 @@ function buildQueryString(filters, page, pageSize) {
 /* ─── KOMPONENTA ───────────────────────────────────── */
 
 export default function JobList() {
+  const { user } = useAuth();
+  const email = user?.email ?? "";
+  const [clientId, setClientId] = useState(() => getStoredClientId());
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -89,8 +100,55 @@ export default function JobList() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [appliedAdIds, setAppliedAdIds] = useState(new Set());
+  const [applyingJobId, setApplyingJobId] = useState(null);
+  const [applyMessage, setApplyMessage] = useState(null);
 
   const PAGE_SIZE = 10;
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function resolveClientId() {
+      const storedId = getStoredClientId();
+      if (storedId) {
+        if (!cancelled) setClientId(storedId);
+        return;
+      }
+
+      if (!email) {
+        if (!cancelled) setClientId(null);
+        return;
+      }
+
+      try {
+        const profile = await getClientProfileByEmail(email);
+        if (cancelled) return;
+
+        if (profile?.clientId) {
+          storeClientId(profile.clientId);
+          setClientId(String(profile.clientId));
+        } else {
+          setClientId(null);
+        }
+      } catch {
+        if (!cancelled) setClientId(null);
+      }
+    }
+
+    resolveClientId();
+    return () => { cancelled = true; };
+  }, [email]);
+
+  useEffect(() => {
+    if (!clientId) return;
+
+    getClientApplications(clientId)
+      .then((items) => {
+        setAppliedAdIds(new Set(items.map((item) => item.advertisementId)));
+      })
+      .catch(() => {});
+  }, [clientId]);
 
   const fetchJobs = useCallback(async (activeFilters, activePage) => {
     try {
@@ -104,15 +162,31 @@ export default function JobList() {
         : `/api/Advertisements/All?${qs}`;
 
       const response = await fetch(endpoint);
-      if (!response.ok) throw new Error("Greška pri učitavanju oglasa.");
+      if (!response.ok) {
+        const body = await response.text();
+        let message = "Greška pri učitavanju oglasa.";
+        try {
+          const parsed = JSON.parse(body);
+          if (parsed.errors?.length) message = parsed.errors.join(" ");
+        } catch {
+          if (body) message = body;
+        }
+        throw new Error(message);
+      }
 
       const data = await response.json();
+      const ads = data.advertisements ?? data.Advertisements ?? [];
 
-      setJobs(Array.isArray(data.advertisements) ? data.advertisements : []);
-      setTotalPages(data.totalPages ?? 1);
-      setTotalCount(data.totalCount ?? 0);
+      setJobs(
+        (Array.isArray(ads) ? ads : []).map((job) => ({
+          ...job,
+          id: job.id ?? job.Id,
+        }))
+      );
+      setTotalPages(data.totalPages ?? data.TotalPages ?? 1);
+      setTotalCount(data.totalCount ?? data.TotalCount ?? 0);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Nije moguće učitati oglase. Proverite da li Advertisement servis radi (port 5104).");
     } finally {
       setLoading(false);
     }
@@ -140,6 +214,26 @@ export default function JobList() {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") applyFilters();
+  };
+
+  const handleApply = async (jobId) => {
+    if (!clientId) {
+      setApplyMessage("Popunite profil pre prijave na oglas.");
+      return;
+    }
+
+    setApplyingJobId(jobId);
+    setApplyMessage(null);
+
+    try {
+      await applyToJob(clientId, jobId);
+      setAppliedAdIds((prev) => new Set(prev).add(jobId));
+      setApplyMessage("Uspešno ste se prijavili na oglas.");
+    } catch (err) {
+      setApplyMessage(err.message || "Greška pri prijavi.");
+    } finally {
+      setApplyingJobId(null);
+    }
   };
 
   return (
@@ -234,7 +328,10 @@ export default function JobList() {
       {/* STANJA */}
       {loading && <p className="job-empty">Učitavanje...</p>}
       {error && <p className="job-error">{error}</p>}
-      {!loading && jobs.length === 0 && <p className="job-empty">Nema rezultata.</p>}
+      {applyMessage && <p className="job-apply-message">{applyMessage}</p>}
+      {!loading && jobs.length === 0 && !error && (
+        <p className="job-empty">Trenutno nema aktivnih oglasa.</p>
+      )}
 
       {/* KARTICE */}
       {!loading &&
@@ -243,12 +340,22 @@ export default function JobList() {
             <div>
               <div className="jcf-header">
                 <h4>{job.title}</h4>
+                {job.position && <span className="jcf-position">{job.position}</span>}
               </div>
 
+              {job.description && (
+                <p className="jcf-description">
+                  {job.description.length > 200
+                    ? `${job.description.slice(0, 200)}...`
+                    : job.description}
+                </p>
+              )}
+
               <div className="jcf-meta">
-                <span className="jcf-meta-item">📍 {job.city}, {job.country}</span>
+                <span className="jcf-meta-item">📍 {job.city}{job.country ? `, ${job.country}` : ""}</span>
                 <span className="jcf-meta-item">{getWorkTypeLabel(job.workType)}</span>
                 <span className="jcf-meta-item">{getSeniorityLabel(job.seniorityLevel)}</span>
+                <span className="jcf-meta-item">{getEmploymentTypeLabel(job.employmentType)}</span>
               </div>
 
               {job.isSalaryVisible && job.salaryFrom > 0 && (
@@ -258,12 +365,25 @@ export default function JobList() {
               )}
 
               <div className="jcf-expire">
+                Objavljeno: {job.postedAt ? new Date(job.postedAt).toLocaleDateString("sr-RS") : "—"}
+                {" · "}
                 Važi do: {job.expiresAt ? new Date(job.expiresAt).toLocaleDateString("sr-RS") : "Nepoznato"}
               </div>
             </div>
 
             <div className="jcf-actions">
-              <button className="btn-apply">Prijavi se</button>
+              <button
+                className="btn-apply"
+                type="button"
+                disabled={!clientId || appliedAdIds.has(job.id) || applyingJobId === job.id}
+                onClick={() => handleApply(job.id)}
+              >
+                {appliedAdIds.has(job.id)
+                  ? "Prijavljen"
+                  : applyingJobId === job.id
+                    ? "Prijavljivanje..."
+                    : "Prijavi se"}
+              </button>
             </div>
           </div>
         ))}

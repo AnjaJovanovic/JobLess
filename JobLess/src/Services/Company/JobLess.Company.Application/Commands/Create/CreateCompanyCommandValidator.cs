@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using JobLess.Company.Application.Common.Helpers;
+using JobLess.Company.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ namespace JobLess.Company.Application.Commands.Create
 {
     public class CreateCompanyCommandValidator : AbstractValidator<CreateCompanyCommand>
     {
-        private static readonly string[] AllowedIndustries =
+        /*private static readonly string[] AllowedIndustries =
                 {
                     "Informacione tehnologije",
                     "Finansije i bankarstvo",
@@ -28,7 +30,7 @@ namespace JobLess.Company.Application.Commands.Create
                 "51-200",
                 "201-500",
                 "500+"
-            };
+            };*/
         public CreateCompanyCommandValidator()
         {
 
@@ -37,17 +39,23 @@ namespace JobLess.Company.Application.Commands.Create
          .MaximumLength(200).WithMessage("Ime kompanije ne sme da ima više od 200 karaktera.");
 
 
-            RuleFor(x => x.Industry)
+            /*RuleFor(x => x.Industry)
                 .NotEmpty()
                 .WithMessage("Delatnost je obavezno polje.")
-                .Must(industry => AllowedIndustries.Contains(industry))
-                .WithMessage("Odabrana delatnost nije validna.");
+                .IsInEnum()
+                .WithMessage("Odabrana delatnost nije validna.");*/
+
+            RuleFor(x => x.Industry)
+                .Must(IndustryHelper.IsValid)
+                .WithMessage("Odabrana industrija nije validna.");
 
             RuleFor(x => x.CompanySize)
-                .NotEmpty()
-                .WithMessage("Veličina kompanije je obavezno polje.")
-                .Must(size => AllowedCompanySizes.Contains(size))
-                .WithMessage("Odabrana veličina kompanije nije validna.");
+                 .Must(x => Enum.IsDefined(typeof(CompanySize), x))
+                 .WithMessage("Veličina kompanije je obavezno i mora biti validna.");
+
+            /* RuleFor(x => x.EmployeeCount)
+                 .GreaterThan(0)
+                 .WithMessage("Broj zaposlenih mora biti veći od 0.");*/
 
             RuleFor(x => x.Location)
                 .NotEmpty().WithMessage("Lokacija je obavezno polje.")
@@ -61,10 +69,11 @@ namespace JobLess.Company.Application.Commands.Create
                 .Must(BeValidUrl)
                 .When(x => !string.IsNullOrWhiteSpace(x.Website))
                 .WithMessage("Unesite ispravan URL (npr. www.kompanija.rs).");
-
+            /*
             RuleFor(x => x.OwnerId)
                 .GreaterThan(0)
                 .WithMessage("Vlasnik je obavezno polje.");
+            */
 
             RuleFor(x => x.TaxIdentificationNumber)
                 .NotEmpty().WithMessage("PIB je obavezno polje.")

@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
+import { clearStoredClientId } from "../api/clientApi";
 
 export const AuthContext = createContext();
 
@@ -12,20 +13,14 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
- // const login = (email, role) => {
- //   const fakeUser = { email, role };
- //   localStorage.setItem("user", JSON.stringify(fakeUser));
- //   setUser(fakeUser);
- // };
-
-  const login = (email, role, id) => {
-     const user = { email, role, id };
-     localStorage.setItem("user", JSON.stringify(user));
-     setUser(user);
+  const login = (authData) => {
+    localStorage.setItem("user", JSON.stringify(authData));
+    setUser(authData);
   };
 
   const logout = () => {
     localStorage.removeItem("user");
+    clearStoredClientId();
     setUser(null);
   };
 
