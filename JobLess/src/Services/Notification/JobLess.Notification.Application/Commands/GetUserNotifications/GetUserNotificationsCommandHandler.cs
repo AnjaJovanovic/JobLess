@@ -13,7 +13,7 @@ public class GetUserNotificationsQueryHandler(INotificationDbContext context)
         CancellationToken cancellationToken)
     {
         return await context.Notifications
-            .Where(n => Guid.Parse(n.RecipientUserId) == request.UserId)
+            .Where(n => n.RecipientUserId == request.UserEmailId)
             .OrderByDescending(n => n.CreatedAt)
             .ToListAsync(cancellationToken);
     }

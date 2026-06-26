@@ -18,7 +18,7 @@ public class UserRegisteredConsumer(
         var notification = new NotificationEntity
         {
             Id = Guid.NewGuid(),
-            RecipientUserId = msg.UserId.ToString(),
+            RecipientUserId = msg.Email,
             Type = Domain.Enums.NotificationType.Welcome,
             Title = "Dobrodošli u JobLess!",
             Message = "Vaš nalog je uspešno kreiran. Srećno pri zapošljavanju!",
