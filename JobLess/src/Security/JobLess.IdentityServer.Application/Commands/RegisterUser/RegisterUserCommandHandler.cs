@@ -1,7 +1,9 @@
+using JobLess.Contracts.Events;
 using JobLess.IdentityServer.Application.DTOs;
 using JobLess.IdentityServer.Application.Interfaces;
 using JobLess.IdentityServer.Domain.Enums;
 using MediatR;
+using MassTransit;
 
 namespace JobLess.IdentityServer.Application.Commands.RegisterUser;
 
@@ -9,11 +11,13 @@ public sealed class RegisterUserCommandHandler : IRequestHandler<RegisterUserCom
 {
     private readonly IAuthenticationService _authService;
     private readonly IJwtTokenService _jwtService;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public RegisterUserCommandHandler(IAuthenticationService authService, IJwtTokenService jwtService)
+    public RegisterUserCommandHandler(IAuthenticationService authService, IJwtTokenService jwtService, IPublishEndpoint publishEndpoint)
     {
         _authService = authService;
         _jwtService = jwtService;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<AuthenticationDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -35,6 +39,10 @@ public sealed class RegisterUserCommandHandler : IRequestHandler<RegisterUserCom
 
         var accessToken = _jwtService.GenerateAccessToken(user!);
         var refreshToken = _jwtService.GenerateRefreshToken();
+
+        await _publishEndpoint.Publish(
+            new UserRegisteredMessage(user!.Id, user.Email!, user.UserRole.ToString()),
+            cancellationToken);
 
         return new AuthenticationDto
         {
