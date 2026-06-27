@@ -19,6 +19,23 @@ services:
       retries: 10
       start_period: 30s
 
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: jobless-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - jobless-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
   auth-service:
     build:
       context: .
@@ -40,8 +57,13 @@ services:
       Jwt__Issuer: "JobLess.Auth"
       Jwt__Audience: "JobLess.Client"
       Jwt__ExpirationMinutes: "60"
+      RabbitMq__Host: "rabbitmq"
+      RabbitMq__Username: "guest"
+      RabbitMq__Password: "guest"
     depends_on:
       sql-server:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - jobless-network
