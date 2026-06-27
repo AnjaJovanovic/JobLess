@@ -15,6 +15,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JobLess.Notification.Domain\JobLess.Notification.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Shared\JobLess.Contracts\JobLess.Contracts.csproj" />
+
   </ItemGroup>
 
 </Project>
