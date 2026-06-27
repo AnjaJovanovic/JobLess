@@ -36,6 +36,14 @@ services:
       timeout: 5s
       retries: 10
       start_period: 30s
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: jobless-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - jobless-network
   auth-service:
     build:
       context: .
