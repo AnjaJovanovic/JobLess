@@ -11,15 +11,14 @@ public class EmailService(IConfiguration configuration, ILogger<EmailService> lo
 {
     public async Task SendWelcomeEmailAsync(string toEmail, string role, CancellationToken cancellationToken = default)
     {
-        var emailSection = configuration.GetSection("Email");
+        var emailSection = configuration.GetSection("Smtp");
 
-        var fromAddress = emailSection["FromAddress"] ?? "jobless@gmail.com";
+        var fromAddress = emailSection["FromEmail"] ?? "jobless.matf@gmail.com";
         var fromName = emailSection["FromName"] ?? "JobLess";
-        var smtpHost = emailSection["SmtpHost"] ?? "localhost";
-        var smtpPort = int.Parse(emailSection["SmtpPort"] ?? "1025");
-        var username = emailSection["Username"];
+        var smtpHost = emailSection["Host"] ?? "smtp.gmail.com";
+        var smtpPort = int.Parse(emailSection["Port"] ?? "587");
+        var username = emailSection["UserName"];
         var password = emailSection["Password"];
-        var useSsl = bool.Parse(emailSection["UseSsl"] ?? "false");
 
         var roleLabel = role.Equals("Company", StringComparison.OrdinalIgnoreCase) ? "kompanija" : "kandidat";
 
@@ -27,6 +26,18 @@ public class EmailService(IConfiguration configuration, ILogger<EmailService> lo
         message.From.Add(new MailboxAddress(fromName, fromAddress));
         message.To.Add(MailboxAddress.Parse(toEmail));
         message.Subject = "Dobrodošli u JobLess!";
+
+        bool isCompany = role.Equals("Company", StringComparison.OrdinalIgnoreCase);
+        string feature1 = "Pretražujete oglase za posao";
+        string feature2 = "Aplicirate na pozicije koje vas zanimaju";
+        string feature3 = "Uredite i dopunite svoj profil";
+
+        if (isCompany)
+        {
+            feature1 = "Objavljujete nove oglase za posao";
+            feature2 = "Pregledate prijavljene kandidate";
+            feature3 = "Uredite i dopunite profil svoje kompanije";
+        }
 
         var builder = new BodyBuilder
         {
@@ -38,11 +49,11 @@ public class EmailService(IConfiguration configuration, ILogger<EmailService> lo
                     <p>Vaš nalog ({roleLabel}) je uspešno kreiran na platformi <strong>JobLess</strong>.</p>
                     <p>Sada možete:</p>
                     <ul>
-                        <li>Pretražujete oglase za posao</li>
-                        <li>Aplicirate na pozicije koje vas zanimaju</li>
-                        <li>Uredite i dopunite svoj profil</li>
+                        <li>{feature1}</li>
+                        <li>{feature2}</li>
+                        <li>{feature3}</li>
                     </ul>
-                    <p style="margin-top: 30px;">Srećno u traženju posla!</p>
+                    <p style="margin-top: 30px;">Srećno!</p>
                     <p><strong>Tim JobLess</strong></p>
                 </body>
                 </html>
@@ -54,8 +65,7 @@ public class EmailService(IConfiguration configuration, ILogger<EmailService> lo
 
         using var smtp = new SmtpClient();
 
-        var socketOptions = useSsl ? SecureSocketOptions.SslOnConnect : SecureSocketOptions.None;
-        await smtp.ConnectAsync(smtpHost, smtpPort, socketOptions, cancellationToken);
+        await smtp.ConnectAsync(smtpHost, smtpPort, SecureSocketOptions.StartTls, cancellationToken);
 
         if (!string.IsNullOrEmpty(username))
             await smtp.AuthenticateAsync(username, password, cancellationToken);
