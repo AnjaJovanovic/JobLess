@@ -6,17 +6,20 @@ using JobLess.Client.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
+using JobLess.Contracts.Events;
+using MassTransit;
+
 namespace JobLess.Client.Application.Clients.Commands.ApplyToJob;
 
-public class ApplyToJobCommandHandler(IApplicationDbContext context)
+public class ApplyToJobCommandHandler(IApplicationDbContext context, IPublishEndpoint publishEndpoint)
     : IRequestHandler<ApplyToJobCommand, JobApplicationDto>
 {
     public async Task<JobApplicationDto> Handle(ApplyToJobCommand request, CancellationToken cancellationToken)
     {
-        var clientExists = await context.Clients
-            .AnyAsync(c => c.ClientId == request.ClientId, cancellationToken);
+        var client = await context.Clients
+            .FirstOrDefaultAsync(c => c.ClientId == request.ClientId, cancellationToken);
 
-        if (!clientExists)
+        if (client is null)
             throw new KeyNotFoundException("Klijent nije pronađen.");
 
         var alreadyApplied = await context.JobApplications
@@ -37,6 +40,19 @@ public class ApplyToJobCommandHandler(IApplicationDbContext context)
 
         context.JobApplications.Add(application);
         await context.SaveChangesAsync(cancellationToken);
+
+        if (!string.IsNullOrEmpty(request.CompanyEmail))
+        {
+            await publishEndpoint.Publish(
+                new JobAppliedMessage(
+                    request.AdvertisementId,
+                    request.ClientId,
+                    client.Email,
+                    client.FirstName,
+                    client.LastName,
+                    request.CompanyEmail),
+                cancellationToken);
+        }
 
         return ToDto(application);
     }

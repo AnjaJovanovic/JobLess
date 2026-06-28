@@ -14,10 +14,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\JobLess.Client.Domain\JobLess.Client.Domain.csproj" />
+      <ProjectReference Include="..\..\..\Shared\JobLess.Contracts\JobLess.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+      <PackageReference Include="MassTransit" Version="8.3.6" />
       <PackageReference Include="MediatR" Version="14.0.0" />
       <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.3.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.27" />

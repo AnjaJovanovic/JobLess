@@ -8,5 +8,7 @@ public class ApplyToJobCommandValidator : AbstractValidator<ApplyToJobCommand>
     {
         RuleFor(x => x.ClientId).GreaterThan(0);
         RuleFor(x => x.AdvertisementId).GreaterThan(0);
+        RuleFor(x => x.CompanyEmail).EmailAddress().When(x => !string.IsNullOrEmpty(x.CompanyEmail));
+
     }
 }
