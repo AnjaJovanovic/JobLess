@@ -43,6 +43,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<UserRegisteredConsumer>();
+    x.AddConsumer<JobAppliedConsumer>();
 
     x.UsingRabbitMq((ctx, cfg) =>
     {
@@ -63,6 +64,18 @@ builder.Services.AddMassTransit(x =>
         {
             e.ConfigureConsumer<UserRegisteredConsumer>(ctx);
             e.Bind("jobless-user-registered", b =>
+            {
+                b.ExchangeType = "fanout";
+            });
+        });
+        
+        cfg.Message<JobAppliedMessage>(
+            m => m.SetEntityName("jobless-job-applied"));
+
+        cfg.ReceiveEndpoint("notification-job-applied-queue", e =>
+        {
+            e.ConfigureConsumer<JobAppliedConsumer>(ctx);
+            e.Bind("jobless-job-applied", b =>
             {
                 b.ExchangeType = "fanout";
             });
