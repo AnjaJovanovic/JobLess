@@ -1,0 +1,112 @@
+.notifications-container {
+  max-width: 700px;
+}
+
+.notifications-container h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.notifications-badge {
+  background: #5B8BFF;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.notifications-loading,
+.notifications-empty {
+  color: #9BA3B8;
+  margin-top: 20px;
+}
+
+.notifications-error {
+  color: #FF5B6B;
+  margin-top: 20px;
+}
+
+.notifications-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notification-item {
+  background: #23272F;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 18px 22px;
+  transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.notification-item.unread {
+  border-color: rgba(91, 139, 255, 0.4);
+  background: rgba(91, 139, 255, 0.06);
+}
+
+.notification-item.unread:hover {
+  border-color: rgba(91, 139, 255, 0.7);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(91, 139, 255, 0.15);
+}
+
+.notification-item.read {
+  opacity: 0.65;
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.notification-type {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5B8BFF;
+  background: rgba(91, 139, 255, 0.14);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.notification-date {
+  font-size: 11px;
+  color: #5C6480;
+  margin-left: auto;
+}
+
+.notification-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #5B8BFF;
+  flex-shrink: 0;
+}
+
+.notification-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #F0F2F7;
+  margin-bottom: 5px;
+}
+
+.notification-message {
+  font-size: 13px;
+  color: #9BA3B8;
+  line-height: 1.5;
+}

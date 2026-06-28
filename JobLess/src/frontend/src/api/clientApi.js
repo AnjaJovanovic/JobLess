@@ -137,7 +137,7 @@ function parseApiError(text, fallback) {
   }
 }
 
-export async function applyToJob(clientId, advertisementId) {
+export async function applyToJob(clientId, advertisementId, companyEmail = "") {
   const numericClientId = Number(clientId);
   const numericAdId = Number(advertisementId);
 
@@ -148,7 +148,7 @@ export async function applyToJob(clientId, advertisementId) {
   const response = await fetch(`/api/clients/${numericClientId}/applications`, {
     method: "POST",
     headers: JSON_HEADERS,
-    body: JSON.stringify({ advertisementId: numericAdId }),
+    body: JSON.stringify({ advertisementId: numericAdId, companyEmail }),
   });
 
   if (!response.ok) {
@@ -204,4 +204,41 @@ export async function updateApplicationStatus(applicationId, status) {
   }
 
   return response.json();
+}
+
+export async function getCompanyById(companyId) {
+  const response = await fetch(`/api/Companies/One?id=${companyId}`);
+  if (!response.ok) return null;
+  const data = await response.json();
+  return data?.company ?? data ?? null;
+}
+
+export async function getMyNotifications(token) {
+  const response = await fetch("/api/notifications/me", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(parseApiError(text, "Greška pri učitavanju obaveštenja."));
+  }
+
+  const data = await response.json();
+  return Array.isArray(data) ? data : [];
+}
+
+export async function markNotificationAsRead(notificationId, token) {
+  const response = await fetch(`/api/notifications/${notificationId}/read`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 204 || response.ok) return true;
+
+  const text = await response.text();
+  throw new Error(parseApiError(text, "Greška pri označavanju obaveštenja."));
 }

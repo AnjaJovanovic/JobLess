@@ -5,13 +5,15 @@ import CompanyProfile from "./CompanyProfile";
 import CreateJob from "./CreateJob";
 import CompanyJobs from "./CompanyJobs";
 import JobApplications from "./JobsApplications";
+import Notifications from "../../notifications/Notifications";
 import "./Company.css";
 
 const tabs = [
-  { key: "profile",      label: "Profil kompanije" },
-  { key: "create-job",   label: "Kreiraj oglas" },
-  { key: "jobs",         label: "Moji oglasi" },
-  { key: "applications", label: "Prijave" },
+  { key: "profile",       label: "Profil kompanije" },
+  { key: "create-job",    label: "Kreiraj oglas" },
+  { key: "jobs",          label: "Moji oglasi" },
+  { key: "applications",  label: "Prijave" },
+  { key: "notifications", label: "Obaveštenja" },
 ];
 
 export default function CompanyDashboard() {
@@ -42,10 +44,11 @@ export default function CompanyDashboard() {
       </aside>
 
       <main className="company-content">
-        {activeTab === "profile"      && <CompanyProfile />}
-        {activeTab === "create-job"   && <CreateJob onSuccess={() => setActiveTab("jobs")} />}
-        {activeTab === "jobs"         && <CompanyJobs onCreateNew={() => setActiveTab("create-job")} />}
-        {activeTab === "applications" && <JobApplications />}
+        {activeTab === "profile"       && <CompanyProfile />}
+        {activeTab === "create-job"    && <CreateJob onSuccess={() => setActiveTab("jobs")} />}
+        {activeTab === "jobs"          && <CompanyJobs onCreateNew={() => setActiveTab("create-job")} />}
+        {activeTab === "applications"  && <JobApplications />}
+        {activeTab === "notifications" && <Notifications />}
       </main>
     </div>
   );

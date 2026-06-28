@@ -4,6 +4,7 @@ import { useAuth } from "../../../context/AuthContext";
 import Profile from "./Profile";
 import Applications from "./Applications";
 import JobList from "./JobList";
+import Notifications from "../../notifications/Notifications";
 import "./User.css";
 
 export default function UserDashboard() {
@@ -16,6 +17,7 @@ export default function UserDashboard() {
     { key: "profile", label: "Moj profil", requiresProfile: false },
     { key: "applications", label: "Moje prijave", requiresProfile: true },
     { key: "jobs", label: "Oglasi", requiresProfile: false },
+    { key: "notifications", label: "Obaveštenja", requiresProfile: false },
   ];
 
   const handleTabClick = (tab) => {
@@ -57,6 +59,7 @@ export default function UserDashboard() {
         )}
         {activeTab === "applications" && profileComplete && <Applications />}
         {activeTab === "jobs" && <JobList />}
+        {activeTab === "notifications" && <Notifications />}
       </main>
     </div>
   );
