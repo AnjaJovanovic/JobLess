@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
+COPY src/Shared/JobLess.Contracts/                      src/Shared/JobLess.Contracts/
 COPY src/Services/Client/JobLess.Client.Domain/         src/Services/Client/JobLess.Client.Domain/
 COPY src/Services/Client/JobLess.Client.Application/    src/Services/Client/JobLess.Client.Application/
 COPY src/Services/Client/JobLess.Client.Infrastructure/ src/Services/Client/JobLess.Client.Infrastructure/
