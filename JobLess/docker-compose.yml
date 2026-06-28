@@ -86,8 +86,13 @@ services:
         Password=JobLess_Pass123!;
         TrustServerCertificate=True;
         MultipleActiveResultSets=True;
+      RabbitMq__Host: "rabbitmq"
+      RabbitMq__Username: "guest"
+      RabbitMq__Password: "guest"
     depends_on:
       sql-server:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - jobless-network
