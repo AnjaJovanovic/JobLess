@@ -126,7 +126,7 @@ public class ClientsController(IMediator mediator) : ControllerBase
         try
         {
             var result = await mediator.Send(
-                new ApplyToJobCommand(id, request.AdvertisementId),
+                new ApplyToJobCommand(id, request.AdvertisementId, request.CompanyEmail ?? string.Empty),
                 cancellationToken);
 
             return CreatedAtAction(nameof(GetApplications), new { id }, result);
@@ -185,6 +185,6 @@ public class ClientsController(IMediator mediator) : ControllerBase
     }
 }
 
-public record ApplyToJobRequest(int AdvertisementId);
+public record ApplyToJobRequest(int AdvertisementId, string? CompanyEmail);
 
 public record UpdateApplicationStatusRequest(JobApplicationStatus Status);
