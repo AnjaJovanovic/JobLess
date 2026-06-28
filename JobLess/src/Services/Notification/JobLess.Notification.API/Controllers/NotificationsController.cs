@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using JobLess.Notification.Application.Commands.GetUserNotifications;
+using JobLess.Notification.Application.Commands.MarkNotificationAsRead;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,5 +28,20 @@ public class NotificationsController(IMediator mediator) : ControllerBase
 
         var result = await mediator.Send(new GetUserNotificationsCommand(userEmail), cancellationToken);
         return Ok(result);
+    }
+
+    [HttpPut("{id:guid}/read")]
+    public async Task<IActionResult> MarkAsRead(Guid id, CancellationToken cancellationToken)
+    {
+        var userEmail = GetAuthUserEmail();
+        if (userEmail == null)
+            return Unauthorized();
+
+        var success = await mediator.Send(new MarkNotificationAsReadCommand(id, userEmail), cancellationToken);
+
+        if (!success)
+            return NotFound();
+
+        return NoContent();
     }
 }

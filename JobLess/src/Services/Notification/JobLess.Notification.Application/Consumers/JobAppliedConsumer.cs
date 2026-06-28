@@ -24,7 +24,7 @@ public class JobAppliedConsumer(
             RecipientUserId = msg.CompanyEmail,
             Type = Domain.Enums.NotificationType.NewApplication,
             Title = "Nova prijava na oglas",
-            Message = $"Imate novu prijavu za posao. Kandidat {msg.ClientFirstName} {msg.ClientLastName} ({msg.ClientEmail}) se prijavio na oglas #{msg.AdvertisementId}.",
+            Message = $"Kandidat {msg.ClientFirstName} {msg.ClientLastName} ({msg.ClientEmail}) se prijavio na oglas #{msg.AdvertisementId}.",
             IsRead = false,
             CreatedAt = DateTime.UtcNow
         };
