@@ -2,36 +2,34 @@ using JobLess.IdentityServer.Application.DTOs;
 using JobLess.IdentityServer.Application.Interfaces;
 using MediatR;
 
-namespace JobLess.IdentityServer.Application.Commands.LoginUser;
+namespace JobLess.IdentityServer.Application.Commands.RefreshToken;
 
-public sealed class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, AuthenticationDto?>
+public sealed class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, AuthenticationDto?>
 {
     private readonly IAuthenticationService _authService;
     private readonly IJwtTokenService _jwtService;
 
-    public LoginUserCommandHandler(IAuthenticationService authService, IJwtTokenService jwtService)
+    public RefreshTokenCommandHandler(IAuthenticationService authService, IJwtTokenService jwtService)
     {
         _authService = authService;
         _jwtService = jwtService;
     }
 
-    public async Task<AuthenticationDto?> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<AuthenticationDto?> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        var credentials = new UserCredentialsDto { Email = request.Email, Password = request.Password };
-        var user = await _authService.ValidateUserAsync(credentials);
-
+        var user = await _authService.FindByEmailWithValidRefreshTokenAsync(request.Email, request.RefreshToken);
         if (user is null) return null;
 
         var accessToken = _jwtService.GenerateAccessToken(user);
-        var refreshToken = _jwtService.GenerateRefreshToken();
+        var newRefreshToken = _jwtService.GenerateRefreshToken();
         var refreshExpiry = DateTime.UtcNow.AddMinutes(10);
 
-        await _authService.SaveRefreshTokenAsync(user, refreshToken, refreshExpiry);
+        await _authService.SaveRefreshTokenAsync(user, newRefreshToken, refreshExpiry);
 
         return new AuthenticationDto
         {
             AccessToken = accessToken,
-            RefreshToken = refreshToken,
+            RefreshToken = newRefreshToken,
             ExpiresAt = DateTime.UtcNow.AddMinutes(5),
             UserId = user.Id,
             Email = user.Email!,

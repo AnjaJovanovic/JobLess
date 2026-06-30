@@ -49,4 +49,25 @@ public class AuthenticationService : IAuthenticationService
         var check = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: false);
         return check.Succeeded ? user : null;
     }
+    public async Task SaveRefreshTokenAsync(User user, string refreshToken, DateTime expiry)
+    {
+        await _userManager.SetAuthenticationTokenAsync(user, "JobLess", "RefreshToken", refreshToken);
+        await _userManager.SetAuthenticationTokenAsync(user, "JobLess", "RefreshTokenExpiry", expiry.ToString("O"));
+    }
+
+    public async Task<User?> FindByEmailWithValidRefreshTokenAsync(string email, string refreshToken)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user is null) return null;
+
+        var storedToken = await _userManager.GetAuthenticationTokenAsync(user, "JobLess", "RefreshToken");
+        var storedExpiry = await _userManager.GetAuthenticationTokenAsync(user, "JobLess", "RefreshTokenExpiry");
+
+        if (storedToken != refreshToken) return null;
+        if (!DateTime.TryParse(storedExpiry, null, System.Globalization.DateTimeStyles.RoundtripKind, out var expiry)
+            || expiry < DateTime.UtcNow)
+            return null;
+
+        return user;
+    }
 }

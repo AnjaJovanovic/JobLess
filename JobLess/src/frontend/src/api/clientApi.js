@@ -213,6 +213,16 @@ export async function getCompanyById(companyId) {
   return data?.company ?? data ?? null;
 }
 
+export async function refreshAccessToken(email, refreshToken) {
+  const response = await fetch("/api/Auth/refresh", {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ email, refreshToken }),
+  });
+  if (!response.ok) return null;
+  return response.json();
+}
+
 export async function getMyNotifications(token) {
   const response = await fetch("/api/notifications/me", {
     headers: {

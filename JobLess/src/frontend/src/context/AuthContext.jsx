@@ -1,16 +1,39 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { clearStoredClientId } from "../api/clientApi";
+import { clearStoredClientId, refreshAccessToken } from "../api/clientApi";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
+    useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (!storedUser) return;
+
+    const parsed = JSON.parse(storedUser);
+    const expiresAt = parsed.expiresAt ? new Date(parsed.expiresAt) : null;
+
+    if (!expiresAt || expiresAt > new Date()) {
+      setUser(parsed);
+      return;
     }
+
+    // istek access tokena - refresh token
+    if (!parsed.refreshToken || !parsed.email) {
+      localStorage.removeItem("user");
+      return;
+    }
+
+    refreshAccessToken(parsed.email, parsed.refreshToken)
+      .then((newAuth) => {
+        if (newAuth) {
+          localStorage.setItem("user", JSON.stringify(newAuth));
+          setUser(newAuth);
+        } else {
+          localStorage.removeItem("user");
+        }
+      })
+      .catch(() => localStorage.removeItem("user"));
   }, []);
 
   const login = (authData) => {
@@ -29,9 +52,7 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-// 🔥 DODAJ OVO
+};
 export function useAuth() {
   return useContext(AuthContext);
 }

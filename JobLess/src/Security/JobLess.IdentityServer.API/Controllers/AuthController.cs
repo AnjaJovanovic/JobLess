@@ -1,5 +1,6 @@
 using JobLess.IdentityServer.Application.Commands.LoginUser;
 using JobLess.IdentityServer.Application.Commands.RegisterUser;
+using JobLess.IdentityServer.Application.Commands.RefreshToken;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,4 +39,13 @@ public class AuthController : ControllerBase
             return Unauthorized(new { message = "Pogrešni kredencijali." });
         return Ok(result);
     }
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
+    {
+        var result = await _mediator.Send(command);
+        if (result is null)
+            return Unauthorized(new { message = "Nevažeći ili istekli refresh token." });
+        return Ok(result);
+    }
+
 }

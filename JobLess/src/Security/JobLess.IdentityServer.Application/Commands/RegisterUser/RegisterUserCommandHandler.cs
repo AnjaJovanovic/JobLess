@@ -39,6 +39,8 @@ public sealed class RegisterUserCommandHandler : IRequestHandler<RegisterUserCom
 
         var accessToken = _jwtService.GenerateAccessToken(user!);
         var refreshToken = _jwtService.GenerateRefreshToken();
+        var refreshExpiry = DateTime.UtcNow.AddMinutes(10);
+
 
         await _publishEndpoint.Publish(
             new UserRegisteredMessage(user!.Id, user.Email!, user.UserRole.ToString()),
@@ -48,7 +50,7 @@ public sealed class RegisterUserCommandHandler : IRequestHandler<RegisterUserCom
         {
             AccessToken = accessToken,
             RefreshToken = refreshToken,
-            ExpiresAt = DateTime.UtcNow.AddMinutes(60),
+            ExpiresAt = DateTime.UtcNow.AddMinutes(5),
             UserId = user!.Id,
             Email = user.Email!,
             Role = user.UserRole.ToString()
