@@ -4,15 +4,18 @@ using JobLess.Company.Application.Commands.Update;
 using JobLess.Company.Application.Queries.GetAll;
 using JobLess.Company.Application.Queries.GetByName;
 using JobLess.Company.Application.Queries.GetOne;
-using JobLess.Company.Application.Queries.GetByName;
 using JobLess.Company.Application.Queries.Search;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+
 
 namespace JobLess.Company.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CompaniesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -23,11 +26,18 @@ namespace JobLess.Company.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Company")]
+
         public async Task<IActionResult> Create([FromBody] CreateCompanyCommand command)
         {
             if (command == null)
                 return BadRequest("Podaci nisu validni.");
 
+            var ownerEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (ownerEmail is null)
+                return Unauthorized();
+
+            command.Email = ownerEmail;
             try
             {
                 var companyId = await _mediator.Send(command);
@@ -57,8 +67,15 @@ namespace JobLess.Company.API.Controllers
         */
 
         [HttpDelete]
+        [Authorize(Roles = "Company")]
         public async Task<IActionResult> Delete(DeleteCompanyCommand command)
         {
+            var ownerEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (ownerEmail is null)
+                return Unauthorized();
+
+            command.CompanyEmail = ownerEmail;
+            
             var result = await _mediator.Send(command);
 
             if (!result)
@@ -111,8 +128,14 @@ namespace JobLess.Company.API.Controllers
         }
 
         [HttpPut("Update")]
+        [Authorize(Roles = "Company")]
         public async Task<IActionResult> Update([FromBody] UpdateCompanyCommand command)
         {
+            var ownerEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (ownerEmail is null)
+                return Unauthorized();
+
+            command.CompanyEmail= ownerEmail;
             var result = await _mediator.Send(command);
 
             if (!result)

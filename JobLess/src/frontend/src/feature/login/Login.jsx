@@ -462,9 +462,10 @@ async function authRequest(path, body) {
   return parseAuthResponse(res);
 }
 
-async function findCompanyIdByEmail(email) {
+async function findCompanyIdByEmail(email, token) {
   const res = await fetch(
-    `/api/Companies/Search?query=${encodeURIComponent(email)}&pageNumber=1&pageSize=20`
+    `/api/Companies/Search?query=${encodeURIComponent(email)}&pageNumber=1&pageSize=20`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
   if (!res.ok) return null;
 
@@ -523,7 +524,7 @@ export default function Login() {
           return;
         }
 
-        const companyId = await findCompanyIdByEmail(data.email);
+        const companyId = await findCompanyIdByEmail(data.email, data.accessToken);
         login({ ...data, id: companyId, companyId });
         navigate("/company");
         return;
@@ -583,7 +584,10 @@ export default function Login() {
 
       const res = await fetch("/api/Companies", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authData.accessToken}`,
+        },
         body: JSON.stringify(payload),
       });
 

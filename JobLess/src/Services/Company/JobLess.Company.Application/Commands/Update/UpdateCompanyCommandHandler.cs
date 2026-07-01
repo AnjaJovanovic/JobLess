@@ -27,7 +27,7 @@ namespace JobLess.Company.Application.Commands.Update
         public async Task<bool> Handle(UpdateCompanyCommand command, CancellationToken cancellationToken)
         {
             var company = await _context.Companies
-                .FirstOrDefaultAsync(x => x.Id == command.CompanyId && x.IsActive, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == command.CompanyId && x.Email == command.CompanyEmail && x.IsActive, cancellationToken);
 
             if (company == null)
                 return false;

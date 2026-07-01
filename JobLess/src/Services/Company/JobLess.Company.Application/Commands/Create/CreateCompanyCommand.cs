@@ -23,7 +23,7 @@ namespace JobLess.Company.Application.Commands.Create
         public required string ContactPersonLastName { get; set; }
         public required string ContactPersonPosition { get; set; }
         public required string ContactPersonPhoneNumber { get; set; }
-        public required string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
         public required string PasswordHash { get; set; }
 
         public string? PhoneNumber { get; set; }

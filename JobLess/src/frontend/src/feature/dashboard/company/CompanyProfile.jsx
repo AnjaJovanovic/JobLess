@@ -33,6 +33,7 @@ const industryReverseMap = {
 export default function CompanyProfile() {
     const { user } = useAuth();
     const companyId = user?.id;
+    const token = user?.accessToken;
 
     const [readonly, setReadonly] = useState({
         email: "",
@@ -68,7 +69,9 @@ export default function CompanyProfile() {
             return;
         }
 
-        fetch(`/api/Companies/One?id=${companyId}`)
+        fetch(`/api/Companies/One?id=${companyId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
             .then((res) => {
                 if (!res.ok) throw new Error("Greška pri učitavanju profila.");
                 return res.json();
@@ -113,7 +116,10 @@ export default function CompanyProfile() {
         try {
             const response = await fetch("/api/Companies/Update", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json" ,
+                    Authorization: `Bearer ${token}`,
+                },
                 body: JSON.stringify({
                     companyId: companyId,
                     name: form.naziv,

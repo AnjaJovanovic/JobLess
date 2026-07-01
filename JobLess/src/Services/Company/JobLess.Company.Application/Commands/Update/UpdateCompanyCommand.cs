@@ -11,6 +11,8 @@ namespace JobLess.Company.Application.Commands.Update
     public class UpdateCompanyCommand : IRequest<bool>
     {
         public required int CompanyId { get; set; }
+        public string CompanyEmail { get; set; } = string.Empty;
+
         public string? Name { get; set; }
         public string? Description { get; set; }
         //public Industry? Industry { get; set; }

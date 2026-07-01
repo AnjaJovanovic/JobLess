@@ -17,7 +17,7 @@ namespace JobLess.Company.Application.Commands.Delete
         public async Task<bool> Handle(DeleteCompanyCommand command, CancellationToken cancellationToken)
         {
             var company = await _context.Companies
-                .FirstOrDefaultAsync(x => x.Id == command.Id && x.IsActive, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == command.Id && x.Email == command.CompanyEmail && x.IsActive, cancellationToken);
 
             if (company == null)
                 return false;

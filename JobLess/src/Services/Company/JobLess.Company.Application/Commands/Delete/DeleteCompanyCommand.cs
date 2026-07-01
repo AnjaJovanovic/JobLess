@@ -10,5 +10,7 @@ namespace JobLess.Company.Application.Commands.Delete
     public class DeleteCompanyCommand : IRequest<bool>
     {
         public required int Id { get; set; }
+        public string CompanyEmail { get; set; } = string.Empty;
+
     }
 }

@@ -1,3 +1,4 @@
+using System.Text;
 using JobLess.Company.Application.Commands.Create;
 using JobLess.Company.Application.Common.Behaviors;
 using JobLess.Company.Application.Interfaces;
@@ -7,6 +8,9 @@ using JobLess.Shared.Domain.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +28,30 @@ builder.Services.AddCors(options =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+var jwtSection = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtSection["Key"]!);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSection["Issuer"],
+        ValidAudience = jwtSection["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -69,7 +97,7 @@ app.UseExceptionHandler(errorApp =>
         }
         else
         {
-            var json = System.Text.Json.JsonSerializer.Serialize(new { errors = new[] { "Dolo je do greke." } });
+            var json = System.Text.Json.JsonSerializer.Serialize(new { errors = new[] { "Doï¿½lo je do greï¿½ke." } });
             await context.Response.WriteAsync(json);
         }
     });
@@ -78,6 +106,8 @@ app.UseExceptionHandler(errorApp =>
 app.UseCors("AllowReactApp");
 app.UseHttpsRedirection();
 app.MapControllers();
+app.UseAuthentication();
+app.UseAuthorization();
 
 using (var scope = app.Services.CreateScope())
 {
