@@ -97,12 +97,14 @@ export default function JobApplications() {
   const countByStatus = (status) =>
     applications.filter((app) => Number(app.status) === status).length;
 
+  const token = user?.accessToken;
+
   const changeStatus = async (applicationId, newStatus) => {
     setUpdatingId(applicationId);
     setError(null);
 
     try {
-      await updateApplicationStatus(applicationId, newStatus);
+      await updateApplicationStatus(applicationId, newStatus, token);
       setApplications((apps) =>
         apps.map((app) =>
           app.applicationId === applicationId

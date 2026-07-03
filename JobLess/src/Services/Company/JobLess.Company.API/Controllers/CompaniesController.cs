@@ -85,6 +85,7 @@ namespace JobLess.Company.API.Controllers
         }
 
         [HttpGet("All")]
+        [AllowAnonymous]
         public async Task<ActionResult<GetAllCompaniesResult>> GetAll(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
@@ -100,6 +101,7 @@ namespace JobLess.Company.API.Controllers
         }
 
         [HttpGet("One")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetOne([FromQuery] int id)
         {
             var result = await _mediator.Send(new GetOneCompanyQuery { Id = id });
@@ -110,8 +112,7 @@ namespace JobLess.Company.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("ByName")]
-        public async Task<IActionResult> GetByName([FromQuery] string name)
+        [HttpGet("ByName")]        public async Task<IActionResult> GetByName([FromQuery] string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return BadRequest("Naziv kompanije je obavezan.");
@@ -120,8 +121,7 @@ namespace JobLess.Company.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Search")]
-        public async Task<ActionResult<SearchCompanyResult>> Search([FromQuery] SearchCompanyQuery query)
+        [HttpGet("Search")]        public async Task<ActionResult<SearchCompanyResult>> Search([FromQuery] SearchCompanyQuery query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);

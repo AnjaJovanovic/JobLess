@@ -28,8 +28,6 @@ namespace JobLess.Company.Application.Models
         public string Location { get; set; } = string.Empty;
 
         public string Email { get; set; }
-        public string PasswordHash { get; set; }
-
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public CompanySize CompanySize { get; set; }
@@ -59,7 +57,6 @@ namespace JobLess.Company.Application.Models
                     CompanySize = entity.CompanySize,
                     Address = entity.Address,
                     Email = entity.Email,
-                    PasswordHash = entity.PasswordHash,
                     PhoneNumber = entity.PhoneNumber,
                     Industry = entity.Industry,
                     Website = entity.Website,

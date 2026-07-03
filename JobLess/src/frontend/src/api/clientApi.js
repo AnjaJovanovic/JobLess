@@ -191,11 +191,13 @@ export async function getApplicationsByAdvertisements(advertisementIds, status =
   return Array.isArray(data) ? data : [];
 }
 
-export async function updateApplicationStatus(applicationId, status) {
+export async function updateApplicationStatus(applicationId, status, token) {
   const response = await fetch(`/api/clients/applications/${applicationId}/status`, {
     method: "PUT",
-    headers: JSON_HEADERS,
-    body: JSON.stringify({ status: Number(status) }),
+    headers: {
+      ...JSON_HEADERS,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },    body: JSON.stringify({ status: Number(status) }),
   });
 
   if (!response.ok) {

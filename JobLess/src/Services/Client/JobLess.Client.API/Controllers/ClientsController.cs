@@ -10,6 +10,7 @@ using JobLess.Client.Application.Models;
 using JobLess.Client.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JobLess.Client.API.Controllers;
 
@@ -165,6 +166,7 @@ public class ClientsController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut("applications/{applicationId:int}/status")]
+    [Authorize(Roles = "Company")]
     public async Task<ActionResult<JobApplicationDto>> UpdateApplicationStatus(
         int applicationId,
         [FromBody] UpdateApplicationStatusRequest request,

@@ -89,6 +89,9 @@ services:
       RabbitMq__Host: "rabbitmq"
       RabbitMq__Username: "guest"
       RabbitMq__Password: "guest"
+      Jwt__Key: "JobLess-Super-Secret-Key-2025-Must-Be-At-Least-32-Chars!"
+      Jwt__Issuer: "JobLess.Auth"
+      Jwt__Audience: "JobLess.Client"
     depends_on:
       sql-server:
         condition: service_healthy

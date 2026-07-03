@@ -1,10 +1,12 @@
+using System.Text;
 using JobLess.Client.Application;
 using JobLess.Client.Application.Interfaces;
 using JobLess.Client.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-
 using JobLess.Contracts.Events;
 using MassTransit;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,30 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<AppDbContext>());
 
 builder.Services.AddApplication();
+
+var jwtSection = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtSection["Key"]!);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSection["Issuer"],
+        ValidAudience = jwtSection["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -32,6 +58,9 @@ builder.Services.AddMassTransit(x =>
 
         cfg.Message<JobAppliedMessage>(m => m.SetEntityName("jobless-job-applied"));
         cfg.Publish<JobAppliedMessage>(p => p.ExchangeType = "fanout");
+        
+        cfg.Message<ApplicationStatusChangedMessage>(m => m.SetEntityName("jobless-application-status-changed"));
+        cfg.Publish<ApplicationStatusChangedMessage>(p => p.ExchangeType = "fanout");
     });
 });
 
@@ -79,6 +108,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 
 app.UseCors("AllowReactApp");
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
