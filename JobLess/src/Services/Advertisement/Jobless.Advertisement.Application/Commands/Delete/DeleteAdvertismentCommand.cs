@@ -10,5 +10,7 @@ namespace JobLess.Advertisement.Application.Commands.Delete
     public class DeleteAdvertismentCommand : IRequest<bool>
     {
         public required int Id { get; set; }
+        public string CompanyEmail { get; set; } = string.Empty;
+
     }
 }

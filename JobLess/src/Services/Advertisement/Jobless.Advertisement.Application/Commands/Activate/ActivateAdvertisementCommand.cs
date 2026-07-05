@@ -10,5 +10,6 @@ namespace JobLess.Advertisement.Application.Commands.Activate
     public class ActivateAdvertisementCommand : IRequest<bool>
     {
         public required int Id { get; set; }
+        public string CompanyEmail { get; set; } = string.Empty;
     }
 }

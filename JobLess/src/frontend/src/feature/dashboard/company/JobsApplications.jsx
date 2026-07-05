@@ -20,9 +20,10 @@ const FILTERS = [
   { key: "rejected", label: "Odbijen", status: APPLICATION_STATUS.REJECTED },
 ];
 
-async function fetchCompanyAdvertisements(companyId) {
+async function fetchCompanyAdvertisements(companyId, token) {
   const response = await fetch(
-    `/api/Advertisements/GetAdvertisementsForCompany?CompanyId=${companyId}&pageNumber=1&pageSize=100`
+    `/api/Advertisements/GetAdvertisementsForCompany?CompanyId=${companyId}&pageNumber=1&pageSize=100`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   if (!response.ok) {
@@ -60,7 +61,7 @@ export default function JobApplications() {
       setError(null);
 
       try {
-        const ads = await fetchCompanyAdvertisements(companyId);
+        const ads = await fetchCompanyAdvertisements(companyId, user?.accessToken);
         if (cancelled) return;
 
         const titles = {};

@@ -17,13 +17,13 @@ public class ActivateAdvertisementCommandHandlerTests
 {
     private readonly Mock<IApplicationDbContext> _contextMock;
     private readonly Mock<IValidationExceptionThrower> _validationThrowerMock;
-    private readonly AktivirajOglasHandler _handler;
+    private readonly ActivateAdvertisementCommandHandler _handler;
 
     public ActivateAdvertisementCommandHandlerTests()
     {
         _contextMock = new Mock<IApplicationDbContext>();
         _validationThrowerMock = new Mock<IValidationExceptionThrower>();
-        _handler = new AktivirajOglasHandler(_contextMock.Object, _validationThrowerMock.Object);
+        _handler = new ActivateAdvertisementCommandHandler(_contextMock.Object, _validationThrowerMock.Object);
     }
 
     private void SetupDbSet(List<JobAdvertisement> data)

@@ -7,12 +7,15 @@ using JobLess.Advertisement.Application.Queries.GetOne;
 using JobLess.Advertisement.Application.Queries.GetAll;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using Jobless.Advertisement.Application.Queries.GetAllForCompany;
 
 namespace JobLess.Advertisement.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class AdvertisementsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -24,10 +27,17 @@ namespace JobLess.Advertisement.API.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Company")]
         public async Task<IActionResult> Create([FromBody] CreateAdvertisementCommand command)
         {
             if (command == null)
                 return BadRequest("Nevalidni podaci.");
+
+            var companyEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (companyEmail is null)
+                return Unauthorized();
+
+            command.CompanyEmail = companyEmail;
 
             var oglasId = await _mediator.Send(command);
 
@@ -35,14 +45,21 @@ namespace JobLess.Advertisement.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Company")]
         public async Task<bool> Delete([FromBody] DeleteAdvertismentCommand command)
         {
+            var companyEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (companyEmail is null)
+                return false;
+
+            command.CompanyEmail = companyEmail;
 
             var success = await _mediator.Send(command);
 
             return success;
         }
         [HttpGet("All")]
+        [Authorize(Roles = "Candidate")]
         public async Task<ActionResult<GetAllAdvertisementResult>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var query = new GetAllAdvertisementQuery
@@ -56,6 +73,7 @@ namespace JobLess.Advertisement.API.Controllers
             return Ok(result);
         }
         [HttpGet("One")]
+        [Authorize(Roles = "Candidate")]
         public async Task<ActionResult<GetOneAdvertisementResult>> GetOne([FromQuery] int id)
         {
             var query = new GetOneAdvertisementQuery
@@ -68,6 +86,7 @@ namespace JobLess.Advertisement.API.Controllers
             return Ok(result);
         }
         [HttpGet("Search")]
+        [Authorize(Roles = "Candidate")]
         public async Task<ActionResult<SearchAdvertisementResult>> Search([FromQuery] SearchAdvertisementQuery query)
         {
             var result = await _mediator.Send(query);
@@ -75,15 +94,29 @@ namespace JobLess.Advertisement.API.Controllers
         }
 
         [HttpGet("GetAdvertisementsForCompany")]
+        [Authorize(Roles = "Company")]
         public async Task<ActionResult<GetAllForCompanyResult>> GetAdvertisementsForComapny([FromQuery] GetAllForCompanyQuery query)
         {
+            var companyEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (companyEmail is null)
+                return Unauthorized();
+
+            query.CompanyEmail = companyEmail;
+
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpPut("Activate")]
+        [Authorize(Roles = "Company")]
         public async Task<IActionResult> Activate([FromQuery] ActivateAdvertisementCommand command)
         {
+            var companyEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (companyEmail is null)
+                return Unauthorized();
+
+            command.CompanyEmail = companyEmail;
+
             var result = await _mediator.Send(command);
 
             if (!result)
@@ -93,8 +126,15 @@ namespace JobLess.Advertisement.API.Controllers
         }
 
         [HttpPut("Update")]
+        [Authorize(Roles = "Company")]
         public async Task<IActionResult> Update([FromBody] UpdateAdvertisementCommand command)
         {
+            var companyEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (companyEmail is null)
+                return Unauthorized();
+
+            command.CompanyEmail = companyEmail;
+
             await _mediator.Send(command);
             return Ok();
         }

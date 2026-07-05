@@ -9,7 +9,7 @@ import {
   storeClientId,
 } from "../../../api/clientApi";
 
-/* ─── ENUM OPCIJE ───────────────────────────────────── */
+
 
 const WORK_TYPE_OPTIONS = [
   { value: "", label: "Tip rada" },
@@ -39,7 +39,6 @@ const WORK_SCHEDULE_OPTIONS = [
   { value: 1, label: "Skraćeno radno vreme" },
 ];
 
-/* ─── HELPERI ───────────────────────────────────────── */
 
 const getWorkTypeLabel = (val) =>
   WORK_TYPE_OPTIONS.find((o) => o.value === val)?.label ?? "Nepoznato";
@@ -53,7 +52,7 @@ const getEmploymentTypeLabel = (val) =>
 const getWorkScheduleLabel = (val) =>
   WORK_SCHEDULE_OPTIONS.find((o) => o.value === val)?.label ?? "Nepoznato";
 
-/* ─── DEFAULT FILTERS ───────────────────────────────── */
+
 
 const DEFAULT_FILTERS = {
   title: "",
@@ -86,7 +85,7 @@ function buildQueryString(filters, page, pageSize) {
   return params.toString();
 }
 
-/* ─── KOMPONENTA ───────────────────────────────────── */
+
 
 export default function JobList() {
   const { user } = useAuth();
@@ -162,7 +161,9 @@ export default function JobList() {
         ? `/api/Advertisements/Search?${qs}`
         : `/api/Advertisements/All?${qs}`;
 
-      const response = await fetch(endpoint);
+      const response = await fetch(endpoint, {
+        headers: { Authorization: `Bearer ${user?.accessToken}` },
+      });
       if (!response.ok) {
         const body = await response.text();
         let message = "Greška pri učitavanju oglasa.";
@@ -191,7 +192,7 @@ export default function JobList() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     fetchJobs(appliedFilters, page);

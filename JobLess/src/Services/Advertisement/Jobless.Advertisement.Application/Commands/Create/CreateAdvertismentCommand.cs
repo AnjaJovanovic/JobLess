@@ -6,6 +6,7 @@ namespace JobLess.Advertisement.Application.Commands.Create
     public class CreateAdvertisementCommand : IRequest<int>
     {
         public required int CompanyId { get; init; }
+        public string CompanyEmail { get; set; } = string.Empty;
         public required string Title { get; init; }
         public string? Description { get; init; }
         public required string Position { get; init; }

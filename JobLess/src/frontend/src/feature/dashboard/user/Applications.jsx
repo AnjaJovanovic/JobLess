@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../../../context/AuthContext";
 import {
   applicationStatusLabel,
   APPLICATION_STATUS,
@@ -13,8 +14,10 @@ function statusClass(status) {
   return "status-pending";
 }
 
-async function fetchAdvertisement(advertisementId) {
-  const response = await fetch(`/api/Advertisements/One?id=${advertisementId}`);
+async function fetchAdvertisement(advertisementId, token) {
+  const response = await fetch(`/api/Advertisements/One?id=${advertisementId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   if (!response.ok) return null;
 
   const data = await response.json();
@@ -22,6 +25,7 @@ async function fetchAdvertisement(advertisementId) {
 }
 
 export default function Applications() {
+  const { user } = useAuth();
   const clientId = getStoredClientId();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +48,7 @@ export default function Applications() {
         const items = await getClientApplications(clientId);
         const enriched = await Promise.all(
           items.map(async (application) => {
-            const ad = await fetchAdvertisement(application.advertisementId);
+            const ad = await fetchAdvertisement(application.advertisementId, user?.accessToken);
             return {
               ...application,
               title: ad?.title ?? `Oglas #${application.advertisementId}`,

@@ -10,6 +10,10 @@ namespace JobLess.Advertisement.Application.Commands.Create
                 .GreaterThan(0)
                 .WithMessage("Kompanija je obavezna.");
 
+            RuleFor(x => x.CompanyEmail)
+                .NotEmpty()
+                .WithMessage("Kompanija nije autentifikovana.");
+
             RuleFor(x => x.Title)
                 .NotEmpty()
                 .WithMessage("Naziv posla je obavezan.")

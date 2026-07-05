@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Text;
+using FluentValidation;
 using JobLess.Advertisement.Application.Commands.Create;
 using JobLess.Advertisement.Application.Common.Behaviors;
 using JobLess.Advertisement.Application.Interfaces;
@@ -6,7 +7,9 @@ using JobLess.Advertisement.Infrastructure.Persistence;
 using JobLess.Shared.Domain.Common;
 using JobLess.Shared.Domain.Common.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +27,30 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+var jwtSection = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtSection["Key"]!);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSection["Issuer"],
+        ValidAudience = jwtSection["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -78,6 +105,9 @@ app.UseExceptionHandler(errorApp =>
 app.UseCors("AllowReactApp");
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

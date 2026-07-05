@@ -5,6 +5,7 @@ namespace JobLess.Advertisement.Domain.Entities;
 public class JobAdvertisement : BaseEntity
 {
     public int CompanyId { get; set; }
+    public string CompanyEmail { get; set; } = string.Empty;
     public required string Title { get; set; }
     public string? Description { get; set; }
     public required string Position { get; set; }

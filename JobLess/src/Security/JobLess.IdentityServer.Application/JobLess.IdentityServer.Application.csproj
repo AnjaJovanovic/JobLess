@@ -15,7 +15,7 @@
 
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JobLess.IdentityServer.Domain\JobLess.IdentityServer.Domain.csproj" />
     <ProjectReference Include="..\..\Shared\JobLess.Contracts\JobLess.Contracts.csproj" />
+    <ProjectReference Include="..\JobLess.IdentityServer.Domain\JobLess.IdentityServer.Domain.csproj" />
   </ItemGroup>
 </Project>

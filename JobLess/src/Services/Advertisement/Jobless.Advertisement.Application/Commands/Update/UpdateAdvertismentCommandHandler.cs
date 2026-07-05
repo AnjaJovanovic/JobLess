@@ -36,6 +36,14 @@ namespace JobLess.Advertisement.Application.Commands.Update
                 throw new InvalidOperationException();
             }
 
+            if (advertisement.CompanyEmail != command.CompanyEmail)
+            {
+                _validationExceptionThrower
+                    .ThrowValidationException("Id",
+                        "Nemate pravo da izmenite ovaj oglas.");
+                throw new InvalidOperationException();
+            }
+
             if (command.Title != null && command.Title != advertisement.Title)
                 advertisement.Title = command.Title;
 

@@ -1,3 +1,4 @@
+
 using JobLess.Contracts.Events;
 using JobLess.Notification.Application.Interfaces;
 using MassTransit;

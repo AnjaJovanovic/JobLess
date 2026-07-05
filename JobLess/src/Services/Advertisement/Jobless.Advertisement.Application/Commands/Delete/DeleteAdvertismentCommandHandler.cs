@@ -35,7 +35,14 @@ namespace JobLess.Advertisement.Application.Commands.Delete
                         "Oglas ne postoji je prethodno deaktiviran");
             }
 
-            advertisement!.IsActive = false;
+            if (advertisement!.CompanyEmail != command.CompanyEmail)
+            {
+                _validationExceptionThrower
+                    .ThrowValidationException("Id",
+                        "Nemate pravo da obrišete ovaj oglas.");
+            }
+
+            advertisement.IsActive = false;
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;

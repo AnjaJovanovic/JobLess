@@ -22,6 +22,7 @@ namespace JobLess.Advertisement.Application.Commands.Create
             var advertisement = new JobAdvertisement
             {
                 CompanyId = request.CompanyId,
+                CompanyEmail = request.CompanyEmail,
                 Title = request.Title,
                 Description = request.Description,
                 Position = request.Position,

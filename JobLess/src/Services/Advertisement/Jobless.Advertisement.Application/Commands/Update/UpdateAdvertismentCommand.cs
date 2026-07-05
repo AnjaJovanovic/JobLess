@@ -6,6 +6,7 @@ namespace JobLess.Advertisement.Application.Commands.Update
     public class UpdateAdvertisementCommand : IRequest<Unit>
     {
         public required int Id { get; set; }
+        public string CompanyEmail { get; set; } = string.Empty;
         public string? Title { get; set; }
         public string? Description { get; set; }
         public string? Position { get; set; }

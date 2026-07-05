@@ -117,7 +117,8 @@ export default function CompanyJobs({ onCreateNew }) {
         try {
             setLoading(true);
             const response = await fetch(
-                `/api/Advertisements/GetAdvertisementsForCompany?CompanyId=${companyId}`
+                `/api/Advertisements/GetAdvertisementsForCompany?CompanyId=${companyId}`,
+                { headers: { Authorization: `Bearer ${user?.accessToken}` } }
             );
             if (!response.ok) throw new Error(await parseError(response));
             const data = await response.json();
@@ -151,13 +152,19 @@ export default function CompanyJobs({ onCreateNew }) {
             if (trenutnoAktivan) {
                 const response = await fetch("/api/Advertisements", {
                     method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${user?.accessToken}`,
+                    },
                     body: JSON.stringify({ id }),
                 });
                 if (!response.ok) throw new Error(await parseError(response));
                 showToast("Oglas je deaktiviran.", "success");
             } else {
-                const response = await fetch(`/api/Advertisements/Activate?Id=${id}`, { method: "PUT" });
+                const response = await fetch(`/api/Advertisements/Activate?Id=${id}`, {
+                    method: "PUT",
+                    headers: { Authorization: `Bearer ${user?.accessToken}` },
+                });
                 if (!response.ok) throw new Error(await parseError(response));
                 showToast("Oglas je aktiviran.", "success");
             }
@@ -267,6 +274,7 @@ export default function CompanyJobs({ onCreateNew }) {
 }
 
 function EditJobModal({ job, onSave, onClose, showToast }) {
+    const { user } = useAuth();
     const [form, setForm] = useState({ ...job });
     const [saving, setSaving] = useState(false);
 
@@ -300,7 +308,10 @@ function EditJobModal({ job, onSave, onClose, showToast }) {
             };
             const response = await fetch("/api/Advertisements/Update", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${user?.accessToken}`,
+                },
                 body: JSON.stringify(command),
             });
             if (!response.ok) throw new Error(await parseError(response));

@@ -27,7 +27,7 @@ public class GetAllForComapnyQueryHandler : IRequestHandler<GetAllForCompanyQuer
         var advertisementsQuery = _context.JobAdvertisements
             .AsQueryable();
         var filteredQuery = advertisementsQuery
-              .Where(x => x.CompanyId == query.CompanyId);
+              .Where(x => x.CompanyId == query.CompanyId && x.CompanyEmail == query.CompanyEmail);
 
         var totalCount = await filteredQuery.CountAsync(cancellationToken);
 

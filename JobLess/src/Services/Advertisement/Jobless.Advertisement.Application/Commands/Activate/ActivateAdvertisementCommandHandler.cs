@@ -1,3 +1,4 @@
+﻿
 ﻿using JobLess.Advertisement.Application.Commands.Activate;
 using JobLess.Advertisement.Application.Interfaces;
 using JobLess.Advertisement.Application.Commands.Delete;
@@ -12,13 +13,13 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace JobLess.Advertisement.Application.Commands.Activate
 {
-    public class AktivirajOglasHandler
+    public class ActivateAdvertisementCommandHandler
         : IRequestHandler<ActivateAdvertisementCommand, bool>
     {
         private readonly IApplicationDbContext _context;
         private readonly IValidationExceptionThrower _validationExceptionThrower;
 
-        public AktivirajOglasHandler(
+        public ActivateAdvertisementCommandHandler(
             IApplicationDbContext context,
             IValidationExceptionThrower validationExceptionThrower)
         {
@@ -40,8 +41,15 @@ namespace JobLess.Advertisement.Application.Commands.Activate
                     .ThrowValidationException("Id",
                         "Oglas ne postoji je prethodno deaktiviran");
             }
-          
-            advertisement!.IsActive = true;
+
+            if (advertisement!.CompanyEmail != command.CompanyEmail)
+            {
+                _validationExceptionThrower
+                    .ThrowValidationException("Id",
+                        "Nemate pravo da aktivirate ovaj oglas.");
+            }
+
+            advertisement.IsActive = true;
 
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -13,6 +13,7 @@ namespace Jobless.Advertisement.Application.Queries.GetAllForCompany
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public required int CompanyId { get; set; }
+        public string CompanyEmail { get; set; } = string.Empty;
 
     }
 }
