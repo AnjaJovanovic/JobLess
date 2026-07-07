@@ -9,7 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.6" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />        
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.27">
             <PrivateAssets>all</PrivateAssets>
@@ -22,7 +21,6 @@
       <ProjectReference Include="..\JobLess.Client.Application\JobLess.Client.Application.csproj" />
       <ProjectReference Include="..\JobLess.Client.Domain\JobLess.Client.Domain.csproj" />
       <ProjectReference Include="..\JobLess.Client.Infrastructure\JobLess.Client.Infrastructure.csproj" />
-      <ProjectReference Include="..\..\..\Shared\JobLess.Contracts\JobLess.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,10 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import {
-  applyToJob,
-  getClientApplications,
   getClientProfileByEmail,
-  getCompanyById,
   getStoredClientId,
   storeClientId,
 } from "../../../api/clientApi";
@@ -100,9 +97,6 @@ export default function JobList() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [appliedAdIds, setAppliedAdIds] = useState(new Set());
-  const [applyingJobId, setApplyingJobId] = useState(null);
-  const [applyMessage, setApplyMessage] = useState(null);
 
   const PAGE_SIZE = 10;
 
@@ -139,16 +133,6 @@ export default function JobList() {
     resolveClientId();
     return () => { cancelled = true; };
   }, [email]);
-
-  useEffect(() => {
-    if (!clientId) return;
-
-    getClientApplications(clientId)
-      .then((items) => {
-        setAppliedAdIds(new Set(items.map((item) => item.advertisementId)));
-      })
-      .catch(() => {});
-  }, [clientId]);
 
   const fetchJobs = useCallback(async (activeFilters, activePage) => {
     try {
@@ -216,37 +200,6 @@ export default function JobList() {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") applyFilters();
-  };
-
-  const handleApply = async (job) => {
-    if (!clientId) {
-      setApplyMessage("Popunite profil pre prijave na oglas.");
-      return;
-    }
-
-    const jobId = job.id;
-    setApplyingJobId(jobId);
-    setApplyMessage(null);
-
-    try {
-      let companyEmail = "";
-      if (job.companyId) {
-        try {
-          const company = await getCompanyById(job.companyId);
-          companyEmail = company?.email ?? "";
-        } catch {
-          // notification will not be sent if company email can't be resolved
-        }
-      }
-
-      await applyToJob(clientId, jobId, companyEmail);
-      setAppliedAdIds((prev) => new Set(prev).add(jobId));
-      setApplyMessage("Uspešno ste se prijavili na oglas.");
-    } catch (err) {
-      setApplyMessage(err.message || "Greška pri prijavi.");
-    } finally {
-      setApplyingJobId(null);
-    }
   };
 
   return (
@@ -341,7 +294,6 @@ export default function JobList() {
       {/* STANJA */}
       {loading && <p className="job-empty">Učitavanje...</p>}
       {error && <p className="job-error">{error}</p>}
-      {applyMessage && <p className="job-apply-message">{applyMessage}</p>}
       {!loading && jobs.length === 0 && !error && (
         <p className="job-empty">Trenutno nema aktivnih oglasa.</p>
       )}
@@ -388,14 +340,9 @@ export default function JobList() {
               <button
                 className="btn-apply"
                 type="button"
-                disabled={!clientId || appliedAdIds.has(job.id) || applyingJobId === job.id}
-                onClick={() => handleApply(job)}
+                disabled
               >
-                {appliedAdIds.has(job.id)
-                  ? "Prijavljen"
-                  : applyingJobId === job.id
-                    ? "Prijavljivanje..."
-                    : "Prijavi se"}
+                Prijavi se
               </button>
             </div>
           </div>

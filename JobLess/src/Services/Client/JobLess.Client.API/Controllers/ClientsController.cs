@@ -1,16 +1,10 @@
-using JobLess.Client.Application.Clients.Commands.ApplyToJob;
 using JobLess.Client.Application.Clients.Commands.CreateClientProfile;
 using JobLess.Client.Application.Clients.Commands.UpdateClientProfile;
-using JobLess.Client.Application.Clients.Commands.UpdateJobApplicationStatus;
-using JobLess.Client.Application.Clients.Queries.GetApplicationsByAdvertisements;
-using JobLess.Client.Application.Clients.Queries.GetClientApplications;
 using JobLess.Client.Application.Clients.Queries.GetClientProfile;
 using JobLess.Client.Application.Clients.Queries.GetClientProfileByEmail;
 using JobLess.Client.Application.Models;
-using JobLess.Client.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
 namespace JobLess.Client.API.Controllers;
 
@@ -117,76 +111,4 @@ public class ClientsController(IMediator mediator) : ControllerBase
 
         return Ok(result);
     }
-
-    [HttpPost("{id:int}/applications")]
-    public async Task<ActionResult<JobApplicationDto>> ApplyToJob(
-        int id,
-        [FromBody] ApplyToJobRequest request,
-        CancellationToken cancellationToken)
-    {
-        try
-        {
-            var result = await mediator.Send(
-                new ApplyToJobCommand(id, request.AdvertisementId, request.CompanyEmail ?? string.Empty),
-                cancellationToken);
-
-            return CreatedAtAction(nameof(GetApplications), new { id }, result);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-    }
-
-    [HttpGet("{id:int}/applications")]
-    public async Task<ActionResult<IReadOnlyList<JobApplicationDto>>> GetApplications(
-        int id,
-        CancellationToken cancellationToken)
-    {
-        var result = await mediator.Send(new GetClientApplicationsQuery(id), cancellationToken);
-        return Ok(result);
-    }
-
-    [HttpGet("applications/by-advertisements")]
-    public async Task<ActionResult<IReadOnlyList<CompanyApplicationDto>>> GetApplicationsByAdvertisements(
-        [FromQuery] int[] advertisementIds,
-        [FromQuery] JobApplicationStatus? status,
-        CancellationToken cancellationToken)
-    {
-        var ids = advertisementIds ?? Array.Empty<int>();
-        var result = await mediator.Send(
-            new GetApplicationsByAdvertisementsQuery(ids, status),
-            cancellationToken);
-
-        return Ok(result);
-    }
-
-    [HttpPut("applications/{applicationId:int}/status")]
-    [Authorize(Roles = "Company")]
-    public async Task<ActionResult<JobApplicationDto>> UpdateApplicationStatus(
-        int applicationId,
-        [FromBody] UpdateApplicationStatusRequest request,
-        CancellationToken cancellationToken)
-    {
-        try
-        {
-            var result = await mediator.Send(
-                new UpdateJobApplicationStatusCommand(applicationId, request.Status),
-                cancellationToken);
-
-            return Ok(result);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-    }
 }
-
-public record ApplyToJobRequest(int AdvertisementId, string? CompanyEmail);
-
-public record UpdateApplicationStatusRequest(JobApplicationStatus Status);

@@ -3,8 +3,6 @@ using JobLess.Client.Application;
 using JobLess.Client.Application.Interfaces;
 using JobLess.Client.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using JobLess.Contracts.Events;
-using MassTransit;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -41,29 +39,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
-
-builder.Services.AddMassTransit(x =>
-{
-    x.UsingRabbitMq((ctx, cfg) =>
-    {
-        var rabbitHost = builder.Configuration["RabbitMq:Host"] ?? "localhost";
-        var rabbitUser = builder.Configuration["RabbitMq:Username"] ?? "guest";
-        var rabbitPass = builder.Configuration["RabbitMq:Password"] ?? "guest";
-
-        cfg.Host(rabbitHost, "/", h =>
-        {
-            h.Username(rabbitUser);
-            h.Password(rabbitPass);
-        });
-
-        cfg.Message<JobAppliedMessage>(m => m.SetEntityName("jobless-job-applied"));
-        cfg.Publish<JobAppliedMessage>(p => p.ExchangeType = "fanout");
-        
-        cfg.Message<ApplicationStatusChangedMessage>(m => m.SetEntityName("jobless-application-status-changed"));
-        cfg.Publish<ApplicationStatusChangedMessage>(p => p.ExchangeType = "fanout");
-    });
-});
-
 
 builder.Services.AddCors(options =>
 {
