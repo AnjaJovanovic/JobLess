@@ -188,6 +188,37 @@ services:
     networks:
       - jobless-network
     restart: on-failure
+  jobapplication-service:
+    build:
+      context: .
+      dockerfile: src/Services/JobApplication/JobLess.JobApplication.API/Dockerfile
+    container_name: jobless-jobapplication
+    ports:
+      - "5291:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: >-
+        Server=sql-server,1433;
+        Database=JobLessJobApplicationDb;
+        User Id=sa;
+        Password=JobLess_Pass123!;
+        TrustServerCertificate=True;
+        MultipleActiveResultSets=True;
+      Jwt__Key: "JobLess-Super-Secret-Key-2025-Must-Be-At-Least-32-Chars!"
+      Jwt__Issuer: "JobLess.Auth"
+      Jwt__Audience: "JobLess.Client"
+      RabbitMq__Host: "rabbitmq"
+      RabbitMq__Username: "guest"
+      RabbitMq__Password: "guest"
+    depends_on:
+      sql-server:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - jobless-network
+    restart: on-failure
   frontend:
     build:
       context: .
@@ -200,6 +231,7 @@ services:
       - client-service
       - advertisement-service
       - company-service
+      - jobapplication-service
     networks:
       - jobless-network
     restart: on-failure
