@@ -3,6 +3,7 @@ import { useAuth } from "../../../context/AuthContext";
 import {
   applyForJob,
   getClientProfileByEmail,
+  getMyJobApplications,
   storeClientId,
 } from "../../../api/clientApi";
 
@@ -97,6 +98,7 @@ export default function JobList() {
   const [totalCount, setTotalCount] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [candidateProfile, setCandidateProfile] = useState(null);
+  const [appliedAdvertisementIds, setAppliedAdvertisementIds] = useState(() => new Set());
   const [applyLoadingId, setApplyLoadingId] = useState(null);
   const [applyMessage, setApplyMessage] = useState("");
   const [applyError, setApplyError] = useState("");
@@ -131,6 +133,32 @@ export default function JobList() {
     return () => { cancelled = true; };
   }, [email]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadAppliedJobs() {
+      if (!user?.accessToken) {
+        if (!cancelled) setAppliedAdvertisementIds(new Set());
+        return;
+      }
+
+      try {
+        const applications = await getMyJobApplications(user.accessToken);
+        if (cancelled) return;
+
+        const ids = new Set(
+          applications.map((item) => Number(item.advertisementId)).filter(Boolean)
+        );
+        setAppliedAdvertisementIds(ids);
+      } catch {
+        if (!cancelled) setAppliedAdvertisementIds(new Set());
+      }
+    }
+
+    loadAppliedJobs();
+    return () => { cancelled = true; };
+  }, [user?.accessToken]);
+
   const handleApply = async (job) => {
     if (!user?.accessToken) {
       setApplyError("Morate biti prijavljeni da biste se prijavili na oglas.");
@@ -159,6 +187,7 @@ export default function JobList() {
         companyId: Number(companyId),
       }, user.accessToken);
 
+      setAppliedAdvertisementIds((prev) => new Set(prev).add(Number(job.id)));
       setApplyMessage(`Uspešno ste se prijavili na oglas #${job.id}.`);
     } catch (err) {
       setApplyError(err.message || "Prijava nije uspela.");
@@ -335,7 +364,12 @@ export default function JobList() {
 
       {/* KARTICE */}
       {!loading &&
-        jobs.map((job) => (
+        jobs.map((job) => {
+          const jobId = Number(job.id);
+          const isApplied = appliedAdvertisementIds.has(jobId);
+          const isApplying = applyLoadingId === job.id;
+
+          return (
           <div key={job.id} className="job-card-full">
             <div>
               <div className="jcf-header">
@@ -373,16 +407,17 @@ export default function JobList() {
 
             <div className="jcf-actions">
               <button
-                className="btn-apply"
+                className={`btn-apply${isApplied ? " btn-applied" : ""}`}
                 type="button"
                 onClick={() => handleApply(job)}
-                disabled={applyLoadingId === job.id}
+                disabled={isApplied || isApplying}
               >
-                {applyLoadingId === job.id ? "Prijava..." : "Prijavi se"}
+                {isApplying ? "Prijava..." : isApplied ? "Prijavljeni ste" : "Prijavi se"}
               </button>
             </div>
           </div>
-        ))}
+          );
+        })}
 
       {/* PAGINACIJA */}
       {!loading && totalPages > 1 && (

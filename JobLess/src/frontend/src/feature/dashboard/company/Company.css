@@ -488,6 +488,7 @@
   }
 
   .btn-view-profile,
+  .btn-action,
   .ar-actions .status-select-wrapper,
   .ar-actions .status-select {
     width: 100%;
@@ -554,6 +555,82 @@
 .candidate-profile-modal .profile-detail-row--multiline dd {
   white-space: pre-wrap;
   line-height: 1.6;
+}
+
+.application-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 99px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid;
+}
+
+.application-status-badge.status-pending {
+  color: var(--warning);
+  border-color: rgba(255, 181, 71, 0.3);
+  background: rgba(255, 181, 71, 0.1);
+}
+
+.application-status-badge.status-accepted {
+  color: var(--success);
+  border-color: rgba(61, 214, 140, 0.3);
+  background: rgba(61, 214, 140, 0.1);
+}
+
+.application-status-badge.status-rejected {
+  color: var(--danger);
+  border-color: rgba(255, 91, 107, 0.3);
+  background: rgba(255, 91, 107, 0.1);
+}
+
+.btn-action {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  line-height: 1;
+  border: 1px solid transparent;
+  color: #fff;
+  transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.btn-action:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.btn-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-action-accept {
+  background: var(--accent);
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.btn-action-accept:hover:not(:disabled) {
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.btn-action-reject {
+  background: var(--danger);
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.btn-action-reject:hover:not(:disabled) {
+  box-shadow: 0 4px 20px rgba(255, 91, 107, 0.28);
 }
 
 /* ─── STATUS SELECT ──────────────────────────────────── */

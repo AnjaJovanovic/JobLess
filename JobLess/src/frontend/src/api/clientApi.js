@@ -224,3 +224,48 @@ export async function getMyJobApplications(token) {
   const data = await response.json();
   return Array.isArray(data) ? data : [];
 }
+
+export async function getCompanyJobApplications(token, { advertisementId, status } = {}) {
+  const params = new URLSearchParams();
+  if (advertisementId) params.set("advertisementId", String(advertisementId));
+  if (status !== undefined && status !== null && status !== "") {
+    params.set("status", String(status));
+  }
+
+  const query = params.toString();
+  const url = query
+    ? `/api/job-applications/company?${query}`
+    : "/api/job-applications/company";
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(parseApiError(text, "Greška pri učitavanju prijava kandidata."));
+  }
+
+  const data = await response.json();
+  return Array.isArray(data) ? data : [];
+}
+
+export async function updateJobApplicationStatus(applicationId, status, token) {
+  const response = await fetch(`/api/job-applications/${applicationId}/status`, {
+    method: "PATCH",
+    headers: {
+      ...JSON_HEADERS,
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ status }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(parseApiError(text, "Greška pri promeni statusa prijave."));
+  }
+
+  return handleResponse(response);
+}
