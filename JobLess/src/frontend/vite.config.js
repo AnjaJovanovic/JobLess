@@ -32,6 +32,11 @@ export default defineConfig({
                 changeOrigin: true,
                 secure: false,
             },
+            "/api/job-applications": {
+                target: "http://localhost:5291",
+                changeOrigin: true,
+                secure: false,
+            },
             "/api": {
                 target: "http://localhost:5218",
                 changeOrigin: true,

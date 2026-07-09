@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import {
+  applyForJob,
   getClientProfileByEmail,
-  getStoredClientId,
   storeClientId,
 } from "../../../api/clientApi";
 
@@ -87,7 +87,6 @@ function buildQueryString(filters, page, pageSize) {
 export default function JobList() {
   const { user } = useAuth();
   const email = user?.email ?? "";
-  const [clientId, setClientId] = useState(() => getStoredClientId());
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -97,6 +96,10 @@ export default function JobList() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [candidateProfile, setCandidateProfile] = useState(null);
+  const [applyLoadingId, setApplyLoadingId] = useState(null);
+  const [applyMessage, setApplyMessage] = useState("");
+  const [applyError, setApplyError] = useState("");
 
   const PAGE_SIZE = 10;
 
@@ -104,14 +107,8 @@ export default function JobList() {
     let cancelled = false;
 
     async function resolveClientId() {
-      const storedId = getStoredClientId();
-      if (storedId) {
-        if (!cancelled) setClientId(storedId);
-        return;
-      }
-
       if (!email) {
-        if (!cancelled) setClientId(null);
+        if (!cancelled) setCandidateProfile(null);
         return;
       }
 
@@ -121,18 +118,54 @@ export default function JobList() {
 
         if (profile?.clientId) {
           storeClientId(profile.clientId);
-          setClientId(String(profile.clientId));
+          setCandidateProfile(profile);
         } else {
-          setClientId(null);
+          setCandidateProfile(null);
         }
       } catch {
-        if (!cancelled) setClientId(null);
+        if (!cancelled) setCandidateProfile(null);
       }
     }
 
     resolveClientId();
     return () => { cancelled = true; };
   }, [email]);
+
+  const handleApply = async (job) => {
+    if (!user?.accessToken) {
+      setApplyError("Morate biti prijavljeni da biste se prijavili na oglas.");
+      return;
+    }
+
+    if (!candidateProfile) {
+      setApplyError("Profil kandidata nije pronađen. Prvo sačuvajte profil.");
+      return;
+    }
+
+    const companyId = job.companyId ?? job.CompanyId;
+
+    if (!companyId) {
+      setApplyError("Nedostaju podaci o kompaniji za ovaj oglas.");
+      return;
+    }
+
+    try {
+      setApplyLoadingId(job.id);
+      setApplyError("");
+      setApplyMessage("");
+
+      await applyForJob({
+        advertisementId: Number(job.id),
+        companyId: Number(companyId),
+      }, user.accessToken);
+
+      setApplyMessage(`Uspešno ste se prijavili na oglas #${job.id}.`);
+    } catch (err) {
+      setApplyError(err.message || "Prijava nije uspela.");
+    } finally {
+      setApplyLoadingId(null);
+    }
+  };
 
   const fetchJobs = useCallback(async (activeFilters, activePage) => {
     try {
@@ -294,6 +327,8 @@ export default function JobList() {
       {/* STANJA */}
       {loading && <p className="job-empty">Učitavanje...</p>}
       {error && <p className="job-error">{error}</p>}
+      {!error && applyError && <p className="job-error">{applyError}</p>}
+      {!error && applyMessage && <p className="job-apply-message">{applyMessage}</p>}
       {!loading && jobs.length === 0 && !error && (
         <p className="job-empty">Trenutno nema aktivnih oglasa.</p>
       )}
@@ -340,9 +375,10 @@ export default function JobList() {
               <button
                 className="btn-apply"
                 type="button"
-                disabled
+                onClick={() => handleApply(job)}
+                disabled={applyLoadingId === job.id}
               >
-                Prijavi se
+                {applyLoadingId === job.id ? "Prijava..." : "Prijavi se"}
               </button>
             </div>
           </div>

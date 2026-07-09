@@ -131,7 +131,14 @@ export function applicationStatusLabel(status) {
 function parseApiError(text, fallback) {
   try {
     const parsed = JSON.parse(text);
-    return parsed.message ?? fallback;
+    if (parsed.message) return parsed.message;
+    if (parsed.title) return parsed.title;
+    if (Array.isArray(parsed.errors)) return parsed.errors.join(" ");
+    const firstValidation = Object.values(parsed.errors || {})[0];
+    if (Array.isArray(firstValidation) && firstValidation.length > 0) {
+      return firstValidation[0];
+    }
+    return fallback;
   } catch {
     return text || fallback;
   }
@@ -182,4 +189,38 @@ export async function markNotificationAsRead(notificationId, token) {
 
   const text = await response.text();
   throw new Error(parseApiError(text, "Greška pri označavanju obaveštenja."));
+}
+
+export async function applyForJob(payload, token) {
+  const response = await fetch("/api/job-applications", {
+    method: "POST",
+    headers: {
+      ...JSON_HEADERS,
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(parseApiError(text, "Greška pri prijavi na oglas."));
+  }
+
+  return handleResponse(response);
+}
+
+export async function getMyJobApplications(token) {
+  const response = await fetch("/api/job-applications/my", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(parseApiError(text, "Greška pri učitavanju prijava."));
+  }
+
+  const data = await response.json();
+  return Array.isArray(data) ? data : [];
 }

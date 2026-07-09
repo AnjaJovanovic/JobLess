@@ -5,6 +5,6 @@ namespace JobLess.JobApplication.Application.Interfaces;
 
 public interface IJobApplicationDbContext
 {
-    DbSet<JobApplicationEntity> JobApplications { get; set; }
+    DbSet<JobApplicationEntity> JobApplications { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
