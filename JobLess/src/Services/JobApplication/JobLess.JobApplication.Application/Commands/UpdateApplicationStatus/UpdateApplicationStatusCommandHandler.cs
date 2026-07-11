@@ -1,13 +1,15 @@
+using JobLess.Contracts.Events;
 using JobLess.JobApplication.Application.Interfaces;
 using JobLess.JobApplication.Application.Models;
 using JobLess.JobApplication.Domain.Enums;
 using JobLess.JobApplication.Domain.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using MassTransit;
 
 namespace JobLess.JobApplication.Application.Commands.UpdateApplicationStatus;
 
-public class UpdateApplicationStatusCommandHandler(IJobApplicationDbContext context)
+public class UpdateApplicationStatusCommandHandler(IJobApplicationDbContext context, IPublishEndpoint publishEndpoint)
     : IRequestHandler<UpdateApplicationStatusCommand, JobApplicationDto>
 {
     public async Task<JobApplicationDto> Handle(
@@ -45,6 +47,16 @@ public class UpdateApplicationStatusCommandHandler(IJobApplicationDbContext cont
         }
 
         await context.SaveChangesAsync(cancellationToken);
+
+        await publishEndpoint.Publish(new ApplicationStatusChangedMessage(
+            application.Id,
+            application.AdvertisementId,
+            application.CompanyId,
+            application.CandidateEmail,
+            application.CandidateFirstName,
+            application.CandidateLastName,
+            application.Status.ToString()), cancellationToken);
+
 
         return new JobApplicationDto(
             application.Id,

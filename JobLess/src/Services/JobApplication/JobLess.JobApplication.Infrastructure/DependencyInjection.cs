@@ -44,6 +44,10 @@ public static class DependencyInjection
                 cfg.Message<JobAppliedMessage>(
                     m => m.SetEntityName("jobless-job-applied"));
                 cfg.Publish<JobAppliedMessage>(p => p.ExchangeType = "fanout");
+
+                cfg.Message<ApplicationStatusChangedMessage>(
+                    m => m.SetEntityName("jobless-application-status-changed"));
+                cfg.Publish<ApplicationStatusChangedMessage>(p => p.ExchangeType = "fanout");
             });
         });
 

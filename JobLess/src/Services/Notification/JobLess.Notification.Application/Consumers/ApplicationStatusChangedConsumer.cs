@@ -23,8 +23,8 @@ public class ApplicationStatusChangedConsumer(
         var type = isAccepted ? NotificationType.ApplicationAccepted : NotificationType.ApplicationRejected;
         var title = isAccepted ? "Prijava prihvaćena" : "Prijava odbijena";
         var message = isAccepted
-            ? $"Čestitamo! Vaša prijava na oglas #{msg.AdvertisementId} je prihvaćena."
-            : $"Vaša prijava na oglas #{msg.AdvertisementId} je odbijena.";
+            ? $"Čestitamo! Vaša prijava na oglas je prihvaćena."
+            : $"Vaša prijava na oglas je odbijena.";
 
         var notification = new NotificationEntity
         {
@@ -34,14 +34,17 @@ public class ApplicationStatusChangedConsumer(
             Title = title,
             Message = message,
             IsRead = false,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            ApplicationId = msg.ApplicationId,
+            AdvertisementId = msg.AdvertisementId,
+            CompanyId = msg.CompanyId
         };
 
         context.Notifications.Add(notification);
         await context.SaveChangesAsync(consumeContext.CancellationToken);
 
         logger.LogInformation(
-            "Notification and email sent to candidate {CandidateEmail} for application {ApplicationId}",
-            msg.CandidateEmail, msg.ApplicationId);
+            "Notification sent to candidate {CandidateEmail}",
+            msg.CandidateEmail);
     }
 }
