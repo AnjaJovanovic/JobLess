@@ -110,3 +110,205 @@
   color: #9BA3B8;
   line-height: 1.5;
 }
+
+.notification-action-btn {
+  margin-top: 12px;
+  padding: 7px 16px;
+  border: 1px solid rgba(91, 139, 255, 0.4);
+  border-radius: 999px;
+  background: rgba(91, 139, 255, 0.1);
+  color: #5B8BFF;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.22s ease, border-color 0.22s ease;
+}
+
+.notification-action-btn:hover {
+  background: rgba(91, 139, 255, 0.2);
+  border-color: rgba(91, 139, 255, 0.7);
+}
+
+/* ─── Self-contained modal shell ───────────────────────────
+   Notifications is rendered from both the candidate and the
+   company dashboard, which each load their own scoped CSS file
+   (User.css / Company.css). Both define the same :root design
+   tokens but only Company.css defines .modal-overlay/.modal-box.
+   These rules are duplicated here so the popups render correctly
+   regardless of which dashboard mounts this component. */
+.notifications-container .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 24px;
+}
+
+.notifications-container .modal-box {
+  background: var(--surface, #23272F);
+  border: 1px solid var(--border-hover, rgba(255, 255, 255, 0.18));
+  border-radius: var(--radius, 12px);
+  padding: 32px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.notifications-container .modal-box.large {
+  max-width: 720px;
+}
+
+.notifications-container .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.notifications-container .modal-header h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-1, #F0F2F7);
+  margin: 0;
+}
+
+.notifications-container .modal-close {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  color: var(--text-2, #9BA3B8);
+  font-size: 16px;
+}
+
+.notifications-container .modal-close:hover {
+  color: var(--text-1, #F0F2F7);
+  background: var(--surface-2, #2A2F3A);
+}
+
+.notification-detail-loading {
+  color: var(--text-2, #9BA3B8);
+  font-size: 14px;
+}
+
+.notification-detail-error {
+  color: var(--danger, #FF5B6B);
+  font-size: 14px;
+}
+
+.notification-detail-section {
+  margin-bottom: 24px;
+}
+
+.notification-detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.notification-detail-section h4 {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent, #5B8BFF);
+  margin: 0 0 10px;
+}
+
+.notification-detail-highlight {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-1, #F0F2F7);
+  margin-bottom: 4px;
+}
+
+.notification-detail-sub {
+  font-size: 13px;
+  color: var(--text-2, #9BA3B8);
+}
+
+.notification-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notification-detail-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+}
+
+.notification-detail-row dt {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-2, #9BA3B8);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.notification-detail-row dd {
+  font-size: 14px;
+  color: var(--text-1, #F0F2F7);
+  word-break: break-word;
+}
+
+.notification-detail-modal .profile-view {
+  max-width: none;
+}
+
+.notification-detail-modal .profile-view-section {
+  margin-bottom: 20px;
+}
+
+.notification-detail-modal .profile-view-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent, #5B8BFF);
+  margin: 0 0 10px;
+}
+
+.notification-detail-modal .profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notification-detail-modal .profile-detail-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+}
+
+.notification-detail-modal .profile-detail-row dt {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-2, #9BA3B8);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.notification-detail-modal .profile-detail-row dd {
+  font-size: 14px;
+  color: var(--text-1, #F0F2F7);
+  word-break: break-word;
+}
+
+.notification-detail-modal .profile-detail-row--multiline dd {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}

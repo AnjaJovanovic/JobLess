@@ -151,6 +151,13 @@ export async function getCompanyById(companyId) {
   return data?.company ?? data ?? null;
 }
 
+export async function getAdvertisementById(advertisementId) {
+  const response = await fetch(`/api/Advertisements/One?id=${advertisementId}`);
+  if (!response.ok) return null;
+  const data = await response.json();
+  return data?.advertisement ?? data ?? null;
+}
+
 export async function refreshAccessToken(email, refreshToken) {
   const response = await fetch("/api/Auth/refresh", {
     method: "POST",

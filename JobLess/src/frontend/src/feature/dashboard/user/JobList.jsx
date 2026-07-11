@@ -100,7 +100,6 @@ export default function JobList() {
   const [candidateProfile, setCandidateProfile] = useState(null);
   const [appliedAdvertisementIds, setAppliedAdvertisementIds] = useState(() => new Set());
   const [applyLoadingId, setApplyLoadingId] = useState(null);
-  const [applyMessage, setApplyMessage] = useState("");
   const [applyError, setApplyError] = useState("");
 
   const PAGE_SIZE = 10;
@@ -180,7 +179,6 @@ export default function JobList() {
     try {
       setApplyLoadingId(job.id);
       setApplyError("");
-      setApplyMessage("");
 
       await applyForJob({
         advertisementId: Number(job.id),
@@ -188,7 +186,6 @@ export default function JobList() {
       }, user.accessToken);
 
       setAppliedAdvertisementIds((prev) => new Set(prev).add(Number(job.id)));
-      setApplyMessage(`Uspešno ste se prijavili na oglas #${job.id}.`);
     } catch (err) {
       setApplyError(err.message || "Prijava nije uspela.");
     } finally {
@@ -357,7 +354,6 @@ export default function JobList() {
       {loading && <p className="job-empty">Učitavanje...</p>}
       {error && <p className="job-error">{error}</p>}
       {!error && applyError && <p className="job-error">{applyError}</p>}
-      {!error && applyMessage && <p className="job-apply-message">{applyMessage}</p>}
       {!loading && jobs.length === 0 && !error && (
         <p className="job-empty">Trenutno nema aktivnih oglasa.</p>
       )}

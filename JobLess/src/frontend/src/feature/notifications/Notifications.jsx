@@ -1,7 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { getMyNotifications, markNotificationAsRead } from "../../api/clientApi";
+import NewApplicationModal from "./NewApplicationModal";
+import ApplicationStatusModal from "./ApplicationStatusModal";
 import "./Notifications.css";
+
+const NOTIFICATION_TYPE = {
+  WELCOME: 0,
+  NEW_APPLICATION: 1,
+  APPLICATION_ACCEPTED: 2,
+  APPLICATION_REJECTED: 3,
+};
 
 function formatDate(dateStr) {
   if (!dateStr) return "";
@@ -24,6 +33,7 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [detailNotification, setDetailNotification] = useState(null);
 
   const fetchNotifications = useCallback(async () => {
     if (!token) return;
@@ -53,6 +63,14 @@ export default function Notifications() {
     } catch (err) {
       console.error("Greška pri označavanju obaveštenja:", err.message);
     }
+  };
+
+  const handleShowDetails = (e, notification) => {
+    e.stopPropagation();
+    if (!notification.isRead) {
+      handleMarkAsRead(notification.id);
+    }
+    setDetailNotification(notification);
   };
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
@@ -89,9 +107,49 @@ export default function Notifications() {
             </div>
             <p className="notification-title">{n.title}</p>
             <p className="notification-message">{n.message}</p>
+
+            {n.type === NOTIFICATION_TYPE.NEW_APPLICATION && n.candidateId && n.advertisementId && (
+              <button
+                type="button"
+                className="notification-action-btn"
+                onClick={(e) => handleShowDetails(e, n)}
+              >
+                Prikaži prijavu
+              </button>
+            )}
+
+            {(n.type === NOTIFICATION_TYPE.APPLICATION_ACCEPTED ||
+              n.type === NOTIFICATION_TYPE.APPLICATION_REJECTED) &&
+              n.companyId &&
+              n.advertisementId && (
+                <button
+                  type="button"
+                  className="notification-action-btn"
+                  onClick={(e) => handleShowDetails(e, n)}
+                >
+                  Detaljnije
+                </button>
+              )}
           </li>
         ))}
       </ul>
+
+      {detailNotification?.type === NOTIFICATION_TYPE.NEW_APPLICATION && (
+        <NewApplicationModal
+          candidateId={detailNotification.candidateId}
+          advertisementId={detailNotification.advertisementId}
+          onClose={() => setDetailNotification(null)}
+        />
+      )}
+
+      {(detailNotification?.type === NOTIFICATION_TYPE.APPLICATION_ACCEPTED ||
+        detailNotification?.type === NOTIFICATION_TYPE.APPLICATION_REJECTED) && (
+        <ApplicationStatusModal
+          companyId={detailNotification.companyId}
+          advertisementId={detailNotification.advertisementId}
+          onClose={() => setDetailNotification(null)}
+        />
+      )}
     </div>
   );
 }
