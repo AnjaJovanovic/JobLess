@@ -40,9 +40,15 @@ export default function ProfileEdit({ profile, onSaved, onCancel }) {
     setError(null);
 
     try {
+      if (!user?.accessToken) {
+        setError("Niste prijavljeni. Prijavite se ponovo.");
+        return;
+      }
+
       const result = await updateClientProfile(
         profile.clientId,
         formToPayload(form, email, profile.clientId),
+        user.accessToken,
       );
       onSaved(result);
     } catch (err) {

@@ -109,13 +109,13 @@ export default function JobList() {
     let cancelled = false;
 
     async function resolveClientId() {
-      if (!email) {
+      if (!email || !user?.accessToken) {
         if (!cancelled) setCandidateProfile(null);
         return;
       }
 
       try {
-        const profile = await getClientProfileByEmail(email);
+        const profile = await getClientProfileByEmail(email, user.accessToken);
         if (cancelled) return;
 
         if (profile?.clientId) {
@@ -131,7 +131,7 @@ export default function JobList() {
 
     resolveClientId();
     return () => { cancelled = true; };
-  }, [email]);
+  }, [email, user?.accessToken]);
 
   useEffect(() => {
     let cancelled = false;

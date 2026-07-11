@@ -26,7 +26,7 @@ export default function ProfileSetup({ onCompleted }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email) {
+    if (!email || !user?.accessToken) {
       setError("Niste prijavljeni. Prijavite se ponovo.");
       return;
     }
@@ -41,7 +41,7 @@ export default function ProfileSetup({ onCompleted }) {
     setError(null);
 
     try {
-      const result = await createClientProfile(formToPayload(form, email));
+      const result = await createClientProfile(formToPayload(form, email), user.accessToken);
       storeClientId(result.clientId);
       onCompleted(result);
     } catch (err) {

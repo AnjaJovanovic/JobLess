@@ -1,5 +1,11 @@
 const JSON_HEADERS = { "Content-Type": "application/json" };
 
+function authHeaders(token) {
+  return token
+    ? { ...JSON_HEADERS, Authorization: `Bearer ${token}` }
+    : { ...JSON_HEADERS };
+}
+
 async function handleResponse(response) {
   if (!response.ok) {
     const text = await response.text();
@@ -10,37 +16,45 @@ async function handleResponse(response) {
   return response.json();
 }
 
-export async function getClientProfileByEmail(email) {
+export async function getClientProfileByEmail(email, token) {
   const encoded = encodeURIComponent(email);
-  const response = await fetch(`/api/clients/profile/by-email?email=${encoded}`);
+  const response = await fetch(`/api/clients/profile/by-email?email=${encoded}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   if (response.status === 404) return null;
 
   return handleResponse(response);
 }
 
-export async function createClientProfile(payload) {
+export async function createClientProfile(payload, token) {
   const response = await fetch("/api/clients/profile", {
     method: "PUT",
-    headers: JSON_HEADERS,
+    headers: authHeaders(token),
     body: JSON.stringify(payload),
   });
 
   return handleResponse(response);
 }
 
-export async function getClientProfile(clientId) {
-  const response = await fetch(`/api/clients/${clientId}/profile`);
+export async function getClientProfile(clientId, token) {
+  const response = await fetch(`/api/clients/${clientId}/profile`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   if (response.status === 404) return null;
 
   return handleResponse(response);
 }
 
-export async function updateClientProfile(clientId, payload) {
+export async function updateClientProfile(clientId, payload, token) {
   const response = await fetch(`/api/clients/${clientId}/profile`, {
     method: "PUT",
-    headers: JSON_HEADERS,
+    headers: authHeaders(token),
     body: JSON.stringify(payload),
   });
 
@@ -61,13 +75,13 @@ export function clearStoredClientId() {
   localStorage.removeItem(CLIENT_ID_KEY);
 }
 
-export async function syncClientProfileAfterAuth(email) {
-  if (!email) {
+export async function syncClientProfileAfterAuth(email, token) {
+  if (!email || !token) {
     clearStoredClientId();
     return null;
   }
 
-  const profile = await getClientProfileByEmail(email);
+  const profile = await getClientProfileByEmail(email, token);
 
   if (profile) {
     storeClientId(profile.clientId);
