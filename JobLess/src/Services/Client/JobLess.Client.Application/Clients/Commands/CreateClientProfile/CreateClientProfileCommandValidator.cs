@@ -21,7 +21,9 @@ public class CreateClientProfileCommandValidator : AbstractValidator<CreateClien
 
         RuleFor(x => x.PhoneNumber)
             .MaximumLength(30)
-            .When(x => x.PhoneNumber is not null);
+            .Matches(@"^\+[0-9][0-9\s\-()/]{5,18}$")
+            .When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber))
+            .WithMessage("Broj telefona mora biti u formatu +381 60 123 4567.");
 
         RuleFor(x => x.Gender)
             .IsInEnum();

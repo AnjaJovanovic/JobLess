@@ -107,7 +107,9 @@ export default function ProfileForm({
             placeholder="+381 60 123 4567"
             value={form.phoneNumber}
             onChange={onChange}
+            className={errors.phoneNumber ? "input-error" : ""}
           />
+          {errors.phoneNumber && <span className="field-error">{errors.phoneNumber}</span>}
         </div>
 
         <div className="form-group">

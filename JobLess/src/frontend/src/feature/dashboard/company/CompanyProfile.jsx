@@ -113,6 +113,18 @@ export default function CompanyProfile() {
         setSaving(true);
         setError(null);
 
+        const phonePattern = /^\+[0-9][0-9\s\-()/]{5,18}$/;
+        if (form.telefon?.trim() && !phonePattern.test(form.telefon.trim())) {
+            setError("Broj telefona mora biti u formatu +381 60 123 4567.");
+            setSaving(false);
+            return;
+        }
+        if (form.contactPhone?.trim() && !phonePattern.test(form.contactPhone.trim())) {
+            setError("Telefon kontakt osobe mora biti u formatu +381 60 123 4567.");
+            setSaving(false);
+            return;
+        }
+
         try {
             const response = await fetch("/api/Companies/Update", {
                 method: "PUT",

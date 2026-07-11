@@ -25,11 +25,15 @@ const v = {
     },
     phone: (val) => {
         if (!val) return "Telefon je obavezan.";
-        return /^[0-9+\s\-()/]{6,20}$/.test(val) ? null : "Unesite ispravan broj telefona.";
+        return /^\+[0-9][0-9\s\-()/]{5,18}$/.test(String(val).trim())
+            ? null
+            : "Broj telefona mora biti u formatu +381 60 123 4567.";
     },
     phoneOptional: (val) => {
         if (!val || !String(val).trim()) return null;
-        return /^[0-9+\s\-()/]{6,20}$/.test(val) ? null : "Unesite ispravan broj telefona.";
+        return /^\+[0-9][0-9\s\-()/]{5,18}$/.test(String(val).trim())
+            ? null
+            : "Broj telefona mora biti u formatu +381 60 123 4567.";
     },
     gender: (val) => (val === "" || val === null || val === undefined ? "Pol je obavezan." : null),
     password: (val) => {

@@ -72,6 +72,16 @@ namespace JobLess.Company.Application.Commands.Update
                 .MaximumLength(50)
                 .WithMessage("Pozicija kontakt osobe ne sme da ima više od 50 karaktera.");
 
+            RuleFor(x => x.ContactPersonPhoneNumber)
+                .Matches(@"^\+[0-9][0-9\s\-()/]{5,18}$")
+                .When(x => !string.IsNullOrWhiteSpace(x.ContactPersonPhoneNumber))
+                .WithMessage("Broj telefona mora biti u formatu +381 60 123 4567.");
+
+            RuleFor(x => x.PhoneNumber)
+                .Matches(@"^\+[0-9][0-9\s\-()/]{5,18}$")
+                .When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber))
+                .WithMessage("Broj telefona mora biti u formatu +381 60 123 4567.");
+
             RuleFor(x => x.PasswordHash)
                 .MinimumLength(8)
                 .WithMessage("Lozinka mora imati najmanje 8 karaktera.")

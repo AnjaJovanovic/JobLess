@@ -6,6 +6,7 @@ import {
   getMyJobApplications,
   storeClientId,
 } from "../../../api/clientApi";
+import { isProfileComplete } from "./profileUtils";
 
 
 
@@ -85,7 +86,7 @@ function buildQueryString(filters, page, pageSize) {
 
 
 
-export default function JobList() {
+export default function JobList({ profileComplete = false }) {
   const { user } = useAuth();
   const email = user?.email ?? "";
   const [jobs, setJobs] = useState([]);
@@ -102,6 +103,7 @@ export default function JobList() {
   const [applyLoadingId, setApplyLoadingId] = useState(null);
   const [applyError, setApplyError] = useState("");
 
+  const canApply = profileComplete || isProfileComplete(candidateProfile);
   const PAGE_SIZE = 10;
 
   useEffect(() => {
@@ -161,6 +163,11 @@ export default function JobList() {
   const handleApply = async (job) => {
     if (!user?.accessToken) {
       setApplyError("Morate biti prijavljeni da biste se prijavili na oglas.");
+      return;
+    }
+
+    if (!canApply) {
+      setApplyError("Prvo popunite obavezna polja na profilu da biste se prijavili na oglas.");
       return;
     }
 
@@ -267,6 +274,13 @@ export default function JobList() {
         Oglasi za posao
         {!loading && <span className="jobs-count">{totalCount} ukupno</span>}
       </h2>
+
+      {!canApply && (
+        <div className="profile-message profile-setup-notice" role="status">
+          Oglase možete pregledati, ali za prijavu prvo popunite obavezna polja na profilu
+          (ime, prezime, pol, datum rođenja, stepen obrazovanja i institucija).
+        </div>
+      )}
 
       {/* FILTER PANEL */}
       <div className="joblist-panel">
@@ -403,12 +417,23 @@ export default function JobList() {
 
             <div className="jcf-actions">
               <button
-                className={`btn-apply${isApplied ? " btn-applied" : ""}`}
+                className={`btn-apply${isApplied ? " btn-applied" : ""}${!canApply && !isApplied ? " btn-apply-disabled" : ""}`}
                 type="button"
                 onClick={() => handleApply(job)}
-                disabled={isApplied || isApplying}
+                disabled={isApplied || isApplying || !canApply}
+                title={
+                  !canApply && !isApplied
+                    ? "Popunite obavezna polja na profilu da biste se prijavili"
+                    : undefined
+                }
               >
-                {isApplying ? "Prijava..." : isApplied ? "Prijavljeni ste" : "Prijavi se"}
+                {isApplying
+                  ? "Prijava..."
+                  : isApplied
+                    ? "Prijavljeni ste"
+                    : !canApply
+                      ? "Popunite profil"
+                      : "Prijavi se"}
               </button>
             </div>
           </div>

@@ -96,16 +96,12 @@ export function validateProfileForm(form) {
     errors.gender = "Izaberite pol.";
   }
 
-  if (!form.dateOfBirth) {
-    errors.dateOfBirth = "Datum rođenja je obavezan.";
-  } else {
+  if (form.dateOfBirth) {
     const dob = new Date(form.dateOfBirth);
     if (Number.isNaN(dob.getTime()) || dob >= new Date()) {
       errors.dateOfBirth = "Unesite validan datum rođenja u prošlosti.";
     }
   }
-
-  if (!form.city.trim()) errors.city = "Grad je obavezan.";
 
   if (form.educationLevel === "" || form.educationLevel === null || form.educationLevel === undefined) {
     errors.educationLevel = "Stepen obrazovanja je obavezan.";
@@ -117,18 +113,14 @@ export function validateProfileForm(form) {
     errors.institutionName = "Naziv institucije je obavezan.";
   }
 
-  if (form.educationStartYear === "" || form.educationStartYear === null) {
-    errors.educationStartYear = "Godina početka je obavezna.";
-  } else {
+  if (form.educationStartYear !== "" && form.educationStartYear !== null) {
     const start = Number(form.educationStartYear);
     if (Number.isNaN(start) || start < 1950 || start > CURRENT_YEAR + 1) {
       errors.educationStartYear = `Unesite godinu između 1950 i ${CURRENT_YEAR + 1}.`;
     }
   }
 
-  if (form.educationEndYear === "" || form.educationEndYear === null) {
-    errors.educationEndYear = "Godina završetka je obavezna.";
-  } else {
+  if (form.educationEndYear !== "" && form.educationEndYear !== null) {
     const end = Number(form.educationEndYear);
     if (Number.isNaN(end) || end < 1950 || end > CURRENT_YEAR + 1) {
       errors.educationEndYear = `Unesite godinu između 1950 i ${CURRENT_YEAR + 1}.`;
@@ -138,6 +130,10 @@ export function validateProfileForm(form) {
   const startYear = Number(form.educationStartYear);
   const endYear = Number(form.educationEndYear);
   if (
+    form.educationStartYear !== "" &&
+    form.educationStartYear !== null &&
+    form.educationEndYear !== "" &&
+    form.educationEndYear !== null &&
     !errors.educationStartYear &&
     !errors.educationEndYear &&
     !Number.isNaN(startYear) &&
@@ -147,9 +143,7 @@ export function validateProfileForm(form) {
     errors.educationEndYear = "Godina završetka ne može biti pre godine početka.";
   }
 
-  if (form.yearsOfExperience === "" || form.yearsOfExperience === null) {
-    errors.yearsOfExperience = "Godine iskustva su obavezne.";
-  } else {
+  if (form.yearsOfExperience !== "" && form.yearsOfExperience !== null) {
     const years = Number(form.yearsOfExperience);
     if (Number.isNaN(years) || years < 0 || years > 60) {
       errors.yearsOfExperience = "Unesite broj između 0 i 60.";
@@ -158,6 +152,12 @@ export function validateProfileForm(form) {
 
   if (form.linkedInUrl.trim() && !/^https?:\/\/.+/i.test(form.linkedInUrl.trim())) {
     errors.linkedInUrl = "Unesite validan URL (npr. https://linkedin.com/in/...).";
+  }
+
+  if (form.phoneNumber.trim()) {
+    if (!/^\+[0-9][0-9\s\-()/]{5,18}$/.test(form.phoneNumber.trim())) {
+      errors.phoneNumber = "Broj telefona mora biti u formatu +381 60 123 4567.";
+    }
   }
 
   return errors;
@@ -170,14 +170,8 @@ export function isProfileComplete(profile) {
     profile.firstName?.trim() &&
     profile.lastName?.trim() &&
     (profile.gender === 0 || profile.gender === 1) &&
-    profile.dateOfBirth &&
-    profile.city?.trim() &&
     profile.educationLevel &&
-    profile.institutionName?.trim() &&
-    profile.educationStartYear &&
-    profile.educationEndYear &&
-    profile.yearsOfExperience !== null &&
-    profile.yearsOfExperience !== undefined,
+    profile.institutionName?.trim(),
   );
 }
 

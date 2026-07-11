@@ -102,6 +102,16 @@ namespace JobLess.Company.Application.Commands.Create
                 .EmailAddress().WithMessage("Unesite ispravnu email adresu.")
                 .MaximumLength(50).WithMessage("Email ne sme da ima više od 50 karaktera.");
 
+            RuleFor(x => x.ContactPersonPhoneNumber)
+                .NotEmpty().WithMessage("Telefon kontakt osobe je obavezno polje.")
+                .Matches(@"^\+[0-9][0-9\s\-()/]{5,18}$")
+                .WithMessage("Broj telefona mora biti u formatu +381 60 123 4567.");
+
+            RuleFor(x => x.PhoneNumber)
+                .Matches(@"^\+[0-9][0-9\s\-()/]{5,18}$")
+                .When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber))
+                .WithMessage("Broj telefona mora biti u formatu +381 60 123 4567.");
+
             RuleFor(x => x.PasswordHash)
                 .NotEmpty().WithMessage("Šifra je obavezno polje.")
                 .MinimumLength(8).WithMessage("Lozinka mora imati najmanje 8 karaktera.")

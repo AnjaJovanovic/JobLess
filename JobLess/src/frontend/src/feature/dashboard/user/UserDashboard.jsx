@@ -14,14 +14,13 @@ export default function UserDashboard() {
   const [profileComplete, setProfileComplete] = useState(false);
 
   const tabs = [
-    { key: "profile", label: "Moj profil", requiresProfile: false },
-    { key: "applications", label: "Moje prijave", requiresProfile: true },
-    { key: "jobs", label: "Oglasi", requiresProfile: false },
-    { key: "notifications", label: "Obaveštenja", requiresProfile: false },
+    { key: "profile", label: "Moj profil" },
+    { key: "applications", label: "Moje prijave" },
+    { key: "jobs", label: "Oglasi" },
+    { key: "notifications", label: "Obaveštenja" },
   ];
 
   const handleTabClick = (tab) => {
-    if (tab.requiresProfile && !profileComplete) return;
     setActiveTab(tab.key);
   };
 
@@ -33,21 +32,15 @@ export default function UserDashboard() {
   return (
     <div className="user-layout">
       <aside className="user-sidebar">
-        {tabs.map((tab) => {
-          const disabled = tab.requiresProfile && !profileComplete;
-
-          return (
-            <button
-              key={tab.key}
-              className={`${activeTab === tab.key ? "active" : ""}${disabled ? " disabled" : ""}`}
-              onClick={() => handleTabClick(tab)}
-              disabled={disabled}
-              title={disabled ? "Prvo popunite svoj profil" : undefined}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
+        {tabs.map((tab) => (
+          <button
+            key={tab.key}
+            className={activeTab === tab.key ? "active" : ""}
+            onClick={() => handleTabClick(tab)}
+          >
+            {tab.label}
+          </button>
+        ))}
         <button type="button" className="user-logout-btn" onClick={handleLogout}>
           Odjavi se
         </button>
@@ -57,8 +50,8 @@ export default function UserDashboard() {
         {activeTab === "profile" && (
           <Profile onProfileStatusChange={setProfileComplete} />
         )}
-        {activeTab === "applications" && profileComplete && <Applications />}
-        {activeTab === "jobs" && <JobList />}
+        {activeTab === "applications" && <Applications />}
+        {activeTab === "jobs" && <JobList profileComplete={profileComplete} />}
         {activeTab === "notifications" && <Notifications />}
       </main>
     </div>

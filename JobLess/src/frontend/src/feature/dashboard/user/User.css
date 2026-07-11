@@ -560,7 +560,15 @@
 
 .jcf-actions .btn-apply:disabled:not(.btn-applied) {
   opacity: 0.7;
-  cursor: wait;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.jcf-actions .btn-apply:disabled:not(.btn-applied):hover {
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
 }
 
 .jcf-expire { font-size: 11px; color: var(--text-3); }

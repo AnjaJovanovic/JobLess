@@ -25,7 +25,7 @@ namespace JobLess.Tests.Company
             ContactPersonFirstName = "Marko",
             ContactPersonLastName = "Markovic",
             ContactPersonPosition = "CEO",
-            ContactPersonPhoneNumber = "0601234567",
+            ContactPersonPhoneNumber = "+381 60 123 4567",
             Email = "test@kompanija.rs",
             PasswordHash = "Sifra1234",
             CompanySize = "1-10"

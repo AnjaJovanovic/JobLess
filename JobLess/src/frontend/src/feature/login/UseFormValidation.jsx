@@ -10,7 +10,9 @@ export const validators = {
     },
     phone: (value) => {
       if (!value) return "Telefon je obavezan.";
-      return /^[0-9+\s\-()]{6,20}$/.test(value) ? null : "Unesite ispravan broj telefona.";
+      return /^\+[0-9][0-9\s\-()/]{5,18}$/.test(String(value).trim())
+        ? null
+        : "Broj telefona mora biti u formatu +381 60 123 4567.";
     },
     password: (value) => {
       if (!value) return "Lozinka je obavezna.";
