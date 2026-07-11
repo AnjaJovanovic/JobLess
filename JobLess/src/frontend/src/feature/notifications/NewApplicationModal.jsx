@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 import { getClientProfile, getAdvertisementById } from "../../api/clientApi";
 import ProfileView from "../dashboard/user/ProfileView";
 
 export default function NewApplicationModal({ candidateId, advertisementId, onClose }) {
+  const { user } = useAuth();
   const [candidate, setCandidate] = useState(null);
   const [advertisement, setAdvertisement] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,9 +17,19 @@ export default function NewApplicationModal({ candidateId, advertisementId, onCl
       setLoading(true);
       setError(null);
 
+      if (!user?.accessToken) {
+        setError("Niste prijavljeni. Prijavite se ponovo.");
+        setCandidate(null);
+        setAdvertisement(null);
+        setLoading(false);
+        return;
+      }
+
       try {
         const [candidateProfile, ad] = await Promise.all([
-          candidateId ? getClientProfile(candidateId) : Promise.resolve(null),
+          candidateId
+            ? getClientProfile(candidateId, user.accessToken)
+            : Promise.resolve(null),
           advertisementId ? getAdvertisementById(advertisementId) : Promise.resolve(null),
         ]);
 
@@ -40,7 +52,7 @@ export default function NewApplicationModal({ candidateId, advertisementId, onCl
 
     load();
     return () => { cancelled = true; };
-  }, [candidateId, advertisementId]);
+  }, [candidateId, advertisementId, user?.accessToken]);
 
   return (
     <div
