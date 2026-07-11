@@ -43,4 +43,7 @@
   <Folder Name="/src/Tests/Advertisement/">
     <Project Path="src/Tests/JobLess.Tests.Advertisement/JobLess.Tests.Advertisement.csproj" Id="d2a103d7-7cb1-4495-9447-4bc46ac5e77a" />
   </Folder>
+  <Folder Name="/src/Tests/Security/">
+    <Project Path="src/Tests/JobLess.Tests.Security/JobLess.Tests.Security.csproj" />
+  </Folder>
 </Solution>

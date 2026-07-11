@@ -41,6 +41,7 @@ public sealed class RegisterUserCommandHandler : IRequestHandler<RegisterUserCom
         var refreshToken = _jwtService.GenerateRefreshToken();
         var refreshExpiry = DateTime.UtcNow.AddMinutes(10);
 
+        await _authService.SaveRefreshTokenAsync(user!, refreshToken, refreshExpiry);
 
         await _publishEndpoint.Publish(
             new UserRegisteredMessage(user!.Id, user.Email!, user.UserRole.ToString()),
