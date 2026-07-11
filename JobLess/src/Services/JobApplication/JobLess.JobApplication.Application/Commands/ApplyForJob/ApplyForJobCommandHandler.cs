@@ -1,15 +1,18 @@
+using JobLess.Contracts.Events;
 using JobLess.JobApplication.Application.Interfaces;
 using JobLess.JobApplication.Application.Models;
 using JobApplicationEntity = JobLess.JobApplication.Domain.Entities.JobApplication;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using MassTransit;
 
 namespace JobLess.JobApplication.Application.Commands.ApplyForJob;
 
 public class ApplyForJobCommandHandler(
     IJobApplicationDbContext context,
     IClientProfileLookupService clientProfileLookupService,
-    ICompanyLookupService companyLookupService)
+    ICompanyLookupService companyLookupService,
+    IPublishEndpoint publishEndpoint)
     : IRequestHandler<ApplyForJobCommand, JobApplicationDto>
 {
     public async Task<JobApplicationDto> Handle(ApplyForJobCommand request, CancellationToken cancellationToken)
@@ -46,6 +49,16 @@ public class ApplyForJobCommandHandler(
 
         context.JobApplications.Add(application);
         await context.SaveChangesAsync(cancellationToken);
+
+        await publishEndpoint.Publish(new JobAppliedMessage(
+            application.Id,
+            application.AdvertisementId,
+            application.CandidateId,
+            application.CandidateEmail,
+            application.CandidateFirstName,
+            application.CandidateLastName,
+            application.CompanyId,
+            application.CompanyEmail), cancellationToken);
 
         return new JobApplicationDto(
             application.Id,

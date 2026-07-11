@@ -73,7 +73,7 @@ namespace JobLess.Advertisement.API.Controllers
             return Ok(result);
         }
         [HttpGet("One")]
-        [Authorize(Roles = "Candidate")]
+        [AllowAnonymous]
         public async Task<ActionResult<GetOneAdvertisementResult>> GetOne([FromQuery] int id)
         {
             var query = new GetOneAdvertisementQuery

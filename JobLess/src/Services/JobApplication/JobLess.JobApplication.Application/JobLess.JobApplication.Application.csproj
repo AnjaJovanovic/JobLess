@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JobLess.JobApplication.Domain\JobLess.JobApplication.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Shared\JobLess.Contracts\JobLess.Contracts.csproj" />  
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="MassTransit" Version="8.3.6" />
     <PackageReference Include="MediatR" Version="14.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.27" />
   </ItemGroup>

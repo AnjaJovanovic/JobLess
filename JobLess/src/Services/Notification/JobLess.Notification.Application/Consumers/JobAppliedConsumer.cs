@@ -16,8 +16,8 @@ public class JobAppliedConsumer(
         var msg = consumeContext.Message;
 
         logger.LogInformation(
-            "JobAppliedConsumer: candidate {ClientEmail} applied to ad {AdvertisementId}, notifying {CompanyEmail}",
-            msg.ClientEmail, msg.AdvertisementId, msg.CompanyEmail);
+            "JobAppliedConsumer: candidate {ClientEmail} applied to ad, notifying {CompanyEmail}",
+            msg.ClientEmail, msg.CompanyEmail);
 
         var notification = new NotificationEntity
         {
@@ -25,9 +25,13 @@ public class JobAppliedConsumer(
             RecipientUserId = msg.CompanyEmail,
             Type = Domain.Enums.NotificationType.NewApplication,
             Title = "Nova prijava na oglas",
-            Message = $"Kandidat {msg.ClientFirstName} {msg.ClientLastName} ({msg.ClientEmail}) se prijavio na oglas #{msg.AdvertisementId}.",
+            Message = $"Kandidat {msg.ClientFirstName} {msg.ClientLastName} ({msg.ClientEmail}) se prijavio na vas oglas.",
             IsRead = false,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            ApplicationId = msg.ApplicationId,
+            AdvertisementId = msg.AdvertisementId,
+            CandidateId = msg.ClientId,
+            CompanyId = msg.CompanyId
         };
 
         context.Notifications.Add(notification);

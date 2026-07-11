@@ -11,4 +11,10 @@ public class Notification
     public bool IsRead { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public NotificationType Type { get; set; }
+    
+    // da bi forntend mogao da prikaze detaljnije notifikaciju
+    public int? ApplicationId { get; set; }
+    public int? AdvertisementId { get; set; }
+    public int? CandidateId { get; set; }
+    public int? CompanyId { get; set; }
 }
