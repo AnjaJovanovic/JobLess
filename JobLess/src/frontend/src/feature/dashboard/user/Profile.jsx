@@ -23,7 +23,7 @@ export default function Profile({ onProfileStatusChange }) {
       setMode("loading");
       setError(null);
 
-      if (!email) {
+      if (!email || !user?.accessToken) {
         if (!cancelled) {
           setProfile(null);
           setMode("setup");
@@ -33,7 +33,7 @@ export default function Profile({ onProfileStatusChange }) {
       }
 
       try {
-        const data = await getClientProfileByEmail(email);
+        const data = await getClientProfileByEmail(email, user.accessToken);
         if (cancelled) return;
 
         if (!data) {
@@ -58,7 +58,7 @@ export default function Profile({ onProfileStatusChange }) {
 
     loadProfile();
     return () => { cancelled = true; };
-  }, [email, onProfileStatusChange]);
+  }, [email, user?.accessToken, onProfileStatusChange]);
 
   const handleCompleted = (result) => {
     setProfile(result);

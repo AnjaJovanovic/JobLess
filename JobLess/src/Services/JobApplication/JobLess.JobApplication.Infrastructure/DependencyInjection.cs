@@ -17,6 +17,7 @@ public static class DependencyInjection
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IJobApplicationDbContext>(sp => sp.GetRequiredService<JobApplicationDbContext>());
+        services.AddHttpContextAccessor();
         services.AddHttpClient<IClientProfileLookupService, ClientProfileLookupService>(client =>
         {
             client.BaseAddress = new Uri(configuration["ServiceEndpoints:Client"] ?? "http://localhost:5263");

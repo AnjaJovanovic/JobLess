@@ -519,7 +519,7 @@ export default function Login() {
 
         if (isCandidateRole(data.role)) {
           login(data);
-          await syncClientProfileAfterAuth(data.email);
+          await syncClientProfileAfterAuth(data.email, data.accessToken);
           navigate("/user");
           return;
         }
@@ -548,7 +548,7 @@ export default function Login() {
           isActive: true,
           clientId: 0,
           createdAt: new Date().toISOString(),
-        });
+        }, data.accessToken);
 
         storeClientId(profile.clientId);
         navigate("/user");
