@@ -1,6 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { getMyNotifications, markNotificationAsRead } from "../../api/clientApi";
+import { useState } from "react";
+import { useNotifications } from "../../context/NotificationContext";
 import NewApplicationModal from "./NewApplicationModal";
 import ApplicationStatusModal from "./ApplicationStatusModal";
 import "./Notifications.css";
@@ -28,38 +27,12 @@ function typeLabel(type) {
 }
 
 export default function Notifications() {
-  const { user } = useAuth();
-  const token = user?.accessToken;
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { notifications, unreadCount, loading, error, markAsRead } = useNotifications();
   const [detailNotification, setDetailNotification] = useState(null);
 
-  const fetchNotifications = useCallback(async () => {
-    if (!token) return;
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await getMyNotifications(token);
-      setNotifications(data);
-    } catch (err) {
-      setError(err.message || "Nije moguće učitati obaveštenja.");
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    fetchNotifications();
-  }, [fetchNotifications]);
-
   const handleMarkAsRead = async (notificationId) => {
-    if (!token) return;
     try {
-      await markNotificationAsRead(notificationId, token);
-      setNotifications((prev) =>
-        prev.map((n) => (n.id === notificationId ? { ...n, isRead: true } : n))
-      );
+      await markAsRead(notificationId);
     } catch (err) {
       console.error("Greška pri označavanju obaveštenja:", err.message);
     }
@@ -72,8 +45,6 @@ export default function Notifications() {
     }
     setDetailNotification(notification);
   };
-
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
     <div className="notifications-container">

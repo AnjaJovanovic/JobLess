@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
+import { useNotifications } from "../../../context/NotificationContext";
 import CompanyProfile from "./CompanyProfile";
 import CreateJob from "./CreateJob";
 import CompanyJobs from "./CompanyJobs";
@@ -18,6 +19,7 @@ const tabs = [
 
 export default function CompanyDashboard() {
   const { logout } = useAuth();
+  const { unreadCount } = useNotifications();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("profile");
 
@@ -36,6 +38,9 @@ export default function CompanyDashboard() {
             onClick={() => setActiveTab(tab.key)}
           >
             {tab.label}
+             {tab.key === "notifications" && unreadCount > 0 && (
+              <span className="tab-unread-badge">{unreadCount}</span>
+            )}
           </button>
         ))}
         <button type="button" className="company-logout-btn" onClick={handleLogout}>
