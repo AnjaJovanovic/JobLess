@@ -1,4 +1,5 @@
 using JobLess.Contracts.Events;
+using JobLess.Grpc.Contracts;
 using JobLess.JobApplication.Application.Interfaces;
 using JobLess.JobApplication.Infrastructure.Persistence;
 using JobLess.JobApplication.Infrastructure.Services;
@@ -13,15 +14,20 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
         services.AddDbContext<JobApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IJobApplicationDbContext>(sp => sp.GetRequiredService<JobApplicationDbContext>());
         services.AddHttpContextAccessor();
-        services.AddHttpClient<IClientProfileLookupService, ClientProfileLookupService>(client =>
+
+        var clientBaseAddress = configuration["ServiceEndpoints:Client"] ?? "http://localhost:5264";
+        services.AddGrpcClient<ClientProfileGrpc.ClientProfileGrpcClient>(options =>
         {
-            client.BaseAddress = new Uri(configuration["ServiceEndpoints:Client"] ?? "http://localhost:5263");
+            options.Address = new Uri(clientBaseAddress);
         });
+        services.AddScoped<IClientProfileLookupService, ClientProfileGrpcLookupService>();
 
         services.AddHttpClient<ICompanyLookupService, CompanyLookupService>(client =>
         {

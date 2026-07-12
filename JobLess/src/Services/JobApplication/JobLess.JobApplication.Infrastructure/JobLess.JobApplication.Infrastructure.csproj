@@ -11,11 +11,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\JobLess.Contracts\JobLess.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Shared\JobLess.Grpc.Contracts\JobLess.Grpc.Contracts.csproj" />
     <ProjectReference Include="..\JobLess.JobApplication.Application\JobLess.JobApplication.Application.csproj" />
     <ProjectReference Include="..\JobLess.JobApplication.Domain\JobLess.JobApplication.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.66.0" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.27" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.27">

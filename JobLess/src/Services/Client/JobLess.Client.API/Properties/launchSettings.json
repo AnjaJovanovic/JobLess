@@ -6,9 +6,11 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5263",
+      "applicationUrl": "http://localhost:5263;http://localhost:5264",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "Kestrel__HttpPort": "5263",
+        "Kestrel__GrpcPort": "5264",
         "DOTNET_ROOT": "/usr/share/dotnet",
         "DOTNET_MULTILEVEL_LOOKUP": "1"
       }

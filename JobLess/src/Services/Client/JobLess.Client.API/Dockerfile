@@ -1,6 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
+COPY src/Shared/JobLess.Grpc.Contracts/ src/Shared/JobLess.Grpc.Contracts/
+
 COPY src/Services/Client/JobLess.Client.Domain/         src/Services/Client/JobLess.Client.Domain/
 COPY src/Services/Client/JobLess.Client.Application/    src/Services/Client/JobLess.Client.Application/
 COPY src/Services/Client/JobLess.Client.Infrastructure/ src/Services/Client/JobLess.Client.Infrastructure/
@@ -19,5 +21,6 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 EXPOSE 8080
+EXPOSE 8081
 
 ENTRYPOINT ["dotnet", "JobLess.Client.API.dll"]

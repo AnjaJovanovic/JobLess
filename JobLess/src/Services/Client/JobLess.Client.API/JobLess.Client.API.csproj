@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Grpc.AspNetCore" Version="2.66.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />        
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.27">
             <PrivateAssets>all</PrivateAssets>
@@ -18,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Shared\JobLess.Grpc.Contracts\JobLess.Grpc.Contracts.csproj" />
       <ProjectReference Include="..\JobLess.Client.Application\JobLess.Client.Application.csproj" />
       <ProjectReference Include="..\JobLess.Client.Domain\JobLess.Client.Domain.csproj" />
       <ProjectReference Include="..\JobLess.Client.Infrastructure\JobLess.Client.Infrastructure.csproj" />

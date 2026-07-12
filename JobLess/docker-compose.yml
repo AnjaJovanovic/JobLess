@@ -76,9 +76,11 @@ services:
     container_name: jobless-client
     ports:
       - "5263:8080"
+      - "5264:8081"
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
-      ASPNETCORE_URLS: "http://+:8080"
+      Kestrel__HttpPort: "8080"
+      Kestrel__GrpcPort: "8081"
       ConnectionStrings__DefaultConnection: >-
         Server=sql-server,1433;
         Database=JobLessClientDb;
@@ -213,7 +215,7 @@ services:
       RabbitMq__Host: "rabbitmq"
       RabbitMq__Username: "guest"
       RabbitMq__Password: "guest"
-      ServiceEndpoints__Client: "http://client-service:8080"
+      ServiceEndpoints__Client: "http://client-service:8081"
       ServiceEndpoints__Company: "http://company-service:8080"
       ServiceEndpoints__Advertisement: "http://advertisement-service:8080"
     depends_on:
