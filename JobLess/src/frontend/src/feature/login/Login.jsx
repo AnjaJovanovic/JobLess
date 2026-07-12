@@ -622,7 +622,7 @@ export default function Login() {
       <div className="auth-root">
         <div className="auth-card">
           <div className="auth-logo">
-            Job<span>Link</span>
+            Job<span>Less</span>
           </div>
           <p className="auth-subtitle">
             {isLogin ? "Dobrodošli nazad. Prijavite se da nastavite." : "Kreirajte nalog i pronađite svoju priliku."}

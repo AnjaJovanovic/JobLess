@@ -1,4 +1,5 @@
 using System.Text;
+using JobLess.Company.API.Grpc;
 using JobLess.Company.Application.Commands.Create;
 using JobLess.Company.Application.Common.Behaviors;
 using JobLess.Company.Application.Interfaces;
@@ -9,10 +10,26 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel((context, options) =>
+{
+    var httpPort = context.Configuration.GetValue("Kestrel:HttpPort", 8080);
+    var grpcPort = context.Configuration.GetValue("Kestrel:GrpcPort", 8081);
+
+    options.ListenAnyIP(httpPort, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+    });
+
+    options.ListenAnyIP(grpcPort, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http2;
+    });
+});
 
 builder.Services.AddCors(options =>
 {
@@ -37,23 +54,24 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtSection["Issuer"],
-        ValidAudience = jwtSection["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(key)
-    };
-});
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSection["Issuer"],
+            ValidAudience = jwtSection["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+    });
 
 builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
+builder.Services.AddGrpc();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg =>
@@ -61,14 +79,11 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateCompanyCommand>();
 
-
-
 builder.Services.AddTransient(
     typeof(IPipelineBehavior<,>),
     typeof(ValidationBehavior<,>));
 
 builder.Services.AddScoped<IValidationExceptionThrower, ValidationExceptionThrower>();
-
 
 var app = builder.Build();
 
@@ -77,9 +92,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
-
 
 app.UseExceptionHandler(errorApp =>
 {
@@ -97,17 +109,21 @@ app.UseExceptionHandler(errorApp =>
         }
         else
         {
-            var json = System.Text.Json.JsonSerializer.Serialize(new { errors = new[] { "Do�lo je do gre�ke." } });
+            var json = System.Text.Json.JsonSerializer.Serialize(new { errors = new[] { "Došlo je do greške." } });
             await context.Response.WriteAsync(json);
         }
     });
 });
 
+if (!app.Environment.IsDevelopment())
+    app.UseHttpsRedirection();
+
 app.UseCors("AllowReactApp");
-app.UseHttpsRedirection();
-app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
+app.MapGrpcService<CompanyProfileGrpcService>();
 
 using (var scope = app.Services.CreateScope())
 {

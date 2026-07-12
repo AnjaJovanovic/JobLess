@@ -29,10 +29,12 @@ public static class DependencyInjection
         });
         services.AddScoped<IClientProfileLookupService, ClientProfileGrpcLookupService>();
 
-        services.AddHttpClient<ICompanyLookupService, CompanyLookupService>(client =>
+        var companyBaseAddress = configuration["ServiceEndpoints:Company"] ?? "http://localhost:5288";
+        services.AddGrpcClient<CompanyProfileGrpc.CompanyProfileGrpcClient>(options =>
         {
-            client.BaseAddress = new Uri(configuration["ServiceEndpoints:Company"] ?? "http://localhost:5287");
+            options.Address = new Uri(companyBaseAddress);
         });
+        services.AddScoped<ICompanyLookupService, CompanyProfileGrpcLookupService>();
 
         services.AddHttpClient<IAdvertisementLookupService, AdvertisementLookupService>(client =>
         {

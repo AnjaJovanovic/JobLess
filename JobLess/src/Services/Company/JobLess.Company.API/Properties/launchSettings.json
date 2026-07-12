@@ -14,13 +14,15 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5287",
+      "applicationUrl": "http://localhost:5287;http://localhost:5288",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Kestrel__HttpPort": "5287",
+        "Kestrel__GrpcPort": "5288"
       }
     },
     "IIS Express": {
-      "commandName": "IISExpress",
+      "commandName": "IIS Express",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "JobLess.Grpc.Contracts";
+
+package companyprofile;
+
+service CompanyProfileGrpc {
+  rpc GetById (GetByIdRequest) returns (CompanyProfileReply);
+}
+
+message GetByIdRequest {
+  int32 company_id = 1;
+}
+
+message CompanyProfileReply {
+  bool found = 1;
+  int32 company_id = 2;
+  string email = 3;
+}
