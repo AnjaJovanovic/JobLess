@@ -66,8 +66,7 @@ export default function Applications() {
         applications.map((item) => (
           <div key={item.id} className="application-card">
             <div className="application-card-info">
-              <h4>Oglas #{item.advertisementId}</h4>
-              <p>Kandidat: {item.candidateFirstName} {item.candidateLastName}</p>
+              <h4>{item.advertisementTitle?.trim() || `Oglas #${item.advertisementId}`}</h4>
               <p>Kompanija: {item.companyEmail}</p>
               <div className="application-date">
                 Prijavljeno: {item.createdAt ? new Date(item.createdAt).toLocaleString("sr-RS") : "—"}

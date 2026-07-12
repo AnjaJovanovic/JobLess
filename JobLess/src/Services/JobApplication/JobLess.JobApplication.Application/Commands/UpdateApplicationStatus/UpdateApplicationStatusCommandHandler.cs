@@ -1,11 +1,12 @@
 using JobLess.Contracts.Events;
 using JobLess.JobApplication.Application.Interfaces;
+using JobLess.JobApplication.Application.Mappings;
 using JobLess.JobApplication.Application.Models;
 using JobLess.JobApplication.Domain.Enums;
 using JobLess.JobApplication.Domain.Exceptions;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using MassTransit;
 
 namespace JobLess.JobApplication.Application.Commands.UpdateApplicationStatus;
 
@@ -57,18 +58,6 @@ public class UpdateApplicationStatusCommandHandler(IJobApplicationDbContext cont
             application.CandidateLastName,
             application.Status.ToString()), cancellationToken);
 
-
-        return new JobApplicationDto(
-            application.Id,
-            application.AdvertisementId,
-            application.CandidateId,
-            application.CandidateEmail,
-            application.CandidateFirstName,
-            application.CandidateLastName,
-            application.CompanyId,
-            application.CompanyEmail,
-            (int)application.Status,
-            application.CreatedAt,
-            application.UpdatedAt);
+        return JobApplicationMapper.ToDto(application);
     }
 }

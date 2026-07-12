@@ -28,6 +28,11 @@ public static class DependencyInjection
             client.BaseAddress = new Uri(configuration["ServiceEndpoints:Company"] ?? "http://localhost:5287");
         });
 
+        services.AddHttpClient<IAdvertisementLookupService, AdvertisementLookupService>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["ServiceEndpoints:Advertisement"] ?? "http://localhost:5104");
+        });
+
         services.AddMassTransit(x =>
         {
             x.UsingRabbitMq((ctx, cfg) =>

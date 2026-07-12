@@ -7,6 +7,7 @@ public class JobApplication
 {
     public int Id { get; private set; }
     public int AdvertisementId { get; private set; }
+    public string AdvertisementTitle { get; private set; } = string.Empty;
     public int CandidateId { get; private set; }
     public string CandidateEmail { get; private set; } = string.Empty;
     public string CandidateFirstName { get; private set; } = string.Empty;
@@ -24,6 +25,7 @@ public class JobApplication
 
     public static JobApplication Create(
         int advertisementId,
+        string advertisementTitle,
         int candidateId,
         string candidateEmail,
         string candidateFirstName,
@@ -31,6 +33,7 @@ public class JobApplication
         int companyId,
         string companyEmail)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(advertisementTitle);
         ArgumentException.ThrowIfNullOrWhiteSpace(candidateEmail);
         ArgumentException.ThrowIfNullOrWhiteSpace(candidateFirstName);
         ArgumentException.ThrowIfNullOrWhiteSpace(candidateLastName);
@@ -46,6 +49,7 @@ public class JobApplication
         return new JobApplication
         {
             AdvertisementId = advertisementId,
+            AdvertisementTitle = advertisementTitle.Trim(),
             CandidateId = candidateId,
             CandidateEmail = candidateEmail.Trim(),
             CandidateFirstName = candidateFirstName.Trim(),

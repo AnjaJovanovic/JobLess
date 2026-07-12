@@ -3,6 +3,7 @@ namespace JobLess.JobApplication.Application.Models;
 public record JobApplicationDto(
     int Id,
     int AdvertisementId,
+    string AdvertisementTitle,
     int CandidateId,
     string CandidateEmail,
     string CandidateFirstName,

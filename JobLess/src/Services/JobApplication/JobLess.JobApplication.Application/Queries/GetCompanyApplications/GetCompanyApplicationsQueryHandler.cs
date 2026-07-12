@@ -1,11 +1,14 @@
 using JobLess.JobApplication.Application.Interfaces;
+using JobLess.JobApplication.Application.Mappings;
 using JobLess.JobApplication.Application.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobLess.JobApplication.Application.Queries.GetCompanyApplications;
 
-public class GetCompanyApplicationsQueryHandler(IJobApplicationDbContext context)
+public class GetCompanyApplicationsQueryHandler(
+    IJobApplicationDbContext context,
+    IAdvertisementLookupService advertisementLookupService)
     : IRequestHandler<GetCompanyApplicationsQuery, IReadOnlyList<JobApplicationDto>>
 {
     public async Task<IReadOnlyList<JobApplicationDto>> Handle(
@@ -28,20 +31,22 @@ public class GetCompanyApplicationsQueryHandler(IJobApplicationDbContext context
             query = query.Where(x => x.Status == request.Status.Value);
         }
 
-        return await query
+        var applications = await query
             .OrderByDescending(x => x.CreatedAt)
-            .Select(x => new JobApplicationDto(
-                x.Id,
-                x.AdvertisementId,
-                x.CandidateId,
-                x.CandidateEmail,
-                x.CandidateFirstName,
-                x.CandidateLastName,
-                x.CompanyId,
-                x.CompanyEmail,
-                (int)x.Status,
-                x.CreatedAt,
-                x.UpdatedAt))
             .ToListAsync(cancellationToken);
+
+        var missingTitleIds = applications
+            .Where(x => string.IsNullOrWhiteSpace(x.AdvertisementTitle))
+            .Select(x => x.AdvertisementId);
+
+        var titles = await advertisementLookupService.GetTitlesByIdsAsync(missingTitleIds, cancellationToken);
+
+        return applications
+            .Select(x => JobApplicationMapper.ToDto(
+                x,
+                string.IsNullOrWhiteSpace(x.AdvertisementTitle)
+                    ? titles.GetValueOrDefault(x.AdvertisementId)
+                    : null))
+            .ToList();
     }
 }

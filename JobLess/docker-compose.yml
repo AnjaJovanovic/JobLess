@@ -215,6 +215,7 @@ services:
       RabbitMq__Password: "guest"
       ServiceEndpoints__Client: "http://client-service:8080"
       ServiceEndpoints__Company: "http://company-service:8080"
+      ServiceEndpoints__Advertisement: "http://advertisement-service:8080"
     depends_on:
       sql-server:
         condition: service_healthy
@@ -223,6 +224,8 @@ services:
       client-service:
         condition: service_started
       company-service:
+        condition: service_started
+      advertisement-service:
         condition: service_started
     networks:
       - jobless-network

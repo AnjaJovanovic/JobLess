@@ -113,7 +113,7 @@ export default function JobApplications() {
               <div className="ar-info">
                 <h4>{candidateName}</h4>
                 <p>{item.candidateEmail}</p>
-                <p>Oglas #{item.advertisementId}</p>
+                <p>{item.advertisementTitle?.trim() || `Oglas #${item.advertisementId}`}</p>
                 <p>
                   Prijavljeno: {item.createdAt ? new Date(item.createdAt).toLocaleString("sr-RS") : "—"}
                 </p>

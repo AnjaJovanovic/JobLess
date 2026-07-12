@@ -28,6 +28,7 @@ public class JobApplicationDbContext : DbContext, IJobApplicationDbContext
             entity.Property(x => x.CandidateFirstName).HasMaxLength(100).IsRequired();
             entity.Property(x => x.CandidateLastName).HasMaxLength(100).IsRequired();
             entity.Property(x => x.CompanyEmail).HasMaxLength(256).IsRequired();
+            entity.Property(x => x.AdvertisementTitle).HasMaxLength(200).IsRequired();
             entity.Property(x => x.Status)
                 .HasConversion<int>()
                 .IsRequired();
