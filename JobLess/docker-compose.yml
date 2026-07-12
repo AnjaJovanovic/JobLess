@@ -230,6 +230,27 @@ services:
     networks:
       - jobless-network
     restart: on-failure
+  api-gateway:
+    build:
+      context: .
+      dockerfile: src/ApiGateway/JobLess.ApiGateway.API/Dockerfile
+    container_name: jobless-api-gateway
+    ports:
+      - "5000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+    depends_on:
+      - auth-service
+      - client-service
+      - advertisement-service
+      - company-service
+      - notification-service
+      - jobapplication-service
+    networks:
+      - jobless-network
+    restart: on-failure
+
   frontend:
     build:
       context: .
@@ -238,11 +259,7 @@ services:
     ports:
       - "5173:80"
     depends_on:
-      - auth-service
-      - client-service
-      - advertisement-service
-      - company-service
-      - jobapplication-service
+      - api-gateway
     networks:
       - jobless-network
     restart: on-failure
