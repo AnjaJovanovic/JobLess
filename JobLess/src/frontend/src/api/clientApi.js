@@ -1,5 +1,16 @@
+/**
+ * API klijent za JobLess frontend.
+ * Profil kandidata, oglasi, prijave i notifikacije preko Api Gateway-a.
+ * @module api/clientApi
+ */
+
 const JSON_HEADERS = { "Content-Type": "application/json" };
 
+/**
+ * Headeri sa Bearer tokenom.
+ * @param {string} [token]
+ * @returns {Record<string, string>}
+ */
 function authHeaders(token) {
   return token
     ? { ...JSON_HEADERS, Authorization: `Bearer ${token}` }
@@ -16,6 +27,12 @@ async function handleResponse(response) {
   return response.json();
 }
 
+/**
+ * Učitava profil kandidata po emailu.
+ * @param {string} email
+ * @param {string} token
+ * @returns {Promise<object|null>}
+ */
 export async function getClientProfileByEmail(email, token) {
   const encoded = encodeURIComponent(email);
   const response = await fetch(`/api/clients/profile/by-email?email=${encoded}`, {
@@ -182,6 +199,11 @@ export async function refreshAccessToken(email, refreshToken) {
   return response.json();
 }
 
+/**
+ * Lista notifikacija ulogovanog korisnika.
+ * @param {string} token
+ * @returns {Promise<Array>}
+ */
 export async function getMyNotifications(token) {
   const response = await fetch("/api/notifications/me", {
     headers: {
@@ -212,6 +234,12 @@ export async function markNotificationAsRead(notificationId, token) {
   throw new Error(parseApiError(text, "Greška pri označavanju obaveštenja."));
 }
 
+/**
+ * Kandidat se prijavljuje na oglas.
+ * @param {{ advertisementId: number, companyId: number }} payload
+ * @param {string} token
+ * @returns {Promise<object>}
+ */
 export async function applyForJob(payload, token) {
   const response = await fetch("/api/job-applications", {
     method: "POST",
@@ -230,6 +258,11 @@ export async function applyForJob(payload, token) {
   return handleResponse(response);
 }
 
+/**
+ * Prijave ulogovanog kandidata.
+ * @param {string} token
+ * @returns {Promise<Array>}
+ */
 export async function getMyJobApplications(token) {
   const response = await fetch("/api/job-applications/my", {
     headers: {
@@ -246,6 +279,14 @@ export async function getMyJobApplications(token) {
   return Array.isArray(data) ? data : [];
 }
 
+/**
+ * Prijave za oglase kompanije (opciono filter po oglasu/statusu).
+ * @param {string} token
+ * @param {Object} [filters]
+ * @param {number} [filters.advertisementId]
+ * @param {number} [filters.status]
+ * @returns {Promise<Array>}
+ */
 export async function getCompanyJobApplications(token, { advertisementId, status } = {}) {
   const params = new URLSearchParams();
   if (advertisementId) params.set("advertisementId", String(advertisementId));
@@ -273,6 +314,13 @@ export async function getCompanyJobApplications(token, { advertisementId, status
   return Array.isArray(data) ? data : [];
 }
 
+/**
+ * Kompanija menja status prijave (accept/reject).
+ * @param {number} applicationId
+ * @param {number} status 1=Accepted, 2=Rejected
+ * @param {string} token
+ * @returns {Promise<object>}
+ */
 export async function updateJobApplicationStatus(applicationId, status, token) {
   const response = await fetch(`/api/job-applications/${applicationId}/status`, {
     method: "PATCH",
