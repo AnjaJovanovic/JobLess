@@ -1,6 +1,7 @@
 using FluentAssertions;
 using JobLess.Company.Application.Interfaces;
 using JobLess.Company.Application.Queries.GetAll;
+using JobLess.Company.Domain.Enums;
 using MockQueryable.Moq;
 using Moq;
 using System;
@@ -29,14 +30,14 @@ namespace JobLess.Tests.Company
             Email = $"kompanija{id}@test.rs",
             TaxIdentificationNumber = $"{id:000000000}",
             RegistrationNumber = $"{id:00000000}",
-            Industry = "Informacione tehnologije",
+            Industry = Industry.InformationTechnology,
             Location = "Beograd",
             ContactPersonFirstName = "Marko",
             ContactPersonLastName = "Markovic",
             ContactPersonPosition = "CEO",
             ContactPersonPhoneNumber = "0601234567",
             PasswordHash = "Sifra1234",
-            CompanySize = "1-10",
+            CompanySize = CompanySize.OneToTen,
             IsActive = isActive,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow

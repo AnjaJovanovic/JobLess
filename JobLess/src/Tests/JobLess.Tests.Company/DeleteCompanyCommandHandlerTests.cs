@@ -1,6 +1,7 @@
 using FluentAssertions;
 using JobLess.Company.Application.Commands.Delete;
 using JobLess.Company.Application.Interfaces;
+using JobLess.Company.Domain.Enums;
 using MockQueryable.Moq;
 using Moq;
 using System;
@@ -16,6 +17,8 @@ namespace JobLess.Tests.Company
         private readonly Mock<IApplicationDbContext> _contextMock;
         private readonly DeleteCompanyCommandHandler _handler;
 
+        private const string CompanyEmailValue = "test@kompanija.rs";
+
         public DeleteCompanyCommandHandlerTests()
         {
             _contextMock = new Mock<IApplicationDbContext>();
@@ -26,17 +29,17 @@ namespace JobLess.Tests.Company
         {
             Id = id,
             Name = "Test Kompanija",
-            Email = "test@kompanija.rs",
+            Email = CompanyEmailValue,
             TaxIdentificationNumber = "123456789",
             RegistrationNumber = "12345678",
-            Industry = "Informacione tehnologije",
+            Industry = Industry.InformationTechnology,
             Location = "Beograd",
             ContactPersonFirstName = "Marko",
             ContactPersonLastName = "Markovic",
             ContactPersonPosition = "CEO",
             ContactPersonPhoneNumber = "0601234567",
             PasswordHash = "Sifra1234",
-            CompanySize = "1-10",
+            CompanySize = CompanySize.OneToTen,
             IsActive = isActive,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
@@ -58,7 +61,7 @@ namespace JobLess.Tests.Company
             var company = CreateCompany(1, isActive: true);
             SetupDbSet(new List<CompanyEntity> { company });
 
-            var command = new DeleteCompanyCommand { Id = 1 };
+            var command = new DeleteCompanyCommand { Id = 1, CompanyEmail = CompanyEmailValue };
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -77,7 +80,7 @@ namespace JobLess.Tests.Company
             var oldUpdatedAt = company.UpdatedAt;
             SetupDbSet(new List<CompanyEntity> { company });
 
-            var command = new DeleteCompanyCommand { Id = 1 };
+            var command = new DeleteCompanyCommand { Id = 1, CompanyEmail = CompanyEmailValue };
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
@@ -92,7 +95,7 @@ namespace JobLess.Tests.Company
             // Arrange
             SetupDbSet(new List<CompanyEntity>());
 
-            var command = new DeleteCompanyCommand { Id = 999 };
+            var command = new DeleteCompanyCommand { Id = 999, CompanyEmail = CompanyEmailValue };
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -109,13 +112,31 @@ namespace JobLess.Tests.Company
             var company = CreateCompany(1, isActive: false);
             SetupDbSet(new List<CompanyEntity> { company });
 
-            var command = new DeleteCompanyCommand { Id = 1 };
+            var command = new DeleteCompanyCommand { Id = 1, CompanyEmail = CompanyEmailValue };
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             result.Should().BeFalse();
+            _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Handle_Should_Return_False_When_CompanyEmail_Does_Not_Match()
+        {
+            // Arrange
+            var company = CreateCompany(1, isActive: true);
+            SetupDbSet(new List<CompanyEntity> { company });
+
+            var command = new DeleteCompanyCommand { Id = 1, CompanyEmail = "pogresan@email.rs" };
+
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            result.Should().BeFalse();
+            company.IsActive.Should().BeTrue();
             _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
     }

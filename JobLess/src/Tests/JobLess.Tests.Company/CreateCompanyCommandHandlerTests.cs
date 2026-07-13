@@ -1,8 +1,11 @@
 using FluentAssertions;
 using JobLess.Company.Application.Commands.Create;
+using JobLess.Company.Application.Common.Helpers;
 using JobLess.Company.Application.Interfaces;
-using JobLess.Company.Domain.Company;
+using JobLess.Company.Domain.Entities;
+using JobLess.Company.Domain.Enums;
 using CompanyEntity = JobLess.Company.Domain.Entities.Company;
+using JobLess.Shared.Domain.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
 using Moq;
@@ -16,12 +19,14 @@ namespace JobLess.Tests.Company
     public class CreateCompanyCommandHandlerTests
     {
         private readonly Mock<IApplicationDbContext> _contextMock;
+        private readonly Mock<IValidationExceptionThrower> _validationThrowerMock;
         private readonly CreateCompanyCommandHandler _handler;
 
         public CreateCompanyCommandHandlerTests()
         {
             _contextMock = new Mock<IApplicationDbContext>();
-            _handler = new CreateCompanyCommandHandler(_contextMock.Object);
+            _validationThrowerMock = new Mock<IValidationExceptionThrower>();
+            _handler = new CreateCompanyCommandHandler(_contextMock.Object, _validationThrowerMock.Object);
         }
 
         private CreateCompanyCommand ValidCommand() => new CreateCompanyCommand
@@ -38,7 +43,7 @@ namespace JobLess.Tests.Company
             ContactPersonPhoneNumber = "0601234567",
             Email = "test@kompanija.rs",
             PasswordHash = "Sifra1234",
-            CompanySize = "1-10"
+            CompanySize = CompanySize.OneToTen
         };
 
         private void SetupEmptyCompanyDbSet()
@@ -59,6 +64,13 @@ namespace JobLess.Tests.Company
         {
             var dbSetMock = companies.AsQueryable().BuildMockDbSet();
             _contextMock.Setup(c => c.Companies).Returns(dbSetMock.Object);
+        }
+
+        private void SetupThrowerToThrow(string expectedMessage)
+        {
+            _validationThrowerMock
+                .Setup(v => v.ThrowValidationException("Id", expectedMessage))
+                .Throws(new Exception(expectedMessage));
         }
 
         [Fact]
@@ -84,7 +96,7 @@ namespace JobLess.Tests.Company
             capturedCompany.Should().NotBeNull();
             capturedCompany!.Name.Should().Be(command.Name);
             capturedCompany.Email.Should().Be(command.Email);
-            capturedCompany.Industry.Should().Be(command.Industry);
+            capturedCompany.Industry.Should().Be(IndustryHelper.GetIndustry(command.Industry));
             capturedCompany.IsActive.Should().BeTrue();
             capturedCompany.TaxIdentificationNumber.Should().Be(command.TaxIdentificationNumber);
             capturedCompany.RegistrationNumber.Should().Be(command.RegistrationNumber);
@@ -125,18 +137,21 @@ namespace JobLess.Tests.Company
                     Email = command.Email, // isti email
                     TaxIdentificationNumber = "999999999",
                     RegistrationNumber = "99999999",
-                    Industry = "Ostalo",
+                    Industry = Industry.Other,
                     Location = "Novi Sad",
                     ContactPersonFirstName = "Ana",
                     ContactPersonLastName = "Anic",
                     ContactPersonPosition = "HR",
                     ContactPersonPhoneNumber = "0611111111",
                     PasswordHash = "Hash1234",
-                    CompanySize = "1-10",
+                    CompanySize = CompanySize.OneToTen,
                     IsActive = true
                 }
             };
             SetupCompanyDbSetWithExisting(existingCompanies);
+
+            var expectedMessage = "Kompanija sa unetim PIB-om, matičnim brojem ili email adresom već postoji.";
+            SetupThrowerToThrow(expectedMessage);
 
             // Act
             var act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -160,18 +175,21 @@ namespace JobLess.Tests.Company
                     Email = "drugi@email.rs",
                     TaxIdentificationNumber = command.TaxIdentificationNumber, // isti PIB
                     RegistrationNumber = "99999999",
-                    Industry = "Ostalo",
+                    Industry = Industry.Other,
                     Location = "Novi Sad",
                     ContactPersonFirstName = "Ana",
                     ContactPersonLastName = "Anic",
                     ContactPersonPosition = "HR",
                     ContactPersonPhoneNumber = "0611111111",
                     PasswordHash = "Hash1234",
-                    CompanySize = "1-10",
+                    CompanySize = CompanySize.OneToTen,
                     IsActive = true
                 }
             };
             SetupCompanyDbSetWithExisting(existingCompanies);
+
+            var expectedMessage = "Kompanija sa unetim PIB-om, matičnim brojem ili email adresom već postoji.";
+            SetupThrowerToThrow(expectedMessage);
 
             // Act
             var act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -195,18 +213,21 @@ namespace JobLess.Tests.Company
                     Email = "drugi@email.rs",
                     TaxIdentificationNumber = "999999999",
                     RegistrationNumber = command.RegistrationNumber, // isti maticni broj
-                    Industry = "Ostalo",
+                    Industry = Industry.Other,
                     Location = "Novi Sad",
                     ContactPersonFirstName = "Ana",
                     ContactPersonLastName = "Anic",
                     ContactPersonPosition = "HR",
                     ContactPersonPhoneNumber = "0611111111",
                     PasswordHash = "Hash1234",
-                    CompanySize = "1-10",
+                    CompanySize = CompanySize.OneToTen,
                     IsActive = true
                 }
             };
             SetupCompanyDbSetWithExisting(existingCompanies);
+
+            var expectedMessage = "Kompanija sa unetim PIB-om, matičnim brojem ili email adresom već postoji.";
+            SetupThrowerToThrow(expectedMessage);
 
             // Act
             var act = async () => await _handler.Handle(command, CancellationToken.None);

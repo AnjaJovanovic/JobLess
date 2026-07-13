@@ -1,6 +1,7 @@
 using FluentAssertions;
 using JobLess.Company.Application.Interfaces;
 using JobLess.Company.Application.Queries.Search;
+using JobLess.Company.Domain.Enums;
 using MockQueryable.Moq;
 using Moq;
 using System;
@@ -25,7 +26,7 @@ namespace JobLess.Tests.Company
         private CompanyEntity CreateCompany(
             int id,
             string name,
-            string industry,
+            Industry industry,
             string location,
             bool isActive = true) => new CompanyEntity
             {
@@ -41,7 +42,7 @@ namespace JobLess.Tests.Company
                 ContactPersonPosition = "CEO",
                 ContactPersonPhoneNumber = "0601234567",
                 PasswordHash = "Sifra1234",
-                CompanySize = "1-10",
+                CompanySize = CompanySize.OneToTen,
                 IsActive = isActive,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -55,11 +56,11 @@ namespace JobLess.Tests.Company
 
         private List<CompanyEntity> SampleData() => new List<CompanyEntity>
         {
-            CreateCompany(1, "TechCorp", "Informacione tehnologije", "Beograd"),
-            CreateCompany(2, "FinBank", "Finansije i bankarstvo", "Novi Sad"),
-            CreateCompany(3, "HealthPlus", "Zdravstvo", "Beograd"),
-            CreateCompany(4, "TechStart", "Informacione tehnologije", "Nis"),
-            CreateCompany(5, "InactiveFirm", "Ostalo", "Beograd", isActive: false)
+            CreateCompany(1, "TechCorp", Industry.InformationTechnology, "Beograd"),
+            CreateCompany(2, "FinBank", Industry.FinanceAndBanking, "Novi Sad"),
+            CreateCompany(3, "HealthPlus", Industry.Healthcare, "Beograd"),
+            CreateCompany(4, "TechStart", Industry.InformationTechnology, "Nis"),
+            CreateCompany(5, "InactiveFirm", Industry.Other, "Beograd", isActive: false)
         };
 
         [Fact]
@@ -100,14 +101,14 @@ namespace JobLess.Tests.Company
             // Arrange
             SetupDbSet(SampleData());
 
-            var query = new SearchCompanyQuery { Industry = "Informacione tehnologije", PageNumber = 1, PageSize = 10 };
+            var query = new SearchCompanyQuery { Industry = nameof(Industry.InformationTechnology), PageNumber = 1, PageSize = 10 };
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
             result.Companies.Should().HaveCount(2);
-            result.Companies.Should().AllSatisfy(c => c.Industry.Should().Be("Informacione tehnologije"));
+            result.Companies.Should().AllSatisfy(c => c.Industry.Should().Be(Industry.InformationTechnology));
         }
 
         [Fact]
@@ -134,7 +135,7 @@ namespace JobLess.Tests.Company
 
             var query = new SearchCompanyQuery
             {
-                Industry = "Informacione tehnologije",
+                Industry = nameof(Industry.InformationTechnology),
                 Location = "Beograd",
                 PageNumber = 1,
                 PageSize = 10
@@ -154,7 +155,7 @@ namespace JobLess.Tests.Company
             // Arrange
             var companies = new List<CompanyEntity>();
             for (int i = 1; i <= 12; i++)
-                companies.Add(CreateCompany(i, $"Kompanija{i}", "Ostalo", "Beograd"));
+                companies.Add(CreateCompany(i, $"Kompanija{i}", Industry.Other, "Beograd"));
 
             SetupDbSet(companies);
 

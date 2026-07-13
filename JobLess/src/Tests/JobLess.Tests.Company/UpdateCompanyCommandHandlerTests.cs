@@ -1,6 +1,7 @@
 using FluentAssertions;
 using JobLess.Company.Application.Commands.Update;
 using JobLess.Company.Application.Interfaces;
+using JobLess.Company.Domain.Enums;
 using MockQueryable.Moq;
 using Moq;
 using System;
@@ -16,6 +17,8 @@ namespace JobLess.Tests.Company
         private readonly Mock<IApplicationDbContext> _contextMock;
         private readonly UpdateCompanyCommandHandler _handler;
 
+        private const string CompanyEmailValue = "stari@email.rs";
+
         public UpdateCompanyCommandHandlerTests()
         {
             _contextMock = new Mock<IApplicationDbContext>();
@@ -27,10 +30,10 @@ namespace JobLess.Tests.Company
             Id = id,
             Name = "Staro Ime",
             Description = "Stari opis",
-            Industry = "Zdravstvo",
+            Industry = Industry.Healthcare,
             Location = "Novi Sad",
             Website = "www.stara.rs",
-            Email = "stari@email.rs",
+            Email = CompanyEmailValue,
             TaxIdentificationNumber = "111111111",
             RegistrationNumber = "11111111",
             OwnerName = "Stari Vlasnik",
@@ -41,7 +44,7 @@ namespace JobLess.Tests.Company
             PasswordHash = "StaraSifra1",
             PhoneNumber = "0111111111",
             Address = "Stara ulica 1",
-            CompanySize = "1-10",
+            CompanySize = CompanySize.OneToTen,
             IsActive = isActive,
             CreatedAt = DateTime.UtcNow.AddDays(-10),
             UpdatedAt = DateTime.UtcNow.AddDays(-1)
@@ -66,6 +69,7 @@ namespace JobLess.Tests.Company
             var command = new UpdateCompanyCommand
             {
                 CompanyId = 1,
+                CompanyEmail = CompanyEmailValue,
                 Name = "Novo Ime Kompanije"
             };
 
@@ -89,6 +93,7 @@ namespace JobLess.Tests.Company
             var command = new UpdateCompanyCommand
             {
                 CompanyId = 1,
+                CompanyEmail = CompanyEmailValue,
                 Name = "string" // treba da se ignorise
             };
 
@@ -110,6 +115,7 @@ namespace JobLess.Tests.Company
             var command = new UpdateCompanyCommand
             {
                 CompanyId = 1,
+                CompanyEmail = CompanyEmailValue,
                 Description = null
             };
 
@@ -130,11 +136,12 @@ namespace JobLess.Tests.Company
             var command = new UpdateCompanyCommand
             {
                 CompanyId = 1,
+                CompanyEmail = CompanyEmailValue,
                 Name = "Novo Ime",
                 Location = "Beograd",
-                Industry = "Finansije i bankarstvo",
-                Email = "novi@email.rs",
-                CompanySize = "51-200"
+                ContactPersonPhoneNumber = "0609999999",
+                Address = "Nova ulica 5",
+                EmployeeCount = 150
             };
 
             // Act
@@ -144,9 +151,9 @@ namespace JobLess.Tests.Company
             result.Should().BeTrue();
             company.Name.Should().Be("Novo Ime");
             company.Location.Should().Be("Beograd");
-            company.Industry.Should().Be("Finansije i bankarstvo");
-            company.Email.Should().Be("novi@email.rs");
-            company.CompanySize.Should().Be("51-200");
+            company.ContactPersonPhoneNumber.Should().Be("0609999999");
+            company.Address.Should().Be("Nova ulica 5");
+            company.CompanySize.Should().Be(CompanySize.FiftyOneToTwoHundred);
         }
 
         [Fact]
@@ -160,6 +167,7 @@ namespace JobLess.Tests.Company
             var command = new UpdateCompanyCommand
             {
                 CompanyId = 1,
+                CompanyEmail = CompanyEmailValue,
                 Name = "Novo Ime"
             };
 
@@ -179,6 +187,7 @@ namespace JobLess.Tests.Company
             var command = new UpdateCompanyCommand
             {
                 CompanyId = 999,
+                CompanyEmail = CompanyEmailValue,
                 Name = "Neko Ime"
             };
 
@@ -200,6 +209,7 @@ namespace JobLess.Tests.Company
             var command = new UpdateCompanyCommand
             {
                 CompanyId = 1,
+                CompanyEmail = CompanyEmailValue,
                 Name = "Neko Ime"
             };
 
@@ -208,6 +218,29 @@ namespace JobLess.Tests.Company
 
             // Assert
             result.Should().BeFalse();
+            _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Handle_Should_Return_False_When_CompanyEmail_Does_Not_Match()
+        {
+            // Arrange
+            var company = CreateCompany(1);
+            SetupDbSet(new List<CompanyEntity> { company });
+
+            var command = new UpdateCompanyCommand
+            {
+                CompanyId = 1,
+                CompanyEmail = "pogresan@email.rs",
+                Name = "Neko Ime"
+            };
+
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            result.Should().BeFalse();
+            company.Name.Should().Be("Staro Ime");
             _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
@@ -221,6 +254,7 @@ namespace JobLess.Tests.Company
             var command = new UpdateCompanyCommand
             {
                 CompanyId = 1,
+                CompanyEmail = CompanyEmailValue,
                 Name = company.Name // isti naziv
             };
 
