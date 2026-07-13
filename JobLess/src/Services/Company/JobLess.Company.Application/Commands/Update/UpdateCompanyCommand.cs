@@ -27,7 +27,6 @@ namespace JobLess.Company.Application.Commands.Update
         public string? ContactPersonPosition { get; set; }
         public string? ContactPersonPhoneNumber { get; set; }
         //public string? Email { get; set; }
-        public string? PasswordHash { get; set; }
 
         public string? PhoneNumber { get; set; }
 

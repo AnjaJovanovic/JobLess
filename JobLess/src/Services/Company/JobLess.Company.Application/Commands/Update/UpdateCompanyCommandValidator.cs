@@ -82,18 +82,6 @@ namespace JobLess.Company.Application.Commands.Update
                 .When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber))
                 .WithMessage("Broj telefona mora biti u formatu +381 60 123 4567.");
 
-            RuleFor(x => x.PasswordHash)
-                .MinimumLength(8)
-                .WithMessage("Lozinka mora imati najmanje 8 karaktera.")
-                .Matches("[A-Z]")
-                .WithMessage("Lozinka mora sadržati bar jedno veliko slovo.")
-                .Matches("[0-9]")
-                .WithMessage("Lozinka mora sadržati bar jedan broj.")
-                .MaximumLength(100)
-                .WithMessage("Šifra ne sme da ima više od 100 karaktera.")
-                .When(x => !string.IsNullOrWhiteSpace(x.PasswordHash));
-                    }
-
         private static bool BeValidUrl(string? website)
         {
             if (string.IsNullOrWhiteSpace(website))

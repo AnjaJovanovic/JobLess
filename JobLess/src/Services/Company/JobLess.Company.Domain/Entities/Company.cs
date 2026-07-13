@@ -23,7 +23,6 @@ namespace JobLess.Company.Domain.Entities
         public required string ContactPersonPosition { get; set; }
         public required string ContactPersonPhoneNumber { get; set; }
         public required string Email {  get; set; }
-        public required string PasswordHash  { get; set; }
 
         public string PhoneNumber   { get; set; }
         public required string Location { get; set; }

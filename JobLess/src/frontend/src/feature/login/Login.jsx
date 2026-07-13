@@ -574,7 +574,6 @@ export default function Login() {
         ownerName: `${values.contactFirstName} ${values.contactLastName}`,
         contactPersonPosition: values.contactPosition,
         contactPersonPhoneNumber: values.phone,
-        passwordHash: values.password,
         ownerId: 0,
         description: null,
         address: values.city,

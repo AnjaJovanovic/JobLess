@@ -59,9 +59,6 @@ namespace JobLess.Company.Application.Commands.Update
             if (IsValid(command.ContactPersonPosition) && command.ContactPersonPosition != company.ContactPersonPosition)
                 company.ContactPersonPosition = command.ContactPersonPosition;
 
-            if (IsValid(command.PasswordHash) && command.PasswordHash != company.PasswordHash)
-                company.PasswordHash = command.PasswordHash;
-
             if (IsValid(command.PhoneNumber) && command.PhoneNumber != company.PhoneNumber)
                 company.PhoneNumber = command.PhoneNumber;
 

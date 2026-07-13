@@ -37,7 +37,6 @@ namespace JobLess.Company.Application.Commands.Create
                 ContactPersonPhoneNumber = request.ContactPersonPhoneNumber,
                 ContactPersonPosition = request.ContactPersonPosition,
                 Email = request.Email,
-                PasswordHash = request.PasswordHash,
                 PhoneNumber = request.PhoneNumber,
                 Address = request.Address,
                 CompanySize = request.CompanySize,
