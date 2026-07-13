@@ -1,0 +1,63 @@
+<mxfile host="app.diagrams.net" agent="5.0">
+  <diagram id="client-class" name="Client">
+    <mxGraphModel dx="1414" dy="764" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="note1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#666666;" value="Client mikroservis – klasni dijagram" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="client" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Client" vertex="1">
+          <mxGeometry height="330" width="230" x="80" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="client-attrs" parent="client" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="+ ClientId : int&#xa;+ Email : string&#xa;+ PasswordHash : string&#xa;+ FirstName : string&#xa;+ LastName : string&#xa;+ PhoneNumber : string?&#xa;+ Gender : Gender&#xa;+ DateOfBirth : DateTime?&#xa;+ City : string?&#xa;+ Address : string?&#xa;+ EducationLevel : EducationLevel?&#xa;+ InstitutionName : string?&#xa;+ EducationStartYear : int?&#xa;+ EducationEndYear : int?&#xa;+ YearsOfExperience : int?&#xa;+ Skills : string?&#xa;+ ProfessionalSummary : string?&#xa;+ LinkedInUrl : string?&#xa;+ CreatedAt : DateTime&#xa;+ IsActive : bool" vertex="1">
+          <mxGeometry height="304" width="230" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gender" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" value="«enumeration»&#xa;Gender" vertex="1">
+          <mxGeometry height="100" width="150" x="400" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="gender-vals" parent="gender" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="Male = 0&#xa;Female = 1" vertex="1">
+          <mxGeometry height="60" width="150" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edu" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" value="«enumeration»&#xa;EducationLevel" vertex="1">
+          <mxGeometry height="160" width="170" x="400" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="edu-vals" parent="edu" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="PrimarySchool = 1&#xa;SecondarySchool = 2&#xa;HigherProfessional = 3&#xa;Bachelor = 4&#xa;Master = 5&#xa;Doctorate = 6" vertex="1">
+          <mxGeometry height="120" width="170" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" value="ClientsController" vertex="1">
+          <mxGeometry height="150" width="240" x="680" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl-line" parent="ctrl" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
+          <mxGeometry height="8" width="240" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl-ops" parent="ctrl" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="+ CreateProfile()&#xa;+ GetProfileByEmail()&#xa;+ UpdateProfile()&#xa;+ GetProfile()" vertex="1">
+          <mxGeometry height="116" width="240" y="34" as="geometry" />
+        </mxCell>
+        <mxCell id="dto" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" value="ClientProfileDto" vertex="1">
+          <mxGeometry height="330" width="260" x="680" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="dto-attrs" parent="dto" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="+ ClientId : int&#xa;+ Email : string&#xa;+ FirstName : string&#xa;+ LastName : string&#xa;+ PhoneNumber : string?&#xa;+ Gender : Gender&#xa;+ DateOfBirth : DateTime?&#xa;+ City : string?&#xa;+ Address : string?&#xa;+ EducationLevel : EducationLevel?&#xa;+ InstitutionName : string?&#xa;+ EducationStartYear : int?&#xa;+ EducationEndYear : int?&#xa;+ YearsOfExperience : int?&#xa;+ Skills : string?&#xa;+ ProfessionalSummary : string?&#xa;+ LinkedInUrl : string?&#xa;+ CreatedAt : DateTime&#xa;+ IsActive : bool" vertex="1">
+          <mxGeometry height="304" width="260" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="client" style="endArrow=open;html=1;endSize=10;dashed=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="gender">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="client" style="endArrow=open;html=1;endSize=10;dashed=1;exitX=1;exitY=0.55;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;" target="edu">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="ctrl" style="endArrow=open;html=1;endSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.35;entryDx=0;entryDy=0;" target="client">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="640" y="165" />
+              <mxPoint x="640" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="ctrl" style="endArrow=open;html=1;endSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="dto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,70 @@
+<mxfile host="app.diagrams.net" agent="5.0">
+  <diagram id="jobapp-class" name="JobApplication">
+    <mxGraphModel dx="1414" dy="764" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="note1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#666666;" value="JobApplication – klasni dijagram" vertex="1">
+          <mxGeometry height="40" width="280" x="40" y="15" as="geometry" />
+        </mxCell>
+        <mxCell id="ja" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="JobApplication" vertex="1">
+          <mxGeometry height="360" width="270" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ja-attrs" parent="ja" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="- Id : int&#xa;- AdvertisementId : int&#xa;- AdvertisementTitle : string&#xa;- CandidateId : int&#xa;- CandidateEmail : string&#xa;- CandidateFirstName : string&#xa;- CandidateLastName : string&#xa;- CompanyId : int&#xa;- CompanyEmail : string&#xa;- Status : JobApplicationStatus&#xa;- CreatedAt : DateTime&#xa;- UpdatedAt : DateTime?&#xa;- RowVersion : byte[]" vertex="1">
+          <mxGeometry height="210" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ja-sep" parent="ja" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
+          <mxGeometry height="8" width="270" y="236" as="geometry" />
+        </mxCell>
+        <mxCell id="ja-ops" parent="ja" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="+ Create(...) : JobApplication&#xa;+ Accept() : void&#xa;+ Reject() : void&#xa;- EnsurePendingStatus(...)" vertex="1">
+          <mxGeometry height="116" width="270" y="244" as="geometry" />
+        </mxCell>
+        <mxCell id="status" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" value="«enumeration»&#xa;JobApplicationStatus" vertex="1">
+          <mxGeometry height="110" width="180" x="380" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="status-vals" parent="status" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="Pending = 0&#xa;Accepted = 1&#xa;Rejected = 2" vertex="1">
+          <mxGeometry height="70" width="180" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ex" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" value="InvalidJobApplication&#xa;StatusTransitionException" vertex="1">
+          <mxGeometry height="120" width="200" x="385" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="ex-attrs" parent="ex" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="+ CurrentStatus&#xa;+ TargetStatus&#xa;&#xa;(bacaju Accept/Reject&#xa;ako status nije Pending)" vertex="1">
+          <mxGeometry height="80" width="200" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" value="JobApplicationsController" vertex="1">
+          <mxGeometry height="160" width="250" x="680" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl-sep" parent="ctrl" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
+          <mxGeometry height="8" width="250" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl-ops" parent="ctrl" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="+ Apply()&#xa;+ GetMyApplications()&#xa;+ GetCompanyApplications()&#xa;+ UpdateStatus()&#xa;+ Health()" vertex="1">
+          <mxGeometry height="126" width="250" y="34" as="geometry" />
+        </mxCell>
+        <mxCell id="dto" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" value="JobApplicationDto" vertex="1">
+          <mxGeometry height="230" width="270" x="680" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="dto-attrs" parent="dto" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="+ Id : int&#xa;+ AdvertisementId : int&#xa;+ AdvertisementTitle : string&#xa;+ CandidateId : int&#xa;+ CandidateEmail : string&#xa;+ CandidateFirstName : string&#xa;+ CandidateLastName : string&#xa;+ CompanyId : int&#xa;+ CompanyEmail : string&#xa;+ Status : int&#xa;+ CreatedAt : DateTime&#xa;+ UpdatedAt : DateTime?" vertex="1">
+          <mxGeometry height="204" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="ja" style="endArrow=open;html=1;endSize=10;dashed=1;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="status">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="ja" style="endArrow=open;html=1;endSize=10;dashed=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;" target="ex">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="ctrl" style="endArrow=open;html=1;endSize=10;exitX=0;exitY=0.45;exitDx=0;exitDy=0;" target="ja">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="620" y="152" />
+              <mxPoint x="620" y="250" />
+            </Array>
+            <mxPoint x="640" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="ctrl" style="endArrow=open;html=1;endSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="dto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
