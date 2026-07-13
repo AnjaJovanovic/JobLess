@@ -35,13 +35,27 @@
     <Project Path="src/Services/Client/JobLess.Client.Infrastructure/JobLess.Client.Infrastructure.csproj" />
   </Folder>
 
+  <Folder Name="/src/Services/JobApplication/">
+    <Project Path="src/Services/JobApplication/JobLess.JobApplication.API/JobLess.JobApplication.API.csproj" />
+    <Project Path="src/Services/JobApplication/JobLess.JobApplication.Application/JobLess.JobApplication.Application.csproj" />
+    <Project Path="src/Services/JobApplication/JobLess.JobApplication.Domain/JobLess.JobApplication.Domain.csproj" />
+    <Project Path="src/Services/JobApplication/JobLess.JobApplication.Infrastructure/JobLess.JobApplication.Infrastructure.csproj" />
+  </Folder>
+
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/JobLess.Contracts/JobLess.Contracts.csproj" />
+    <Project Path="src/Shared/JobLess.Grpc.Contracts/JobLess.Grpc.Contracts.csproj" />
     <Project Path="src/Shared/JobLess.Shared.Domain/JobLess.Shared.Domain.csproj" />
   </Folder>
   <Folder Name="/src/Tests/" />
   <Folder Name="/src/Tests/Advertisement/">
     <Project Path="src/Tests/JobLess.Tests.Advertisement/JobLess.Tests.Advertisement.csproj" Id="d2a103d7-7cb1-4495-9447-4bc46ac5e77a" />
+  </Folder>
+  <Folder Name="/src/Tests/Client/">
+    <Project Path="src/Tests/JobLess.Tests.Client/JobLess.Tests.Client.csproj" />
+  </Folder>
+  <Folder Name="/src/Tests/JobApplication/">
+    <Project Path="src/Tests/JobLess.Tests.JobApplication/JobLess.Tests.JobApplication.csproj" />
   </Folder>
   <Folder Name="/src/Tests/Security/">
     <Project Path="src/Tests/JobLess.Tests.Security/JobLess.Tests.Security.csproj" />
