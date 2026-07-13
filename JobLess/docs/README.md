@@ -174,5 +174,3 @@ Stiže obaveštenje kada se kandidat prijavi na oglas. Iz obaveštenja se mogu o
 |-------|------|
 | Kandidat | Profil, pregled oglasa, prijava, praćenje statusa, obaveštenja |
 | Kompanija | Profil, oglasi, pregled prijava, accept/reject, obaveštenja |
-
-JobLess ne zamenjuje email komunikaciju van aplikacije; sve ključne radnje oko prijave i statusa odvijaju se kroz kontrolnu tablu i obaveštenja u aplikaciji.
