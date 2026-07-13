@@ -41,7 +41,7 @@ namespace JobLess.Tests.Company
                 ContactPersonLastName = "Markovic",
                 ContactPersonPosition = "CEO",
                 ContactPersonPhoneNumber = "0601234567",
-                PasswordHash = "Sifra1234",
+                //PasswordHash = "Sifra1234",
                 CompanySize = CompanySize.OneToTen,
                 IsActive = isActive,
                 CreatedAt = DateTime.UtcNow,

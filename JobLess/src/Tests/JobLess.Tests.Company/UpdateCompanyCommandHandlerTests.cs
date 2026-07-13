@@ -41,7 +41,7 @@ namespace JobLess.Tests.Company
             ContactPersonLastName = "Anic",
             ContactPersonPosition = "HR",
             ContactPersonPhoneNumber = "0601111111",
-            PasswordHash = "StaraSifra1",
+            //PasswordHash = "StaraSifra1",
             PhoneNumber = "0111111111",
             Address = "Stara ulica 1",
             CompanySize = CompanySize.OneToTen,

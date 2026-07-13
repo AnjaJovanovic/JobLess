@@ -28,7 +28,7 @@ namespace JobLess.Tests.Company
             ContactPersonPosition = "CEO",
             ContactPersonPhoneNumber = "+381 60 123 4567",
             Email = "test@kompanija.rs",
-            PasswordHash = "Sifra1234",
+            //PasswordHash = "Sifra1234",
             CompanySize = CompanySize.OneToTen
         };
 
@@ -146,36 +146,6 @@ namespace JobLess.Tests.Company
 
             var result = await _validator.TestValidateAsync(command);
             result.ShouldHaveValidationErrorFor(x => x.Email);
-        }
-
-        [Fact]
-        public async Task Should_Fail_When_Password_Has_No_Uppercase()
-        {
-            var command = ValidCommand();
-            command.PasswordHash = "sifra1234"; // nema veliko slovo
-
-            var result = await _validator.TestValidateAsync(command);
-            result.ShouldHaveValidationErrorFor(x => x.PasswordHash);
-        }
-
-        [Fact]
-        public async Task Should_Fail_When_Password_Has_No_Number()
-        {
-            var command = ValidCommand();
-            command.PasswordHash = "SifraABC"; // nema broj
-
-            var result = await _validator.TestValidateAsync(command);
-            result.ShouldHaveValidationErrorFor(x => x.PasswordHash);
-        }
-
-        [Fact]
-        public async Task Should_Fail_When_Password_Too_Short()
-        {
-            var command = ValidCommand();
-            command.PasswordHash = "S1"; // manje od 8
-
-            var result = await _validator.TestValidateAsync(command);
-            result.ShouldHaveValidationErrorFor(x => x.PasswordHash);
         }
 
         [Fact]

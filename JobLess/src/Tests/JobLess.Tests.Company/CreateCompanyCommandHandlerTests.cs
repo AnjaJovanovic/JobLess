@@ -42,7 +42,7 @@ namespace JobLess.Tests.Company
             ContactPersonPosition = "CEO",
             ContactPersonPhoneNumber = "0601234567",
             Email = "test@kompanija.rs",
-            PasswordHash = "Sifra1234",
+            //PasswordHash = "Sifra1234",
             CompanySize = CompanySize.OneToTen
         };
 
@@ -143,7 +143,7 @@ namespace JobLess.Tests.Company
                     ContactPersonLastName = "Anic",
                     ContactPersonPosition = "HR",
                     ContactPersonPhoneNumber = "0611111111",
-                    PasswordHash = "Hash1234",
+                   // PasswordHash = "Hash1234",
                     CompanySize = CompanySize.OneToTen,
                     IsActive = true
                 }
@@ -181,7 +181,7 @@ namespace JobLess.Tests.Company
                     ContactPersonLastName = "Anic",
                     ContactPersonPosition = "HR",
                     ContactPersonPhoneNumber = "0611111111",
-                    PasswordHash = "Hash1234",
+                  //  PasswordHash = "Hash1234",
                     CompanySize = CompanySize.OneToTen,
                     IsActive = true
                 }
@@ -219,7 +219,7 @@ namespace JobLess.Tests.Company
                     ContactPersonLastName = "Anic",
                     ContactPersonPosition = "HR",
                     ContactPersonPhoneNumber = "0611111111",
-                    PasswordHash = "Hash1234",
+                 //   PasswordHash = "Hash1234",
                     CompanySize = CompanySize.OneToTen,
                     IsActive = true
                 }
