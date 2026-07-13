@@ -1,145 +1,178 @@
-# JobLess
+# JobLess korisničko uputstvo
 
-JobLess je veb platforma za povezivanje nezaposlenih kandidata i kompanija koje traže zaposlene — kandidati pretražuju oglase i prijavljuju se na poslove, a kompanije objavljuju oglase i upravljaju pristiglim prijavama. Aplikacija je razvijena kao seminarski rad na master studijama (predmet RS2, Matematički fakultet).
+JobLess je web aplikacija za oglase za posao i prijave. Postoje dva tipa naloga: **kandidat** i **kompanija**.
 
-Sistem je izgrađen kao **mikroservisna arhitektura** u .NET 8, sa React frontendom i API Gateway-om kao jedinstvenom ulaznom tačkom.
+Aplikacija se otvara u pregledaču na adresi **http://localhost:5173** (kad je frontend pokrenut). Prijava je na stranici `/login`.
 
-## Sadržaj
+## 1. Registracija i prijava
 
-- [Arhitektura](#arhitektura)
-- [Mikroservisi](#mikroservisi)
-- [Tehnologije](#tehnologije)
-- [Struktura repozitorijuma](#struktura-repozitorijuma)
-- [Komunikacija između servisa](#komunikacija-između-servisa)
-- [Pokretanje projekta](#pokretanje-projekta)
-- [Tim](#tim)
+Na ekranu za prijavu bira se tip naloga: kandidat ili kompanija. Može se prelaziti između **Prijave** i **Registracije**.
 
-## Arhitektura
+### 1.1 Kandidat registracija
 
-```mermaid
-flowchart TB
-    FE["Frontend (React + Vite)\n:5173"]
-    GW["API Gateway (Ocelot)\n:5000"]
+Potrebna polja:
 
-    FE --> GW
+- ime i prezime
+- email
+- lozinka (najmanje 8 karaktera, bar jedno veliko slovo i bar jedan broj) i potvrda lozinke
+- pol
+- telefon (opciono; ako se unese, format je npr. `+381 60 123 4567`)
 
-    GW --> AUTH["Auth servis\nJobLess.IdentityServer\n:5218"]
-    GW --> CLIENT["Client servis\n:5263"]
-    GW --> COMPANY["Company servis\n:5287"]
-    GW --> ADS["Advertisement servis\n:5104"]
-    GW --> JOBAPP["JobApplication servis\n:5291"]
-    GW --> NOTIF["Notification servis\n:5240"]
+Posle uspešne registracije sledi automatska prijava i prelazak na kontrolnu tablu kandidata.
 
-    JOBAPP -. gRPC .-> CLIENT
-    JOBAPP -. gRPC .-> COMPANY
+### 1.2 Kompanija registracija
 
-    AUTH -- publish --> MQ[("RabbitMQ")]
-    JOBAPP -- publish --> MQ
-    MQ -- consume --> NOTIF
+Potrebna polja uključuju:
 
-    AUTH --> DB[("SQL Server")]
-    CLIENT --> DB
-    COMPANY --> DB
-    ADS --> DB
-    JOBAPP --> DB
-    NOTIF --> DB
+- naziv kompanije
+- PIB (9 cifara) i matični broj (8 cifara)
+- email, telefon
+- industrija, broj zaposlenih, grad
+- ime i prezime kontakt osobe i pozicija
+- lozinka i potvrda lozinke
+- sajt (opciono)
 
-    NOTIF -- SMTP --> MAIL["Email (Gmail SMTP)"]
-```
+### 1.3 Prijava
 
-Svaki poslovni mikroservis prati **Clean Architecture** raspodelu po slojevima:
+Unose se email i lozinka za izabrani tip naloga. Posle uspešne prijave:
 
-- **API** – kontroleri, DI kompozicija, `Program.cs`
-- **Application** – CQRS (MediatR) komande/upiti, DTO-ovi, interfejsi
-- **Domain** – entiteti, enumeracije, poslovna pravila
-- **Infrastructure** – EF Core `DbContext`, implementacije servisa, migracije, integracije (RabbitMQ, SMTP, gRPC)
+- kandidat ide na `/user`
+- kompanija ide na `/company`
 
-Frontend nikada ne komunicira direktno sa mikroservisima — svi zahtevi idu kroz **API Gateway** (Ocelot), koji rutira zahteve na osnovu path-a i primenjuje rate limiting.
+Ako sesija istekne ili nalog nije prijavljen, stranice zaštite vraćaju na `/login`.
 
-## Mikroservisi
+### 1.4 Odjava
 
-| Servis | Opis | Port (Docker) | README |
-|---|---|---|---|
-| **API Gateway** | Jedinstvena ulazna tačka, rutiranje i rate limiting (Ocelot) | 5000 | [src/ApiGateway](JobLess/src/ApiGateway/README.md) |
-| **Auth (IdentityServer)** | Registracija, prijava, JWT/refresh tokeni | 5218 | [src/Security](JobLess/src/Security/README.md) |
-| **Client** | Profili kandidata | 5263 (HTTP), 5264 (gRPC) | *(README u izradi)* |
-| **Company** | Profili kompanija | 5287 (HTTP), 5288 (gRPC) | *(README u izradi)* |
-| **Advertisement** | Oglasi za posao | 5104 | *(README u izradi)* |
-| **JobApplication** | Prijave kandidata na oglase | 5291 | *(README u izradi)* |
-| **Notification** | In-app i email obaveštenja | 5240 | [src/Services/Notification](JobLess/src/Services/Notification/README.md) |
-| **Frontend** | React SPA | 5173 | [src/frontend](JobLess/src/frontend/README.md) |
+U bočnom meniju postoji dugme **Odjavi se**. Posle odjave ponovo se otvara ekran za prijavu.
 
-## Tehnologije
+## 2. Nalog kandidata
 
-**Backend**
-- .NET 8 / ASP.NET Core Web API
-- Entity Framework Core + SQL Server (Docker kontejner, po jedna baza za svaki servis)
-- ASP.NET Core Identity + JWT Bearer autentifikacija
-- MediatR (CQRS obrasci unutar Application sloja)
-- MassTransit + RabbitMQ (asinhrona komunikacija između servisa, fanout exchange-evi)
-- gRPC (sinhrona komunikacija JobApplication → Client/Company)
-- Ocelot (API Gateway)
-- MailKit/MimeKit (slanje email obaveštenja)
-- xUnit (testiranje)
+Bočni meni:
 
-**Frontend**
-- React 19 + Vite
-- React Router
-- React Toastify
+| Stavka | Sadržaj |
+|--------|---------|
+| Moj profil | Pregled i uređivanje profila |
+| Moje prijave | Lista prijava na oglase i statusi |
+| Oglasi | Pretraga oglasa i prijava |
+| Obaveštenja | Poruke (npr. promena statusa prijave) |
 
-**Infrastruktura**
-- Docker / Docker Compose
-- Nginx (posluživanje frontend build-a)
+Broj nepročitanih obaveštenja prikazuje se kao bedž pored stavke **Obaveštenja**.
 
-## Struktura repozitorijuma
+### 2.1 Moj profil
 
-```
-JobLess/
-├── docker-compose.yml        # orkestracija svih servisa
-├── docker-up.sh               # skripta za brzo pokretanje
-├── JobLess.slnx               # .NET solution
-├── src/
-│   ├── ApiGateway/             # Ocelot API Gateway
-│   ├── Security/               # Auth mikroservis (IdentityServer)
-│   ├── Services/
-│   │   ├── Client/              # profili kandidata
-│   │   ├── Company/             # profili kompanija
-│   │   ├── Advertisement/       # oglasi
-│   │   ├── JobApplication/      # prijave na oglase
-│   │   └── Notification/        # obaveštenja
-│   ├── Shared/
-│   │   ├── JobLess.Contracts/       # deljeni MassTransit event kontrakti
-│   │   ├── JobLess.Grpc.Contracts/  # .proto definicije
-│   │   └── JobLess.Shared.Domain/   # zajednička domenska osnova
-│   ├── Tests/                   # xUnit test projekti (po servisu)
-│   └── frontend/                # React aplikacija
-```
+Profil treba biti popunjen pre prijave na oglas. Za kompletan profil potrebni su bar:
 
-## Komunikacija između servisa
+- ime i prezime
+- pol
+- nivo obrazovanja
+- naziv institucije
 
-- **Sinhrona (REST preko Gateway-a)** — frontend šalje HTTP zahteve na `http://localhost:5000/api/...`, Ocelot ih prosleđuje odgovarajućem servisu.
-- **Sinhrona (gRPC)** — JobApplication servis direktno (interno, mimo Gateway-a) poziva Client i Company servise preko gRPC-a da bi dobio podatke o kandidatu/kompaniji.
-- **Asinhrona (RabbitMQ / MassTransit)** — servisi objavljuju domenske događaje (fanout exchange) na koje se Notification servis pretplaćuje:
-  - `UserRegisteredMessage` (Auth → Notification): dobrodošlica + email
-  - `JobAppliedMessage` (JobApplication → Notification): obaveštenje kompaniji o novoj prijavi
-  - `ApplicationStatusChangedMessage` (JobApplication → Notification): obaveštenje kandidatu o prihvatanju/odbijanju prijave
+Ostala polja (telefon, datum rođenja, grad, adresa, godine obrazovanja, godine iskustva, veštine, kratak opis, LinkedIn) su opciona, ali pomažu pri pregledu od strane kompanije.
 
-## Pokretanje
-Kompletno uputstvo (preduslovi, environment promenljive, pokretanje pojedinačnih servisa, rešavanje problema) nalazi se u [`docs/POKRETANJE.md`](./POKRETANJE.md).
+Mogućnosti:
 
-Najbrži start (Docker):
+- prvo popunjavanje profila (setup)
+- pregled sačuvanog profila
+- izmena postojećih podataka
 
-```bash
-git clone git@github.com:AnjaJovanovic/JobLess.git
-cd JobLess/JobLess
-./docker-up.sh
-```
-Aplikacija je dostupna na `http://localhost:5173`, a API Gateway na `http://localhost:5000`
-## Tim
+### 2.2 Oglasi
 
-Projekat je razvijen timski u okviru predmeta na master studijama (Matematički fakultet, Univerzitet u Beogradu):
+Otvara se lista aktivnih oglasa. Dostupni su filteri (npr. naslov, grad, tip rada, senioritet, vrsta zaposlenja, radno vreme, iskustvo, plata).
 
-- Anja Jovanović
-- Jelena Mitrović
-- Luna Rančić, 1027/2025
-- Ana Veličković
+Prijava na oglas:
+
+1. Profil mora biti kompletan (inače prijava nije dozvoljena).
+2. Na oglasu se bira akcija prijave.
+3. Jedan kandidat ne može dva puta da se prijavi na isti oglas.
+
+### 2.3 Moje prijave
+
+Prikazuje se lista prijava sa statusom:
+
+| Status | Značenje |
+|--------|----------|
+| U razmatranju | Prijava čeka odluku kompanije |
+| Prihvaćen | Kompanija je prihvatila prijavu |
+| Odbijen | Kompanija je odbila prijavu |
+
+### 2.4 Obaveštenja (kandidat)
+
+Pojavljuju se obaveštenja o promeni statusa prijave (prihvatanje ili odbijanje). Obaveštenje se može otvoriti radi detalja i označiti kao pročitano.
+
+## 3. Nalog kompanije
+
+Bočni meni:
+
+| Stavka | Sadržaj |
+|--------|---------|
+| Profil kompanije | Podaci o kompaniji |
+| Kreiraj oglas | Novi oglas za posao |
+| Moji oglasi | Pregled i upravljanje oglasima |
+| Prijave | Prijave kandidata na oglase |
+| Obaveštenja | Nove prijave i slične poruke |
+
+### 3.1 Profil kompanije
+
+Pregled i ažuriranje podataka o kompaniji (kontakt, adresa, opis i slično, u zavisnosti od forme u aplikaciji).
+
+### 3.2 Kreiranje oglasa
+
+Unose se podaci oglasa, npr.:
+
+- naslov i pozicija
+- opis
+- tip zaposlenja, radno vreme, senioritet
+- iskustvo (min/max)
+- lokacija, tip rada
+- plata i valuta (po potrebi)
+
+Posle uspešnog kreiranja otvara se lista oglasa (**Moji oglasi**).
+
+### 3.3 Moji oglasi
+
+Pregled oglasa koje je kompanija objavila. Odavde se može preći na kreiranje novog oglasa.
+
+### 3.4 Prijave
+
+Lista kandidata koji su se prijavili. Filteri:
+
+- po ID-u oglasa
+- po statusu (svi / u razmatranju / prihvaćen / odbijen)
+
+Za svaku prijavu u statusu **U razmatranju** moguće je:
+
+- **prihvatanje** prijave
+- **odbijanje** prijave
+
+Status se menja samo jednom (iz "u razmatranju"); kasnija promena nije dozvoljena.
+
+Iz liste se može otvoriti profil kandidata radi detaljnijeg pregleda.
+
+### 3.5 Obaveštenja (kompanija)
+
+Stiže obaveštenje kada se kandidat prijavi na oglas. Iz obaveštenja se mogu otvoriti detalji (npr. kandidat / oglas) i označiti pročitano.
+
+## 4. Tipičan tok korišćenja
+
+1. Kompanija se registruje, popuni profil i objavi oglas.
+2. Kandidat se registruje, popuni profil i nađe oglas (filteri po želji).
+3. Kandidat šalje prijavu.
+4. Kompanija dobija obaveštenje, pregleda prijavu i profil kandidata, pa prihvata ili odbija.
+5. Kandidat dobija obaveštenje o novom statusu i vidi ga u **Moje prijave**.
+
+## 5. Napomene i česti problemi
+
+- **Prijava ne radi bez kompletnog profila:** dopuniti obrazovanje (nivo + institucija), ime, prezime i pol.
+- **Telefon** mora biti u međunarodnom formatu ako se unosi (`+381 60 123 4567`).
+- **Lozinka** mora zadovoljiti pravila dužine i sastava (veliko slovo + broj).
+- Ako lista oglasa ili prijava ne učitava podatke, proveriti da li je backend (Api Gateway i servisi) pokrenut; frontend proksira `/api` ka gateway-u na `http://localhost:5000`.
+- Aplikacija zahteva prijavljen nalog za sve stranice osim `/login`.
+
+## 6. Ukratko o ulogama
+
+| Uloga | Može |
+|-------|------|
+| Kandidat | Profil, pregled oglasa, prijava, praćenje statusa, obaveštenja |
+| Kompanija | Profil, oglasi, pregled prijava, accept/reject, obaveštenja |
+
+JobLess ne zamenjuje email komunikaciju van aplikacije; sve ključne radnje oko prijave i statusa odvijaju se kroz kontrolnu tablu i obaveštenja u aplikaciji.
