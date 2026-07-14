@@ -15,21 +15,21 @@ namespace JobLess.Company.Application.Models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public string TaxIdentificationNumber { get; set; } //PIB
-        public string RegistrationNumber { get; set; } //maticni broj
-        public string OwnerName { get; set; }
+        public string TaxIdentificationNumber { get; set; } = string.Empty; //PIB
+        public string RegistrationNumber { get; set; } = string.Empty; //maticni broj
+        public string? OwnerName { get; set; } 
 
-        public string ContactPersonFirstName { get; set; }
-        public string ContactPersonLastName { get; set; }
-        public string ContactPersonPosition { get; set; }
-        public string ContactPersonPhoneNumber { get; set; }
+        public string ContactPersonFirstName { get; set; } = string.Empty;
+        public string ContactPersonLastName { get; set; } = string.Empty;
+        public string ContactPersonPosition { get; set; } = string.Empty;
+        public string ContactPersonPhoneNumber { get; set; } = string.Empty;
         public Industry Industry { get; set; } 
-        public string? Website { get; set; }
+        public string? Website { get; set; } 
         public string Location { get; set; } = string.Empty;
 
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Address { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
         public CompanySize CompanySize { get; set; }
         //public int EmployeeCount { get; set; }
         public bool IsActive { get; set; }

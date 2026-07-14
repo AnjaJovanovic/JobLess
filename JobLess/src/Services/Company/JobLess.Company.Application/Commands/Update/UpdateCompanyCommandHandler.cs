@@ -2,7 +2,7 @@
 using JobLess.Company.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-
+using System.Diagnostics.CodeAnalysis;
 
 namespace JobLess.Company.Application.Commands.Update
 {
@@ -18,10 +18,10 @@ namespace JobLess.Company.Application.Commands.Update
         }
 
 
-        bool IsValid(string? value)
+        bool IsValid([NotNullWhen(true)] string? value)
         {
             return !string.IsNullOrWhiteSpace(value)
-                   && value.Trim().ToLower() != "string";
+                && value.Trim().ToLower() != "string";
         }
 
         public async Task<bool> Handle(UpdateCompanyCommand command, CancellationToken cancellationToken)

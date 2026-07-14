@@ -24,9 +24,9 @@ namespace JobLess.Company.Domain.Entities
         public required string ContactPersonPhoneNumber { get; set; }
         public required string Email {  get; set; }
 
-        public string PhoneNumber   { get; set; }
+        public string? PhoneNumber   { get; set; }
         public required string Location { get; set; }
-        public string Address { get; set; }
+        public string? Address { get; set; }
         public CompanySize CompanySize { get; set; }
         //public int EmployeeCount { get; set; }
 
