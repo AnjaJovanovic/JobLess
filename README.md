@@ -115,7 +115,7 @@ JobLess/
 │   └── frontend/                # React aplikacija
 ```
 
-## Komunikacija između servisa
+## Komunikacija između servisa 
 
 - **Sinhrona (REST preko Gateway-a)** — frontend šalje HTTP zahteve na `http://localhost:5000/api/...`, Ocelot ih prosleđuje odgovarajućem servisu.
 - **Sinhrona (gRPC)** — JobApplication servis direktno (interno, mimo Gateway-a) poziva Client i Company servise preko gRPC-a da bi dobio podatke o kandidatu/kompaniji.
@@ -125,21 +125,24 @@ JobLess/
   - `ApplicationStatusChangedMessage` (JobApplication → Notification): obaveštenje kandidatu o prihvatanju/odbijanju prijave
 
 ## Pokretanje
-Kompletno uputstvo (preduslovi, environment promenljive, pokretanje pojedinačnih servisa, rešavanje problema) nalazi se u [`docs/POKRETANJE.md`](./POKRETANJE.md).
+Kompletno uputstvo (Linux, macOS, Windows; `.env`; Docker; lokalni servisi) nalazi se u [`JobLess/docs/POKRETANJE.md`](JobLess/docs/POKRETANJE.md).
 
-Najbrži start (Docker):
+Najbrži start (Docker) — iz foldera `JobLess/JobLess`, nakon `cp`/kopiranja `.env.example` → `.env` i popunjavanja vrednosti:
 
 ```bash
-git clone git@github.com:AnjaJovanovic/JobLess.git
-cd JobLess/JobLess
+# Linux / macOS
 ./docker-up.sh
+
+# Windows (PowerShell ili cmd) — bash skripta se ne koristi
+docker compose up --build -d
 ```
-Aplikacija je dostupna na `http://localhost:5173`, a API Gateway na `http://localhost:5000`
+
+Aplikacija je dostupna na `http://localhost:5173`, a API Gateway na `http://localhost:5000`.
 ## Tim
 
 Projekat je razvijen timski u okviru predmeta na master studijama (Matematički fakultet, Univerzitet u Beogradu):
 
 - Anja Jovanović, 1044/2025
-- Jelena Mitrović
+- Jelena Mitrović, 1019/2024
 - Luna Rančić, 1027/2025
 - Ana Veličković, 1128/2025
