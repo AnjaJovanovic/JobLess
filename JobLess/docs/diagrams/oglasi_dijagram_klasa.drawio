@@ -1,0 +1,73 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Advertisement" id="pJNZfm4SFGgHj6IfQk8B">
+    <mxGraphModel dx="1030" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#333333;fontFamily=Helvetica;" value="Advertisement mikroservis – klasni dijagram" vertex="1">
+          <mxGeometry height="40" width="500" x="40" y="15" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-2" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#4a86e8;strokeColor=#1a56c4;fontColor=#ffffff;fontSize=13;rounded=1;arcSize=8;shadow=1;gradientColor=#a4c2f4;swimlaneFillColor=#eaf1fd;" value="JobAdvertisement" vertex="1">
+          <mxGeometry height="380" width="270" x="70" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-3" parent="DmD0bUxtk2MZNvYk0O6L-2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=10;spacingRight=4;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontColor=#1c2b45;fontFamily=Helvetica;" value="+ Id : int&#xa;+ CompanyId : int&#xa;+ CompanyEmail : string&#xa;+ Title : string&#xa;+ Description : string?&#xa;+ Position : string&#xa;+ PostedAt : DateTime&#xa;+ ExpiresAt : DateTime?&#xa;+ IsActive : bool&#xa;+ EmploymentType : EmploymentType&#xa;+ WorkSchedule : WorkSchedule&#xa;+ SeniorityLevel : SeniorityLevel&#xa;+ MinExperience : int?&#xa;+ MaxExperience : int?&#xa;+ City : string&#xa;+ Country : string?&#xa;+ WorkType : WorkType&#xa;+ SalaryFrom : decimal?&#xa;+ SalaryTo : decimal?&#xa;+ Currency : string?&#xa;+ IsSalaryVisible : bool" vertex="1">
+          <mxGeometry height="350" width="270" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-4" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffe066;strokeColor=#cca300;fontColor=#4d3d00;fontSize=12;rounded=1;arcSize=10;shadow=1;gradientColor=#fff6cc;swimlaneFillColor=#fffbe6;" value="«enumeration»&#xa;EmploymentType" vertex="1">
+          <mxGeometry height="124" width="180" x="414" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-5" parent="DmD0bUxtk2MZNvYk0O6L-4" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;spacingLeft=10;fontColor=#5b3a12;fontFamily=Helvetica;" value="Permanent = 0&#xa;Temporary = 1&#xa;Internship = 2" vertex="1">
+          <mxGeometry height="90" width="180" y="34" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-6" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffe066;strokeColor=#cca300;fontColor=#4d3d00;fontSize=12;rounded=1;arcSize=10;shadow=1;gradientColor=#fff6cc;swimlaneFillColor=#fffbe6;" value="«enumeration»&#xa;WorkSchedule" vertex="1">
+          <mxGeometry height="104" width="180" x="414" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-7" parent="DmD0bUxtk2MZNvYk0O6L-6" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;spacingLeft=10;fontColor=#5b3a12;fontFamily=Helvetica;" value="Full = 0&#xa;PartTime = 1" vertex="1">
+          <mxGeometry height="70" width="180" y="34" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-8" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffe066;strokeColor=#cca300;fontColor=#4d3d00;fontSize=12;rounded=1;arcSize=10;shadow=1;gradientColor=#fff6cc;swimlaneFillColor=#fffbe6;" value="«enumeration»&#xa;SeniorityLevel" vertex="1">
+          <mxGeometry height="144" width="180" x="414" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-9" parent="DmD0bUxtk2MZNvYk0O6L-8" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;spacingLeft=10;fontColor=#5b3a12;fontFamily=Helvetica;" value="Beginner = 0&#xa;Junior = 1&#xa;Medior = 2&#xa;Senior = 3" vertex="1">
+          <mxGeometry height="110" width="180" y="34" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-10" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffe066;strokeColor=#cca300;fontColor=#4d3d00;fontSize=12;rounded=1;arcSize=10;shadow=1;gradientColor=#fff6cc;swimlaneFillColor=#fffbe6;" value="«enumeration»&#xa;WorkType" vertex="1">
+          <mxGeometry height="124" width="180" x="414" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-11" parent="DmD0bUxtk2MZNvYk0O6L-10" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;spacingLeft=10;fontColor=#5b3a12;fontFamily=Helvetica;" value="OnSite = 0&#xa;Remote = 1&#xa;Hybrid = 2" vertex="1">
+          <mxGeometry height="90" width="180" y="34" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-12" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#8e63ce;strokeColor=#5b2c9e;fontColor=#ffffff;fontSize=13;rounded=1;arcSize=8;shadow=1;gradientColor=#d5bdf5;swimlaneFillColor=#f3ecfc;" value="AdvertisementsController" vertex="1">
+          <mxGeometry height="220" width="360" x="740" y="15" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-13" parent="DmD0bUxtk2MZNvYk0O6L-12" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;spacingLeft=10;spacingTop=6;fontColor=#3a1d63;fontFamily=Helvetica;" value="+ Create() : IActionResult&#xa;+ Delete() : bool&#xa;+ GetAll() : GetAllAdvertisementResult&#xa;+ GetOne() : GetOneAdvertisementResult&#xa;+ Search() : SearchAdvertisementResult&#xa;+ GetAdvertisementsForCompany() : GetAllForCompanyResult&#xa;+ Activate() : IActionResult&#xa;+ Update() : IActionResult" vertex="1">
+          <mxGeometry height="190" width="360" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-14" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#57bb8a;strokeColor=#2e8b57;fontColor=#ffffff;fontSize=13;rounded=1;arcSize=8;shadow=1;gradientColor=#b6e3cb;swimlaneFillColor=#eafaf1;" value="AdvertisementModel" vertex="1">
+          <mxGeometry height="380" width="270" x="830" y="395" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-15" parent="DmD0bUxtk2MZNvYk0O6L-14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;spacingLeft=10;spacingTop=6;fontColor=#1c4b32;fontFamily=Helvetica;" value="+ Id : int&#xa;+ CompanyId : int&#xa;+ Title : string&#xa;+ Description : string?&#xa;+ Position : string&#xa;+ PostedAt : DateTime&#xa;+ ExpiresAt : DateTime?&#xa;+ IsActive : bool&#xa;+ EmploymentType : EmploymentType&#xa;+ WorkSchedule : WorkSchedule&#xa;+ SeniorityLevel : SeniorityLevel&#xa;+ City : string&#xa;+ Country : string?&#xa;+ WorkType : WorkType&#xa;+ SalaryFrom : decimal?&#xa;+ SalaryTo : decimal?&#xa;+ Currency : string?&#xa;+ IsSalaryVisible : bool" vertex="1">
+          <mxGeometry height="350" width="270" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-16" edge="1" parent="1" source="DmD0bUxtk2MZNvYk0O6L-2" style="endArrow=open;html=1;dashed=1;strokeColor=#b45f06;strokeWidth=2;" target="DmD0bUxtk2MZNvYk0O6L-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-17" edge="1" parent="1" source="DmD0bUxtk2MZNvYk0O6L-2" style="endArrow=open;html=1;dashed=1;strokeColor=#b45f06;strokeWidth=2;" target="DmD0bUxtk2MZNvYk0O6L-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-18" edge="1" parent="1" source="DmD0bUxtk2MZNvYk0O6L-2" style="endArrow=open;html=1;dashed=1;strokeColor=#b45f06;strokeWidth=2;" target="DmD0bUxtk2MZNvYk0O6L-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-19" edge="1" parent="1" source="DmD0bUxtk2MZNvYk0O6L-2" style="endArrow=open;html=1;dashed=1;strokeColor=#b45f06;strokeWidth=2;" target="DmD0bUxtk2MZNvYk0O6L-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-20" edge="1" parent="1" source="DmD0bUxtk2MZNvYk0O6L-12" style="endArrow=open;html=1;strokeColor=#5b2c9e;strokeWidth=2;" target="DmD0bUxtk2MZNvYk0O6L-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DmD0bUxtk2MZNvYk0O6L-21" edge="1" parent="1" source="DmD0bUxtk2MZNvYk0O6L-12" style="endArrow=open;html=1;strokeColor=#5b2c9e;strokeWidth=2;" target="DmD0bUxtk2MZNvYk0O6L-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
