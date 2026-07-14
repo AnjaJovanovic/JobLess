@@ -64,7 +64,7 @@ Frontend nikada ne komunicira direktno sa mikroservisima — svi zahtevi idu kro
 | **Auth (IdentityServer)** | Registracija, prijava, JWT/refresh tokeni | 5218 | [src/Security](JobLess/src/Security/README.md) |
 | **Client** | Profili kandidata | 5263 (HTTP), 5264 (gRPC) | *(README u izradi)* |
 | **Company** | Profili kompanija | 5287 (HTTP), 5288 (gRPC) | [src/Company](JobLess/src/Services/Company/README.md) |
-| **Advertisement** | Oglasi za posao | 5104 | *(README u izradi)* |
+| **Advertisement** | Oglasi za posao | 5104 | [src/Advertisement](Jobless/src/Services/Advertisement/README.md) |
 | **JobApplication** | Prijave kandidata na oglase | 5291 | *(README u izradi)* |
 | **Notification** | In-app i email obaveštenja | 5240 | [src/Services/Notification](JobLess/src/Services/Notification/README.md) |
 | **Frontend** | React SPA | 5173 | [src/frontend](JobLess/src/frontend/README.md) |
