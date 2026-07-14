@@ -63,7 +63,7 @@ Frontend nikada ne komunicira direktno sa mikroservisima — svi zahtevi idu kro
 | **API Gateway** | Jedinstvena ulazna tačka, rutiranje i rate limiting (Ocelot) | 5000 | [src/ApiGateway](JobLess/src/ApiGateway/README.md) |
 | **Auth (IdentityServer)** | Registracija, prijava, JWT/refresh tokeni | 5218 | [src/Security](JobLess/src/Security/README.md) |
 | **Client** | Profili kandidata | 5263 (HTTP), 5264 (gRPC) | *(README u izradi)* |
-| **Company** | Profili kompanija | 5287 (HTTP), 5288 (gRPC) | *(README u izradi)* |
+| **Company** | Profili kompanija | 5287 (HTTP), 5288 (gRPC) | [src/Company](JobLess/src/Company/README.md)] |
 | **Advertisement** | Oglasi za posao | 5104 | *(README u izradi)* |
 | **JobApplication** | Prijave kandidata na oglase | 5291 | *(README u izradi)* |
 | **Notification** | In-app i email obaveštenja | 5240 | [src/Services/Notification](JobLess/src/Services/Notification/README.md) |
@@ -142,4 +142,4 @@ Projekat je razvijen timski u okviru predmeta na master studijama (Matematički 
 - Anja Jovanović, 1044/2025
 - Jelena Mitrović
 - Luna Rančić, 1027/2025
-- Ana Veličković
+- Ana Veličković, 1128/2025
