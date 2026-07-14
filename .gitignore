@@ -26,3 +26,9 @@ packages/
 JobLess/docs/doxygen/
 JobLess/docs/frontend/
 
+
+## Tajne / env fajlovi
+.env
+.env.local
+*.env
+!.env.example
