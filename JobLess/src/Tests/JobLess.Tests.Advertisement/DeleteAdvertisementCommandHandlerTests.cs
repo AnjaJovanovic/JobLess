@@ -23,13 +23,16 @@ namespace JobLess.Tests.Advertisement
         {
             _contextMock = new Mock<IApplicationDbContext>();
             _validationThrowerMock = new Mock<IValidationExceptionThrower>();
-            _handler = new DeleteAdvertisementCommandHandler(_contextMock.Object, _validationThrowerMock.Object);
+            _handler = new DeleteAdvertisementCommandHandler(
+                _contextMock.Object,
+                _validationThrowerMock.Object);
         }
 
         private JobAdvertisement CreateAd(bool isActive) => new JobAdvertisement
         {
             Id = 1,
             CompanyId = 1,
+            CompanyEmail = "test@test.com",
             Title = "Backend Developer",
             Description = "Test opis",
             Position = "Developer",
@@ -49,9 +52,11 @@ namespace JobLess.Tests.Advertisement
         private void SetupDbSet(List<JobAdvertisement> data)
         {
             var dbSetMock = data.AsQueryable().BuildMockDbSet();
+
             _contextMock
                 .Setup(c => c.JobAdvertisements)
                 .Returns(dbSetMock.Object);
+
             _contextMock
                 .Setup(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1);
@@ -61,10 +66,14 @@ namespace JobLess.Tests.Advertisement
         public async Task Handle_Should_Deactivate_Advertisement_When_Exists_And_Active()
         {
             // Arrange
-            var ad = CreateAd(isActive: true);
+            var ad = CreateAd(true);
             SetupDbSet(new List<JobAdvertisement> { ad });
 
-            var command = new DeleteAdvertismentCommand { Id = 1 };
+            var command = new DeleteAdvertismentCommand
+            {
+                Id = 1,
+                CompanyEmail = "test@test.com"
+            };
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -72,30 +81,44 @@ namespace JobLess.Tests.Advertisement
             // Assert
             result.Should().BeTrue();
             ad.IsActive.Should().BeFalse();
-            _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+
+            _contextMock.Verify(
+                c => c.SaveChangesAsync(It.IsAny<CancellationToken>()),
+                Times.Once);
         }
 
         [Fact]
         public async Task Handle_Should_Throw_When_Advertisement_Already_Inactive()
         {
             // Arrange
-            var ad = CreateAd(isActive: false);
+            var ad = CreateAd(false);
             SetupDbSet(new List<JobAdvertisement> { ad });
 
             _validationThrowerMock
-                .Setup(v => v.ThrowValidationException("Id", "Advertisement does not exist or has already been deactivated."))
-                .Throws(new Exception("Advertisement does not exist or has already been deactivated."));
+                .Setup(v => v.ThrowValidationException(
+                    "Id",
+                   "Oglas ne postoji je prethodno deaktiviran"))
+                .Throws(new Exception(
+                    "Oglas ne postoji je prethodno deaktiviran"));
 
-            var command = new DeleteAdvertismentCommand { Id = 1 };
+            var command = new DeleteAdvertismentCommand
+            {
+                Id = 1,
+                CompanyEmail = "test@test.com"
+            };
 
             // Act
-            var act = async () => await _handler.Handle(command, CancellationToken.None);
+            var act = async () =>
+                await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            await act.Should().ThrowAsync<Exception>()
-                .WithMessage("Advertisement does not exist or has already been deactivated.");
+            await act.Should()
+                .ThrowAsync<Exception>()
+                .WithMessage("Oglas ne postoji je prethodno deaktiviran");
 
-            _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+            _contextMock.Verify(
+                c => c.SaveChangesAsync(It.IsAny<CancellationToken>()),
+                Times.Never);
         }
 
         [Fact]
@@ -105,19 +128,30 @@ namespace JobLess.Tests.Advertisement
             SetupDbSet(new List<JobAdvertisement>());
 
             _validationThrowerMock
-                .Setup(v => v.ThrowValidationException("Id", "Advertisement does not exist or has already been deactivated."))
-                .Throws(new Exception("Advertisement does not exist or has already been deactivated."));
+                .Setup(v => v.ThrowValidationException(
+                    "Id",
+                   "Oglas ne postoji je prethodno deaktiviran"))
+                .Throws(new Exception(
+                    "Oglas ne postoji je prethodno deaktiviran"));
 
-            var command = new DeleteAdvertismentCommand { Id = 999 };
+            var command = new DeleteAdvertismentCommand
+            {
+                Id = 999,
+                CompanyEmail = "test@test.com"
+            };
 
             // Act
-            var act = async () => await _handler.Handle(command, CancellationToken.None);
+            var act = async () =>
+                await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            await act.Should().ThrowAsync<Exception>()
-                .WithMessage("Advertisement does not exist or has already been deactivated.");
+            await act.Should()
+                .ThrowAsync<Exception>()
+                .WithMessage("Oglas ne postoji je prethodno deaktiviran");
 
-            _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+            _contextMock.Verify(
+                c => c.SaveChangesAsync(It.IsAny<CancellationToken>()),
+                Times.Never);
         }
     }
 }

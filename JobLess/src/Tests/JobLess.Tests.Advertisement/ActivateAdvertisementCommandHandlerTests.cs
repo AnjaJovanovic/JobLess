@@ -114,8 +114,8 @@ public class ActivateAdvertisementCommandHandlerTests
         // Arrange
         SetupDbSet(new List<JobAdvertisement>());
         _validationThrowerMock
-            .Setup(v => v.ThrowValidationException("Id", "Advertisement don't exists."))
-            .Throws(new Exception("Advertisement don't exists."));
+            .Setup(v => v.ThrowValidationException("Id", "Oglas ne postoji je prethodno deaktiviran"))
+            .Throws(new Exception("Oglas ne postoji je prethodno deaktiviran"));
 
         var command = new ActivateAdvertisementCommand { Id = 999 };
 
@@ -124,7 +124,7 @@ public class ActivateAdvertisementCommandHandlerTests
 
         // Assert
         await act.Should().ThrowAsync<Exception>()
-            .WithMessage("Advertisement don't exists.");
+            .WithMessage("Oglas ne postoji je prethodno deaktiviran");
 
         _contextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
