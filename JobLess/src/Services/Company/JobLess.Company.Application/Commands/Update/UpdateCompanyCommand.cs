@@ -15,7 +15,7 @@ namespace JobLess.Company.Application.Commands.Update
 
         public string? Name { get; set; }
         public string? Description { get; set; }
-        //public Industry? Industry { get; set; }
+        public Industry? Industry { get; set; }
         public string? Website { get; set; }
         public string? Location { get; set; }
         //public string? TaxIdentificationNumber { get; set; } //PIB

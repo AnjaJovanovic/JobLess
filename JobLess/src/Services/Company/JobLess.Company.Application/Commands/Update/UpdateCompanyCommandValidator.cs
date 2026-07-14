@@ -1,34 +1,10 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using JobLess.Company.Application.Common.Helpers;
 
 namespace JobLess.Company.Application.Commands.Update
 {
     public class UpdateCompanyCommandValidator : AbstractValidator<UpdateCompanyCommand>
     {
-        /*private static readonly string[] AllowedIndustries =
-                {
-                    "Informacione tehnologije",
-                    "Finansije i bankarstvo",
-                    "Maloprodaja i usluge",
-                    "Industrija i proizvodnja",
-                    "Zdravstvo",
-                    "Građevinarstvo",
-                    "Mediji i marketing",
-                    "Ostalo"
-                };
-
-        private static readonly string[] AllowedCompanySizes =
-            {
-                "1-10",
-                "11-50",
-                "51-200",
-                "201-500",
-                "500+"
-            };*/
         public UpdateCompanyCommandValidator()
         {
 
@@ -36,9 +12,10 @@ namespace JobLess.Company.Application.Commands.Update
             .MaximumLength(200)
             .WithMessage("Ime kompanije ne sme da ima više od 200 karaktera.");
 
-            /* RuleFor(x => x.CompanySize)
-                 .IsInEnum()
-                 .WithMessage("Odabrana veličina kompanije nije validna.");*/
+            RuleFor(x => x.Industry)
+                .IsInEnum()
+                .When(x => x.Industry.HasValue)
+                .WithMessage("Odabrana delatnost nije validna.");
 
             RuleFor(x => x.EmployeeCount)
                 .GreaterThan(0)

@@ -1,4 +1,5 @@
-﻿using JobLess.Company.Application.Interfaces;
+﻿using JobLess.Company.Application.Common.Helpers;
+using JobLess.Company.Application.Interfaces;
 using JobLess.Company.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace JobLess.Company.Application.Commands.Update
         bool IsValid([NotNullWhen(true)] string? value)
         {
             return !string.IsNullOrWhiteSpace(value)
-                && value.Trim().ToLower() != "string";
+                   && value.Trim().ToLower() != "string";
         }
 
         public async Task<bool> Handle(UpdateCompanyCommand command, CancellationToken cancellationToken)
@@ -37,6 +38,11 @@ namespace JobLess.Company.Application.Commands.Update
 
             if (IsValid(command.Description) && command.Description != company.Description)
                 company.Description = command.Description;
+
+            if (command.Industry.HasValue && command.Industry.Value != company.Industry)
+            {
+                company.Industry = command.Industry.Value;
+            }
 
             if (IsValid(command.Website) && command.Website != company.Website)
                 company.Website = command.Website;
