@@ -2,16 +2,22 @@
 
 Ovaj dokument opisuje kako se JobLess sistem podešava i pokreće lokalno, u razvojnom okruženju. Projekat nije javno objavljen (deployovan) na spoljnom serveru — pokreće se lokalno putem Dockera.
 
-## Preduslovi
+## Konfiguracija (environment promenljive)
 
-| Alat | Verzija | Potrebno za |
-|---|---|---|
-| [Docker](https://www.docker.com/) + Docker Compose | najnovija stabilna | pokretanje kompletnog sistema (preporučeno) |
-| [.NET SDK](https://dotnet.microsoft.com/) | 8.0.x | pokretanje pojedinačnog servisa van Dockera, `dotnet test` |
-| [Node.js](https://nodejs.org/) | 18+ | pokretanje frontenda u dev modu (`npm run dev`) |
-| SQL klijent (opciono) | — | inspekcija baze (`localhost:1433`) |
+Aplikacija koristi `.env` fajl za konfiguraciju osetljivih parametara kao što su lozinke za baze podataka, JWT ključevi, SMTP i RabbitMQ kredencijali. Iz bezbednosnih razloga, `.env` fajl se ne nalazi na Git repozitorijumu.
 
-Verzija .NET SDK-a je fiksirana u [`global.json`](../JobLess/global.json) na `8.0.*`.
+**Kopirati primer konfiguracije:**
+
+   Napraviti kopiju `.env.example` fajla i nazivati ga `.env`, pokretanjem sledeće komande u terminalu (iz korena projekta):
+
+   ```bash
+   cp .env.example .env # Za Linux i macOS
+   copy .env.example .env # Za Windows Command Prompt
+   ```
+**Popuniti vrednosti u .env fajlu**
+
+   Otvoriti novokreirani .env fajl i popuniti prazne promenljive (poput SQL_SA_PASSWORD, JWT_KEY, RABBITMQ_PASSWORD, itd.).
+
 
 ## Pokretanje kompletnog sistema (Docker Compose)
 
@@ -48,22 +54,7 @@ docker compose down                 # zaustavljanje (podaci u volume-u ostaju)
 docker compose down -v              # zaustavljanje + brisanje baze (čist start)
 ```
 
-### Redosled pokretanja i migracije
 
-`docker-compose.yml` definiše `depends_on` sa `condition: service_healthy` za SQL Server i RabbitMQ, tako da se servisi ne pokreću dok baza i broker nisu spremni. Svaki servis pri startu sam primenjuje EF Core migracije (`db.Database.Migrate()` u `Program.cs`), pa nije potrebna ručna inicijalizacija baze.
-
-### Konfiguracija (environment promenljive)
-
-Sve promenljive za Development okruženje su već podešene direktno u `docker-compose.yml` (connection stringovi, JWT ključ, RabbitMQ i SMTP kredencijali). Za realan projekat ove vrednosti bi trebalo da budu u `.env` fajlu ili secret manageru — ovde su hardkodovane radi jednostavnosti pokretanja u okviru seminarskog rada.
-
-Najvažnije promenljive po servisu:
-
-- `ConnectionStrings__DefaultConnection` / `ConnectionStrings__IdentityConnectionString` — konekcija ka SQL Serveru
-- `Jwt__Key`, `Jwt__Issuer`, `Jwt__Audience`, `Jwt__ExpirationMinutes` — moraju biti **identični** u Auth servisu i u svakom servisu koji validira JWT (Client, Company, Notification, JobApplication)
-- `RabbitMq__Host`, `RabbitMq__Username`, `RabbitMq__Password` — konekcija ka RabbitMQ-u
-- `Smtp__*` (samo Notification servis) — SMTP nalog za slanje email obaveštenja
-
-> **Napomena:** JWT ključ i SMTP lozinka u `docker-compose.yml` su primer/demo vrednosti namenjene isključivo lokalnom razvoju za potrebe seminarskog rada i ne treba ih koristiti u produkcionom okruženju.
 
 ## Opcija 2 — Pokretanje pojedinačnih servisa lokalno (bez Dockera)
 
@@ -74,15 +65,58 @@ Koristi se kada se razvija/debaguje jedan servis, dok ostali rade u Dockeru (ili
    ```bash
    docker compose up -d sql-server rabbitmq
    ```
+2. Podesiti user-secrets za servis koji se pokreće
 
-2. Pokrenuti željeni servis direktno:
+Pokrenuti jednom po servisu, iz foldera`*.API` projekta tog servisa. Vrednosti uzeti iz `.env` fajla (isti ključ/lozinka).
+
+**Auth (Security):**
+```bash
+cd src/Security/JobLess.IdentityServer.API
+dotnet user-secrets init
+dotnet user-secrets set "Jwt:Key" "JWT_KEY_VREDNOST"
+dotnet user-secrets set "ConnectionStrings:IdentityConnectionString" "Server=localhost,1433;Database=JobLessIdentityDb;User Id=sa;Password=SA_PASSWORD_VREDNOST;TrustServerCertificate=True;MultipleActiveResultSets=True;"
+dotnet user-secrets set "RabbitMq:Username" "jobless"
+dotnet user-secrets set "RabbitMq:Password" "RABBITMQ_PASSWORD_VREDNOST"
+```
+
+**Client / Company / Advertisement / JobApplication (isti obrazac):**
+```bash
+cd src/Services//JobLess..API
+dotnet user-secrets init
+dotnet user-secrets set "Jwt:Key" "JWT_KEY_VREDNOST"
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=JobLessDb;User Id=sa;Password=SA_PASSWORD_VREDNOST;TrustServerCertificate=True;MultipleActiveResultSets=True;"
+dotnet user-secrets set "RabbitMq:Username" "jobless"
+dotnet user-secrets set "RabbitMq:Password" "RABBITMQ_PASSWORD_VREDNOST"
+```
+
+**Notification (dodatno ima SMTP):**
+```bash
+cd src/Services/Notification/JobLess.Notification.API
+dotnet user-secrets init
+dotnet user-secrets set "Jwt:Key" "JWT_KEY_VREDNOST"
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=JobLessNotificationDb;User Id=sa;Password=SA_PASSWORD_VREDNOST;TrustServerCertificate=True;MultipleActiveResultSets=True;"
+dotnet user-secrets set "RabbitMq:Username" "jobless"
+dotnet user-secrets set "RabbitMq:Password" "RABBITMQ_PASSWORD_VREDNOST"
+dotnet user-secrets set "Smtp:UserName" "jobless.matf@gmail.com"
+dotnet user-secrets set "Smtp:Password" "SMTP_PASSWORD_VREDNOST"
+dotnet user-secrets set "Smtp:FromEmail" "jobless.matf@gmail.com"
+```
+
+> **Napomena o sintaksi:** u `.env`/`docker-compose.yml` ključevi koriste `__`
+> (npr. `Jwt__Key`), u `dotnet user-secrets` koriste `:` (npr. `Jwt:Key`) — ista
+> promenljiva, druga notacija.
+
+Proveri šta je upisano:
+```bash
+dotnet user-secrets list
+```
+
+3. Pokrenuti željeni servis direktno:
 
    ```bash
    cd src/Security/JobLess.IdentityServer.API
    dotnet run
    ```
-
-   Servis će koristiti `appsettings.Development.json` / `launchSettings.json` iz svog projekta (portovi se poklapaju sa onima iz tabele iznad, npr. Auth na `5218`).
 
 3. Za API Gateway u ovom režimu koristiti profil koji rutira ka `localhost` (umesto ka Docker imenima kontejnera) — pokrenuti sa `ASPNETCORE_ENVIRONMENT=Local`, kako bi se učitao `ocelot.Local.json` (rute ka `localhost:<port>` za svaki servis). Podrazumevani `ASPNETCORE_ENVIRONMENT=Development` učitava `ocelot.Development.json`, koji rutira ka imenima Docker kontejnera (npr. `client-service`) i **neće raditi** ako servisi nisu u istoj Docker mreži.
 
