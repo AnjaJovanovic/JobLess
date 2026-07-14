@@ -1,0 +1,60 @@
+<mxfile host="app.diagrams.net" agent="Claude">
+  <diagram name="Company mikroservis" id="companyClassDiagram">
+    <mxGraphModel dx="1823" dy="1028" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="700" background="#1a1a1a" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontColor=#cccccc;fontSize=14;fontStyle=0;" value="Company mikroservis – klasni dijagram" vertex="1">
+          <mxGeometry height="30" width="400" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="company_outer" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#12181f;strokeColor=#4a90d9;fontColor=#e0e0e0;align=left;verticalAlign=top;spacingLeft=8;spacingTop=34;fontSize=11;" value="+ Id : int&#xa;+ Name : string&#xa;+ Description : string?&#xa;+ Industry : Industry&#xa;+ Website : string?&#xa;+ TaxIdentificationNumber : string&#xa;+ RegistrationNumber : string&#xa;+ OwnerName : string?&#xa;+ ContactPersonFirstName : string&#xa;+ ContactPersonLastName : string&#xa;+ ContactPersonPosition : string&#xa;+ ContactPersonPhoneNumber : string&#xa;+ Email : string&#xa;+ PhoneNumber : string&#xa;+ Location : string&#xa;+ Address : string&#xa;+ CompanySize : CompanySize&#xa;+ IsActive : bool&#xa;+ CreatedAt : DateTime&#xa;+ UpdatedAt : DateTime" vertex="1">
+          <mxGeometry height="362" width="240" x="30" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="company_header" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2b4a6f;strokeColor=#4a90d9;fontColor=#ffffff;fontStyle=1;align=center;verticalAlign=middle;fontSize=12;" value="Company" vertex="1">
+          <mxGeometry height="26" width="240" x="30" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="industry_outer" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a1710;strokeColor=#c9a227;fontColor=#e0e0e0;align=left;verticalAlign=top;spacingLeft=8;spacingTop=42;fontSize=11;" value="InformationTechnology = 1&#xa;FinanceAndBanking = 2&#xa;RetailAndServices = 3&#xa;Manufacturing = 4&#xa;Healthcare = 5&#xa;Construction = 6&#xa;MediaAndMarketing = 7&#xa;Other = 8" vertex="1">
+          <mxGeometry height="178" width="190" x="330" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="industry_header" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#5c4813;strokeColor=#c9a227;fontColor=#ffffff;fontStyle=1;align=center;verticalAlign=middle;fontSize=11;" value="«enumeration»&#xa;Industry" vertex="1">
+          <mxGeometry height="34" width="190" x="330" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="size_outer" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a1710;strokeColor=#c9a227;fontColor=#e0e0e0;align=left;verticalAlign=top;spacingLeft=8;spacingTop=42;fontSize=11;" value="OneToTen = 1&#xa;ElevenToFifty = 2&#xa;FiftyOneToTwoHundred = 3&#xa;TwoHundredOneToFiveHundred = 4&#xa;MoreThanFiveHundred = 5" vertex="1">
+          <mxGeometry height="130" width="190" x="330" y="728" as="geometry" />
+        </mxCell>
+        <mxCell id="size_header" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#5c4813;strokeColor=#c9a227;fontColor=#ffffff;fontStyle=1;align=center;verticalAlign=middle;fontSize=11;" value="«enumeration»&#xa;CompanySize" vertex="1">
+          <mxGeometry height="34" width="190" x="330" y="728" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_outer" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#17121c;strokeColor=#9b6fc9;fontColor=#e0e0e0;align=left;verticalAlign=top;spacingLeft=8;spacingTop=34;fontSize=11;" value="+ Create() : IActionResult&#xa;+ Delete() : IActionResult&#xa;+ GetAll() : IActionResult&#xa;+ GetOne() : IActionResult&#xa;+ GetByName() : IActionResult&#xa;+ Search() : IActionResult&#xa;+ Update() : IActionResult" vertex="1">
+          <mxGeometry height="154" width="220" x="20" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_header" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#4a2f5c;strokeColor=#9b6fc9;fontColor=#ffffff;fontStyle=1;align=center;verticalAlign=middle;fontSize=12;" value="CompaniesController" vertex="1">
+          <mxGeometry height="26" width="220" x="20" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="dto_outer" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#10160f;strokeColor=#4caf7d;fontColor=#e0e0e0;align=left;verticalAlign=top;spacingLeft=8;spacingTop=34;fontSize=11;" value="+ Id : int&lt;br&gt;+ Name : string&lt;br&gt;+ Description : string?&lt;br&gt;+ Industry : Industry&lt;br&gt;+ Website : string?&lt;br&gt;+ TaxIdentificationNumber : string&lt;br&gt;+ RegistrationNumber : string&lt;br&gt;+ OwnerName : string?&lt;br&gt;+ ContactPersonFirstName : string&lt;br&gt;+ ContactPersonLastName : string&lt;br&gt;+ ContactPersonPosition : string&lt;br&gt;+ ContactPersonPhoneNumber : string&lt;br&gt;+ Email : string&lt;br&gt;+ PhoneNumber : string&lt;br&gt;+ Address : string&lt;br&gt;+ CompanySize : CompanySize&lt;br&gt;+ IsActive : bool&lt;br&gt;+ CreatedAt : DateTime&lt;br&gt;+ UpdatedAt : DateTime" vertex="1">
+          <mxGeometry height="310" width="220" x="310" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="dto_header" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1f4d33;strokeColor=#4caf7d;fontColor=#ffffff;fontStyle=1;align=center;verticalAlign=middle;fontSize=12;" value="CompanyModel «DTO»" vertex="1">
+          <mxGeometry height="26" width="220" x="310" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="e_company_industry" edge="1" parent="1" source="company_outer" style="endArrow=open;dashed=1;html=1;strokeColor=#aaaaaa;fontColor=#aaaaaa;fontSize=10;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" target="industry_outer" value="&lt;span style=&quot;background-color: rgb(102, 102, 255);&quot;&gt;uses&lt;/span&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_company_size" edge="1" parent="1" source="company_outer" style="endArrow=open;dashed=1;html=1;strokeColor=#aaaaaa;fontColor=#aaaaaa;fontSize=10;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" target="size_outer" value="&lt;span style=&quot;background-color: rgb(102, 102, 255);&quot;&gt;uses&lt;/span&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ctrl_company" edge="1" parent="1" source="ctrl_outer" style="endArrow=block;html=1;strokeColor=#cccccc;fontColor=#cccccc;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="130" y="350" />
+            </Array>
+            <mxPoint x="130" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_ctrl_dto" edge="1" parent="1" source="ctrl_outer" style="endArrow=block;html=1;strokeColor=#cccccc;fontColor=#cccccc;fontSize=10;exitX=1.007;exitY=0.661;exitDx=0;exitDy=0;entryX=-0.011;entryY=0.361;entryDx=0;entryDy=0;exitPerimeter=0;entryPerimeter=0;" target="dto_outer" value="&lt;b style=&quot;background-color: rgb(102, 102, 255);&quot;&gt;returns / sends&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
