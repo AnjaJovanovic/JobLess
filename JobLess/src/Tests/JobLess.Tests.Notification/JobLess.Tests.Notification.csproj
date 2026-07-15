@@ -30,6 +30,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Services\Notification\JobLess.Notification.Application\JobLess.Notification.Application.csproj" />
 		<ProjectReference Include="..\..\Services\Notification\JobLess.Notification.Domain\JobLess.Notification.Domain.csproj" />
+		<ProjectReference Include="..\..\Services\JobApplication\JobLess.JobApplication.Application\JobLess.JobApplication.Application.csproj" />
+		<ProjectReference Include="..\..\Services\JobApplication\JobLess.JobApplication.Domain\JobLess.JobApplication.Domain.csproj" />
+		<ProjectReference Include="..\..\Shared\JobLess.Contracts\JobLess.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>

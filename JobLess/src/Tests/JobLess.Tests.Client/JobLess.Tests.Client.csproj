@@ -30,6 +30,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Services\Client\JobLess.Client.Application\JobLess.Client.Application.csproj" />
 		<ProjectReference Include="..\..\Services\Client\JobLess.Client.Domain\JobLess.Client.Domain.csproj" />
+		<ProjectReference Include="..\..\Services\Client\JobLess.Client.Infrastructure\JobLess.Client.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\Shared\JobLess.Contracts\JobLess.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>
