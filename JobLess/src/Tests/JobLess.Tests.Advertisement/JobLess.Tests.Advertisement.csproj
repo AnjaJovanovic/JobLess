@@ -34,8 +34,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Services\Advertisement\JobLess.Advertisement.Application\JobLess.Advertisement.Application.csproj" />
+		<ProjectReference Include="..\..\Services\Advertisement\Jobless.Advertisement.Application\Jobless.Advertisement.Application.csproj" />
 		<ProjectReference Include="..\..\Services\Advertisement\JobLess.Advertisement.Domain\JobLess.Advertisement.Domain.csproj" />
+		<ProjectReference Include="..\..\Services\Advertisement\JobLess.Advertisement.Infrastructure\JobLess.Advertisement.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\Shared\JobLess.Contracts\JobLess.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>

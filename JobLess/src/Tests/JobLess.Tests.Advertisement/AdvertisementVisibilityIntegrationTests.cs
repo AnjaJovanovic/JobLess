@@ -12,7 +12,7 @@ namespace JobLess.Tests.Advertisement;
 
 public class AdvertisementVisibilityIntegrationTests
 {
-    private readonly Mock<IAdvertisementDbContext> _contextMock = new ();
+    private readonly Mock<IApplicationDbContext> _contextMock = new ();
     private readonly List<JobAdvertisement> _advertisements = new ();
 
     private readonly CreateAdvertisementCommandHandler _createHandler;

@@ -1,1 +1,12 @@
 global using Xunit;
+global using JobLess.Advertisement.Application.Interfaces;
+global using JobLess.Advertisement.Application.Commands.Create;
+global using JobLess.Advertisement.Application.Commands.Activate;
+global using JobLess.Advertisement.Application.Commands.Update;
+global using JobLess.Advertisement.Application.Commands.Delete;
+global using JobLess.Advertisement.Application.Queries.GetAll;
+global using JobLess.Advertisement.Application.Queries.GetAllForCompany;
+global using Jobless.Advertisement.Application.Queries.GetAllForCompany;
+global using JobLess.Advertisement.Application.Queries.GetOne;
+global using JobLess.Advertisement.Application.Queries.Search;
+global using JobLess.Advertisement.Application.Models;
