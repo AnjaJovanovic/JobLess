@@ -62,10 +62,10 @@ Frontend nikada ne komunicira direktno sa mikroservisima — svi zahtevi idu kro
 |---|---|---|---|
 | **API Gateway** | Jedinstvena ulazna tačka, rutiranje i rate limiting (Ocelot) | 5000 | [src/ApiGateway](JobLess/src/ApiGateway/README.md) |
 | **Auth (IdentityServer)** | Registracija, prijava, JWT/refresh tokeni | 5218 | [src/Security](JobLess/src/Security/README.md) |
-| **Client** | Profili kandidata | 5263 (HTTP), 5264 (gRPC) | *(README u izradi)* |
+| **Client** | Profili kandidata | 5263 (HTTP), 5264 (gRPC) | [src/Client](JobLess/src/Services/Client/README.md) |
 | **Company** | Profili kompanija | 5287 (HTTP), 5288 (gRPC) | [src/Company](JobLess/src/Services/Company/README.md) |
 | **Advertisement** | Oglasi za posao | 5104 | [src/Advertisement](JobLess/src/Services/Advertisement/README.md) |
-| **JobApplication** | Prijave kandidata na oglase | 5291 | *(README u izradi)* |
+| **JobApplication** | Prijave kandidata na oglase | 5291 | [src/JobApplication](JobLess/src/Services/JobApplication) |
 | **Notification** | In-app i email obaveštenja | 5240 | [src/Services/Notification](JobLess/src/Services/Notification/README.md) |
 | **Frontend** | React SPA | 5173 | [src/frontend](JobLess/src/frontend/README.md) |
 
