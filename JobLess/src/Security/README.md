@@ -24,6 +24,8 @@ JobLess.IdentityServer.Infrastructure  → EF Core (IdentityContext), JWT servis
 
 Tok zahteva: `AuthController` → `IMediator` → `*CommandHandler` (Application) → `IAuthenticationService` / `IJwtTokenService` (implementacije u Infrastructure) → `IdentityContext` (EF Core, SQL Server).
 
+Dijagram klasa: [JobLess/docs/diagrams/identity_service_dijagram_klasa.drawio](../../docs/diagrams/identity_service_dijagram_klasa.drawio)
+
 ## Dijagram klasa
 
 ```mermaid

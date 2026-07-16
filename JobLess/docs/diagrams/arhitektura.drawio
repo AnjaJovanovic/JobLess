@@ -1,0 +1,145 @@
+<mxfile host="app.diagrams.net" agent="Claude">
+  <diagram id="arch-diagram" name="Arhitektura">
+    <mxGraphModel dx="1664" dy="886" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FE" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" value="Frontend (React + Vite)&#xa;:5173" vertex="1">
+          <mxGeometry height="60" width="200" x="610" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="GW" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;" value="API Gateway (Ocelot)&#xa;:5000" vertex="1">
+          <mxGeometry height="60" width="200" x="610" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="AUTH" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Auth servis&#xa;JobLess.IdentityServer&#xa;:5218" vertex="1">
+          <mxGeometry height="70" width="190" x="60" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="CLIENT" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Client servis&#xa;:5263" vertex="1">
+          <mxGeometry height="70" width="160" x="290" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="COMPANY" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Company servis&#xa;:5287" vertex="1">
+          <mxGeometry height="70" width="160" x="490" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="ADS" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Advertisement servis&#xa;:5104" vertex="1">
+          <mxGeometry height="70" width="170" x="690" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="JOBAPP" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="JobApplication servis&#xa;:5291" vertex="1">
+          <mxGeometry height="70" width="180" x="900" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="NOTIF" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Notification servis&#xa;:5240" vertex="1">
+          <mxGeometry height="70" width="170" x="1120" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="MQ" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="RabbitMQ" vertex="1">
+          <mxGeometry height="80" width="140" x="960" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="DB" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" value="SQL Server" vertex="1">
+          <mxGeometry height="90" width="150" x="480" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="MAIL" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" value="Email (Gmail SMTP)" vertex="1">
+          <mxGeometry height="60" width="170" x="1220" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="eFEGW" edge="1" parent="1" source="FE" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="GW">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eGW_AUTH" edge="1" parent="1" source="GW" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="AUTH">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eGW_CLIENT" edge="1" parent="1" source="GW" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="CLIENT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eGW_COMPANY" edge="1" parent="1" source="GW" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="COMPANY">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="260" />
+              <mxPoint x="570" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eGW_ADS" edge="1" parent="1" source="GW" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="ADS">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="260" />
+              <mxPoint x="775" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eGW_JOBAPP" edge="1" parent="1" source="GW" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="JOBAPP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eGW_NOTIF" edge="1" parent="1" source="GW" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="NOTIF">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eJOB_CLIENT" edge="1" parent="1" source="JOBAPP" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;fontSize=11;entryX=0.75;entryY=0;entryDx=0;entryDy=0;exitX=0.222;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" target="CLIENT" value="gRPC">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="940" y="280" />
+              <mxPoint x="410" y="280" />
+            </Array>
+            <mxPoint x="940" y="300" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eJOB_COMPANY" edge="1" parent="1" source="JOBAPP" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;fontSize=11;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="COMPANY" value="&lt;span&gt;gRPC&lt;/span&gt;">
+          <mxGeometry relative="1" x="-0.2523" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="900" y="380" />
+              <mxPoint x="775" y="380" />
+              <mxPoint x="775" y="370" />
+              <mxPoint x="650" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eAUTH_MQ" edge="1" parent="1" source="AUTH" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="MQ" value="publish">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="155" y="545" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eJOB_MQ" edge="1" parent="1" source="JOBAPP" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="MQ" value="publish">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eMQ_NOTIF" edge="1" parent="1" source="MQ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="NOTIF" value="consume">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1205" y="540" />
+              <mxPoint x="1205" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eAUTH_DB" edge="1" parent="1" source="AUTH" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="DB">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="108" y="665" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eCLIENT_DB" edge="1" parent="1" source="CLIENT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.2;entryY=0;entryDx=0;entryDy=0;" target="DB">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eCOMPANY_DB" edge="1" parent="1" source="COMPANY" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="DB">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eADS_DB" edge="1" parent="1" source="ADS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.8;entryY=0;entryDx=0;entryDy=0;" target="DB">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eJOBAPP_DB" edge="1" parent="1" source="JOBAPP" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" target="DB">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="945" y="645" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eNOTIF_DB" edge="1" parent="1" source="NOTIF" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="DB">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1162" y="690" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eNOTIF_MAIL" edge="1" parent="1" source="NOTIF" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="MAIL" value="SMTP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

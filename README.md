@@ -16,37 +16,6 @@ Sistem je izgrađen kao **mikroservisna arhitektura** u .NET 8, sa React fronten
 
 ## Arhitektura
 
-```mermaid
-flowchart TB
-    FE["Frontend (React + Vite)\n:5173"]
-    GW["API Gateway (Ocelot)\n:5000"]
-
-    FE --> GW
-
-    GW --> AUTH["Auth servis\nJobLess.IdentityServer\n:5218"]
-    GW --> CLIENT["Client servis\n:5263"]
-    GW --> COMPANY["Company servis\n:5287"]
-    GW --> ADS["Advertisement servis\n:5104"]
-    GW --> JOBAPP["JobApplication servis\n:5291"]
-    GW --> NOTIF["Notification servis\n:5240"]
-
-    JOBAPP -. gRPC .-> CLIENT
-    JOBAPP -. gRPC .-> COMPANY
-
-    AUTH -- publish --> MQ[("RabbitMQ")]
-    JOBAPP -- publish --> MQ
-    MQ -- consume --> NOTIF
-
-    AUTH --> DB[("SQL Server")]
-    CLIENT --> DB
-    COMPANY --> DB
-    ADS --> DB
-    JOBAPP --> DB
-    NOTIF --> DB
-
-    NOTIF -- SMTP --> MAIL["Email (Gmail SMTP)"]
-```
-
 Svaki poslovni mikroservis prati **Clean Architecture** raspodelu po slojevima:
 
 - **API** – kontroleri, DI kompozicija, `Program.cs`
@@ -55,6 +24,8 @@ Svaki poslovni mikroservis prati **Clean Architecture** raspodelu po slojevima:
 - **Infrastructure** – EF Core `DbContext`, implementacije servisa, migracije, integracije (RabbitMQ, SMTP, gRPC)
 
 Frontend nikada ne komunicira direktno sa mikroservisima — svi zahtevi idu kroz **API Gateway** (Ocelot), koji rutira zahteve na osnovu path-a i primenjuje rate limiting.
+
+Dijagram arhitekture: [docs/diagrams/arhitektura.drawio](JobLess/docs/diagrams/arhitektura.drawio)
 
 ## Mikroservisi
 

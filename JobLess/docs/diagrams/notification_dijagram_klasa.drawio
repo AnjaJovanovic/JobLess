@@ -1,0 +1,143 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Notification" id="notification-class-diagram">
+    <mxGraphModel dx="1600" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#333333;fontFamily=Helvetica;" value="Notification mikroservis – klasni dijagram" vertex="1">
+          <mxGeometry height="40" width="560" x="40" y="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="notifications-controller" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;rounded=1;arcSize=8;" value="NotificationsController" vertex="1">
+          <mxGeometry height="100" width="270" x="60" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="notifications-controller-body" parent="notifications-controller" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ GetMyNotifications() List~Notification~&#xa;+ MarkAsRead(Guid id) IActionResult" vertex="1">
+          <mxGeometry height="70" width="270" y="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="notification" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;arcSize=8;" value="Notification" vertex="1">
+          <mxGeometry height="250" width="250" x="60" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="notification-body" parent="notification" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ Guid Id&#xa;+ string RecipientUserId&#xa;+ string Title&#xa;+ string Message&#xa;+ bool IsRead&#xa;+ DateTime CreatedAt&#xa;+ NotificationType Type&#xa;+ int? ApplicationId&#xa;+ int? AdvertisementId&#xa;+ int? CandidateId&#xa;+ int? CompanyId" vertex="1">
+          <mxGeometry height="220" width="250" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="notification-type" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;rounded=1;arcSize=8;" value="«enumeration»&#xa;NotificationType" vertex="1">
+          <mxGeometry height="130" width="190" x="380" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="notification-type-body" parent="notification-type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="Welcome&#xa;NewApplication&#xa;ApplicationAccepted&#xa;ApplicationRejected" vertex="1">
+          <mxGeometry height="86" width="190" y="44" as="geometry" />
+        </mxCell>
+
+        <mxCell id="get-command" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;rounded=1;arcSize=8;" value="«record»&#xa;GetUserNotificationsCommand" vertex="1">
+          <mxGeometry height="90" width="260" x="420" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="get-command-body" parent="get-command" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ string UserEmailId" vertex="1">
+          <mxGeometry height="46" width="260" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="get-handler" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;arcSize=8;" value="GetUserNotificationsQueryHandler" vertex="1">
+          <mxGeometry height="90" width="300" x="770" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="get-handler-body" parent="get-handler" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ Handle(GetUserNotificationsCommand) List~Notification~" vertex="1">
+          <mxGeometry height="60" width="300" y="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mark-command" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;rounded=1;arcSize=8;" value="«record»&#xa;MarkNotificationAsReadCommand" vertex="1">
+          <mxGeometry height="110" width="260" x="420" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="mark-command-body" parent="mark-command" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ Guid NotificationId&#xa;+ string UserEmail" vertex="1">
+          <mxGeometry height="66" width="260" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="mark-handler" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;arcSize=8;" value="MarkNotificationAsReadCommandHandler" vertex="1">
+          <mxGeometry height="90" width="300" x="770" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="mark-handler-body" parent="mark-handler" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ Handle(MarkNotificationAsReadCommand) bool" vertex="1">
+          <mxGeometry height="60" width="300" y="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="notification-db-interface" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;rounded=1;arcSize=8;" value="«interface»&#xa;INotificationDbContext" vertex="1">
+          <mxGeometry height="110" width="260" x="1170" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="notification-db-interface-body" parent="notification-db-interface" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ DbSet~Notification~ Notifications&#xa;+ SaveChangesAsync() int" vertex="1">
+          <mxGeometry height="66" width="260" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="notification-db-context" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;rounded=1;arcSize=8;" value="NotificationDbContext" vertex="1">
+          <mxGeometry height="60" width="240" x="1180" y="270" as="geometry" />
+        </mxCell>
+
+        <mxCell id="email-service-interface" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;rounded=1;arcSize=8;" value="«interface»&#xa;IEmailService" vertex="1">
+          <mxGeometry height="90" width="240" x="1180" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="email-service-interface-body" parent="email-service-interface" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ SendWelcomeEmailAsync(string, string)" vertex="1">
+          <mxGeometry height="46" width="240" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="email-service" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;rounded=1;arcSize=8;" value="EmailService" vertex="1">
+          <mxGeometry height="60" width="220" x="1190" y="550" as="geometry" />
+        </mxCell>
+
+        <mxCell id="user-registered-consumer" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;rounded=1;arcSize=8;" value="UserRegisteredConsumer" vertex="1">
+          <mxGeometry height="70" width="260" x="420" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="user-registered-consumer-body" parent="user-registered-consumer" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ Consume(UserRegisteredMessage)" vertex="1">
+          <mxGeometry height="40" width="260" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="job-applied-consumer" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;rounded=1;arcSize=8;" value="JobAppliedConsumer" vertex="1">
+          <mxGeometry height="70" width="260" x="420" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="job-applied-consumer-body" parent="job-applied-consumer" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ Consume(JobAppliedMessage)" vertex="1">
+          <mxGeometry height="40" width="260" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="application-status-consumer" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;rounded=1;arcSize=8;" value="ApplicationStatusChangedConsumer" vertex="1">
+          <mxGeometry height="70" width="300" x="400" y="930" as="geometry" />
+        </mxCell>
+        <mxCell id="application-status-consumer-body" parent="application-status-consumer" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ Consume(ApplicationStatusChangedMessage)" vertex="1">
+          <mxGeometry height="40" width="300" y="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e-notification-type" edge="1" parent="1" source="notification" target="notification-type" style="endArrow=open;html=1;strokeColor=#6c8ebf;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-db-impl" edge="1" parent="1" source="notification-db-context" target="notification-db-interface" style="endArrow=block;endFill=0;html=1;dashed=1;strokeColor=#b85450;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-email-impl" edge="1" parent="1" source="email-service" target="email-service-interface" style="endArrow=block;endFill=0;html=1;dashed=1;strokeColor=#b85450;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e-controller-get" edge="1" parent="1" source="notifications-controller" target="get-command" style="endArrow=open;html=1;dashed=1;strokeColor=#9673a6;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-controller-mark" edge="1" parent="1" source="notifications-controller" target="mark-command" style="endArrow=open;html=1;dashed=1;strokeColor=#9673a6;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-get-handler-db" edge="1" parent="1" source="get-handler" target="notification-db-interface" style="endArrow=open;html=1;dashed=1;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-mark-handler-db" edge="1" parent="1" source="mark-handler" target="notification-db-interface" style="endArrow=open;html=1;dashed=1;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e-user-consumer-db" edge="1" parent="1" source="user-registered-consumer" target="notification-db-interface" style="endArrow=open;html=1;dashed=1;strokeColor=#d79b00;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-user-consumer-email" edge="1" parent="1" source="user-registered-consumer" target="email-service-interface" style="endArrow=open;html=1;dashed=1;strokeColor=#d79b00;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-user-consumer-notification" edge="1" parent="1" source="user-registered-consumer" target="notification" style="endArrow=open;html=1;dashed=1;strokeColor=#d79b00;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-job-consumer-db" edge="1" parent="1" source="job-applied-consumer" target="notification-db-interface" style="endArrow=open;html=1;dashed=1;strokeColor=#d79b00;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-job-consumer-notification" edge="1" parent="1" source="job-applied-consumer" target="notification" style="endArrow=open;html=1;dashed=1;strokeColor=#d79b00;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-status-consumer-db" edge="1" parent="1" source="application-status-consumer" target="notification-db-interface" style="endArrow=open;html=1;dashed=1;strokeColor=#d79b00;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-status-consumer-notification" edge="1" parent="1" source="application-status-consumer" target="notification" style="endArrow=open;html=1;dashed=1;strokeColor=#d79b00;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,154 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Security" id="security-class-diagram">
+    <mxGraphModel dx="1664" dy="886" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#333333;fontFamily=Helvetica;" value="Auth mikroservis – klasni dijagram" vertex="1">
+          <mxGeometry height="40" width="500" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-controller" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;rounded=1;arcSize=8;" value="AuthController" vertex="1">
+          <mxGeometry height="150" width="260" x="40" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-controller-body" parent="auth-controller" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="- IMediator _mediator&#xa;+ Register(RegisterUserCommand) IActionResult&#xa;+ Login(LoginUserCommand) IActionResult&#xa;+ Refresh(RefreshTokenCommand) IActionResult" vertex="1">
+          <mxGeometry height="120" width="260" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="register-command" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;rounded=1;arcSize=8;" value="«record»&#xa;RegisterUserCommand" vertex="1">
+          <mxGeometry height="130" width="220" x="360" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="register-command-body" parent="register-command" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ string Email&#xa;+ string Password&#xa;+ string Role" vertex="1">
+          <mxGeometry height="86" width="220" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="login-command" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;rounded=1;arcSize=8;" value="«record»&#xa;LoginUserCommand" vertex="1">
+          <mxGeometry height="110" width="220" x="60" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="login-command-body" parent="login-command" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ string Email&#xa;+ string Password" vertex="1">
+          <mxGeometry height="66" width="220" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="refresh-command" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;rounded=1;arcSize=8;" value="«record»&#xa;RefreshTokenCommand" vertex="1">
+          <mxGeometry height="110" width="220" x="60" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="refresh-command-body" parent="refresh-command" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ string Email&#xa;+ string RefreshToken" vertex="1">
+          <mxGeometry height="66" width="220" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="register-handler" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;arcSize=8;" value="RegisterUserCommandHandler" vertex="1">
+          <mxGeometry height="90" width="260" x="360" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="register-handler-body" parent="register-handler" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ Handle(RegisterUserCommand) AuthenticationDto" vertex="1">
+          <mxGeometry height="60" width="260" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="login-handler" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;arcSize=8;" value="LoginUserCommandHandler" vertex="1">
+          <mxGeometry height="90" width="260" x="670" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="login-handler-body" parent="login-handler" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ Handle(LoginUserCommand) AuthenticationDto?" vertex="1">
+          <mxGeometry height="60" width="260" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="refresh-handler" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;arcSize=8;" value="RefreshTokenCommandHandler" vertex="1">
+          <mxGeometry height="90" width="260" x="1150" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="refresh-handler-body" parent="refresh-handler" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ Handle(RefreshTokenCommand) AuthenticationDto?" vertex="1">
+          <mxGeometry height="60" width="260" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-service-interface" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;rounded=1;arcSize=8;" value="«interface»&#xa;IAuthenticationService" vertex="1">
+          <mxGeometry height="160" width="300" x="680" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-service-interface-body" parent="auth-service-interface" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ RegisterCandidateAsync(UserCredentialsDto)&#xa;+ RegisterCompanyAsync(UserCredentialsDto)&#xa;+ ValidateUserAsync(UserCredentialsDto) User?&#xa;+ SaveRefreshTokenAsync(User, string, DateTime)&#xa;+ FindByEmailWithValidRefreshTokenAsync(string, string) User?" vertex="1">
+          <mxGeometry height="116" width="300" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-service" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;rounded=1;arcSize=8;" value="AuthenticationService" vertex="1">
+          <mxGeometry height="100" width="300" x="1280" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-service-body" parent="auth-service" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="- UserManager~User~ _userManager&#xa;- SignInManager~User~ _signInManager" vertex="1">
+          <mxGeometry height="70" width="300" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jwt-service-interface" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;rounded=1;arcSize=8;" value="«interface»&#xa;IJwtTokenService" vertex="1">
+          <mxGeometry height="110" width="260" x="840" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="jwt-service-interface-body" parent="jwt-service-interface" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ GenerateAccessToken(User) string&#xa;+ GenerateRefreshToken() string" vertex="1">
+          <mxGeometry height="66" width="260" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="jwt-service" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;rounded=1;arcSize=8;" value="JwtTokenService" vertex="1">
+          <mxGeometry height="80" width="260" x="980" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="jwt-service-body" parent="jwt-service" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="- IConfiguration _configuration" vertex="1">
+          <mxGeometry height="50" width="260" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="user" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;arcSize=8;" value="User" vertex="1">
+          <mxGeometry height="130" width="220" x="1320" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="user-body" parent="user" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ Guid Id&#xa;+ string Email&#xa;+ string UserName&#xa;+ Roles UserRole" vertex="1">
+          <mxGeometry height="100" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="roles" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;rounded=1;arcSize=8;" value="«enumeration»&#xa;Roles" vertex="1">
+          <mxGeometry height="100" width="160" x="1350" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="roles-body" parent="roles" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="Candidate&#xa;Company" vertex="1">
+          <mxGeometry height="56" width="160" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-dto" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;rounded=1;arcSize=8;" value="AuthenticationDto" vertex="1">
+          <mxGeometry height="160" width="230" x="375" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-dto-body" parent="auth-dto" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ string AccessToken&#xa;+ string RefreshToken&#xa;+ DateTime ExpiresAt&#xa;+ Guid UserId&#xa;+ string Email&#xa;+ string Role" vertex="1">
+          <mxGeometry height="130" width="230" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="user-credentials-dto" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;rounded=1;arcSize=8;" value="UserCredentialsDto" vertex="1">
+          <mxGeometry height="90" width="220" x="1010" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="user-credentials-dto-body" parent="user-credentials-dto" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;overflow=hidden;rotatable=0;fontSize=11;fontFamily=Helvetica;" value="+ string Email&#xa;+ string Password" vertex="1">
+          <mxGeometry height="60" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="e-auth-impl" edge="1" parent="1" source="auth-service" style="endArrow=block;endFill=0;html=1;dashed=1;strokeColor=#b85450;strokeWidth=2;" target="auth-service-interface">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-jwt-impl" edge="1" parent="1" source="jwt-service" style="endArrow=block;endFill=0;html=1;dashed=1;strokeColor=#b85450;strokeWidth=2;" target="jwt-service-interface">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-user-roles" edge="1" parent="1" source="user" style="endArrow=open;html=1;strokeColor=#6c8ebf;strokeWidth=2;" target="roles">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ctrl-reg" edge="1" parent="1" source="auth-controller" style="endArrow=open;html=1;dashed=1;strokeColor=#9673a6;" target="register-command">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ctrl-login" edge="1" parent="1" source="auth-controller" style="endArrow=open;html=1;dashed=1;strokeColor=#9673a6;" target="login-command">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ctrl-refresh" edge="1" parent="1" style="endArrow=open;html=1;dashed=1;strokeColor=#9673a6;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="166.3152631578947" y="250" as="sourcePoint" />
+            <mxPoint x="159.99947368421053" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-reg-handler-auth" edge="1" parent="1" source="register-handler" style="endArrow=open;html=1;dashed=1;strokeColor=#6c8ebf;" target="auth-service-interface">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-reg-handler-jwt" edge="1" parent="1" source="register-handler" style="endArrow=open;html=1;dashed=1;strokeColor=#6c8ebf;" target="jwt-service-interface">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-login-handler-auth" edge="1" parent="1" source="login-handler" style="endArrow=open;html=1;dashed=1;strokeColor=#6c8ebf;" target="auth-service-interface">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-login-handler-jwt" edge="1" parent="1" source="login-handler" style="endArrow=open;html=1;dashed=1;strokeColor=#6c8ebf;" target="jwt-service-interface">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-refresh-handler-auth" edge="1" parent="1" source="refresh-handler" style="endArrow=open;html=1;dashed=1;strokeColor=#6c8ebf;" target="auth-service-interface">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-refresh-handler-jwt" edge="1" parent="1" source="refresh-handler" style="endArrow=open;html=1;dashed=1;strokeColor=#6c8ebf;" target="jwt-service-interface">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-auth-service-user" edge="1" parent="1" source="auth-service" style="endArrow=open;html=1;dashed=1;strokeColor=#b85450;" target="user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-jwt-user" edge="1" parent="1" source="jwt-service" style="endArrow=open;html=1;dashed=1;strokeColor=#b85450;" target="user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-reg-auth-dto" edge="1" parent="1" source="register-handler" style="endArrow=open;html=1;dashed=1;strokeColor=#6c8ebf;" target="auth-dto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-login-auth-dto" edge="1" parent="1" source="login-handler" style="endArrow=open;html=1;dashed=1;strokeColor=#6c8ebf;" target="auth-dto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
